@@ -1,0 +1,51 @@
+# =============== #
+# Unity generated #
+# =============== #
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+UnityGenerated/
+Assets/AssetStoreTools*
+sysinfo.txt
+*.stackdump
+
+# ===================================== #
+# Visual Studio / MonoDevelop generated #
+# ===================================== #
+/.vs/
+[Ee]xported[Oo]bj/
+*.svd
+*.userprefs
+*.csproj
+*.pidb
+*.suo
+*.sln*
+*.user
+*.unityproj
+*.booproj
+*.tmp
+
+# UnityVS
+UnityVS/*
+UnityVS.meta
+
+# Unity3D generated meta files
+*.pidb.meta
+
+# Unity3D Generated File On Crash Reports
+sysinfo.txt
+
+# ============ #
+# OS generated #
+# ============ #
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+*.sqo
+*.sqr
+ehthumbs.db
+[Tt]humbs.db
+[Dd]esktop.ini
