@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //TODO rename
-public class Player : MonoBehaviour{
-    public int number;
+public class Player : MonoBehaviour {
+    public Element element;
+    internal int number;
     internal Rigidbody rigidBody; //TODO protect
     internal Segment currentSegment;
 

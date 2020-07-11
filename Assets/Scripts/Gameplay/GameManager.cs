@@ -5,7 +5,7 @@ using System.Linq;
 
 public class GameManager : SingletonMonoBehaviour<GameManager> {
     [SerializeField] Transform[] spawnPointTransformArray;
-    [SerializeField] GameObject playerPrefab;
+    [SerializeField] GameObject[] playerPrefabArray;
     [SerializeField] GameObject[] cardPrefabArray;
 
     internal Player[] playerArray; //TODO protect
@@ -31,7 +31,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         
         playerArray = new Player[spawnPointTransformArray.Length];
         for (int i = 1; i < spawnPointTransformArray.Length; i++) {
-            playerArray[i] = Instantiate(playerPrefab, spawnPointTransformArray[i].position, spawnPointTransformArray[i].rotation).GetComponent<Player>();
+            playerArray[i] = Instantiate(
+                playerPrefabArray[i], spawnPointTransformArray[i].position, spawnPointTransformArray[i].rotation
+            ).GetComponent<Player>();
             playerArray[i].number = i;
         }
         currentPlayer = playerArray[1];

@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 4183367664832444661}
   - component: {fileID: 4261193072581082851}
   m_Layer: 0
-  m_Name: Player
+  m_Name: FirePlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -124,7 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbec5b16c6b24dd4e940d91f58303e56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  definedColor: {r: 0.8551874, g: 0, b: 1, a: 1}
+  definedColor: {r: 0.8207547, g: 0.112273075, b: 0.1182878, a: 1}
   setInChildren: 1
   onlyFirstMaterial: 1
   totalTime: 0
@@ -142,4 +142,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   number: 0
-  rigidBody: {fileID: 0}
+  element: 1

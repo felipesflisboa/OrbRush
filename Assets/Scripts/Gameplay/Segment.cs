@@ -46,7 +46,10 @@ public class Segment : MonoBehaviour {
     public void ApplyEffectInPlayer(Player player) {
         switch (cardType) {
             case CardType.Fire:
-                player.rigidBody.velocity = player.rigidBody.velocity * 0.25f;
+                if(player.element == Element.Fire)
+                    player.rigidBody.velocity = player.rigidBody.velocity * 1.1f;
+                if (player.element == Element.Air)
+                    player.rigidBody.velocity = player.rigidBody.velocity * 0.8f;
                 break;
         }
     }
