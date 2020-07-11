@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4187372817680983990}
   - component: {fileID: 4187372817680983987}
   m_Layer: 5
-  m_Name: btnCard
+  m_Name: AirCard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.14481235, g: 1, b: 0, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -142,3 +142,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cba6a3955848c5544a4edde60dc2711d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 4

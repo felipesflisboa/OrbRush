@@ -9,6 +9,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
 
     internal Player[] playerArray; //TODO protect
     internal bool occuring;
+    internal Card selectedCard; 
 
     void Start() {
         StartGame();

@@ -124,7 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbec5b16c6b24dd4e940d91f58303e56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  definedColor: {r: 1, g: 0, b: 0, a: 1}
+  definedColor: {r: 0.8551874, g: 0, b: 1, a: 1}
   setInChildren: 1
   onlyFirstMaterial: 1
   totalTime: 0
@@ -141,3 +141,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08af9585364880b48bddb98d28a28be4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  number: 0
+  rigidBody: {fileID: 0}

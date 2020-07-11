@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour{
     public int number;
-    Rigidbody rigidBody;
+    public Rigidbody rigidBody; //TODO protect
 
     void Awake() {
         rigidBody = GetComponentInChildren<Rigidbody>();
