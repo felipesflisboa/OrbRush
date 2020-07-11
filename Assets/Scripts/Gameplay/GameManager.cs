@@ -9,26 +9,18 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     [SerializeField] GameObject[] cardPrefabArray;
 
     internal Player[] playerArray; //TODO protect
-    internal Player currentPlayer;
+    internal Player humanPlayer;
     internal bool occuring;
     internal Card selectedCard;
     internal List<Segment> segmentList;
     AI[] aiArray;
 
-    private void Awake() {
-        
-    }
-
     void Start() {
-        StartGame();
-    }
-
-    void StartGame() {
-        //TODO move to Start?
+        Time.timeScale = 0;
         segmentList = FindObjectsOfType<Segment>().ToList();
         segmentList.Sort((a, b) => a.transform.position.z.CompareTo(b.transform.position.z));
         // zoneList.Sort((a, b) => Mathf.Approximately(a.transform.position.z, b.transform.position.z) ? a.transform.position.x.CompareTo(b.transform.position.x) : a.transform.position.z.CompareTo(b.transform.position.z));
-        
+
         playerArray = new Player[spawnPointTransformArray.Length];
         for (int i = 1; i < spawnPointTransformArray.Length; i++) {
             playerArray[i] = Instantiate(
@@ -36,12 +28,23 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
             ).GetComponent<Player>();
             playerArray[i].number = i;
         }
-        currentPlayer = playerArray[1];
+
+        CanvasController.I.startText.gameObject.SetActive(true);
+    }
+
+    public void StartGame() {
+        CanvasController.I.startText.gameObject.SetActive(false);
+        CanvasController.I.playerText.text = $"Player {humanPlayer.m_name}";
+        Time.timeScale = 1;
 
         aiArray = new AI[3];
-        for (int i = 0; i < aiArray.Length; i++) {
-            aiArray[i] = new AI(playerArray[i+2]);
-            aiArray[i].StartRoutine(this);
+        int playerI = 1;
+        for (int aiI = 0; aiI < aiArray.Length; aiI++) {
+            if(humanPlayer== playerArray[playerI])
+                playerI++;
+            aiArray[aiI] = new AI(playerArray[playerI]);
+            aiArray[aiI].StartRoutine(this);
+            playerI++;
         }
 
         StartCoroutine(CardRoutine());

@@ -17,4 +17,11 @@ public class Player : MonoBehaviour {
     public void Boost() {
         rigidBody.velocity = rigidBody.velocity + rigidBody.velocity.normalized * 1.2f;
     }
+
+    void OnMouseDown() {
+        if (GameManager.I.humanPlayer == null) {
+            GameManager.I.humanPlayer = this;
+            GameManager.I.StartGame();
+        }
+    }
 }

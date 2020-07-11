@@ -21,6 +21,6 @@ public class Card : MonoBehaviour{
 
     public void OnClick() {
         Debug.Log("OnClick");
-        GameManager.I.ExecuteCardEffect(GameManager.I.currentPlayer, this, type);
+        GameManager.I.ExecuteCardEffect(GameManager.I.humanPlayer, this, type);
     }
 }

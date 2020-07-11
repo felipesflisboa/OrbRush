@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class CanvasController : SingletonMonoBehaviour<CanvasController> {
     internal CardZone cardZone;
+    public Text startText;
+    public Text playerText;
     public Text victoryText;
     public Text timeText;
 
