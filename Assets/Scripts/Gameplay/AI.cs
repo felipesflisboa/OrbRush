@@ -18,7 +18,7 @@ public class AI{
         yield return new WaitForSeconds(1);
         while (GameManager.I.occuring) {
             yield return new WaitWhile(() => cardTypeDeck.Count == 0);
-            GameManager.I.ExecuteCardEffect(GameManager.I.currentPlayer, null, cardTypeDeck[0]);
+            GameManager.I.ExecuteCardEffect(player, null, cardTypeDeck[0]);
             cardTypeDeck.RemoveAt(0);
             yield return new WaitForSeconds(Random.Range(8,20));
         }
