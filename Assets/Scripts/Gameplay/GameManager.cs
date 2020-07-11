@@ -82,7 +82,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
                 break;
             case CardType.Fire:
                 if (card != null)
-                    GameManager.I.selectedCard = card;
+                    card.Highlight();
                 else
                     AIApplyOnNearSegment(player, cardType);
                 break;
