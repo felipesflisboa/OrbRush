@@ -40,6 +40,15 @@ public class Segment : MonoBehaviour {
             case CardType.Fire:
                 ApplyColor(Color.red);
                 break;
+            case CardType.Water:
+                ApplyColor(Color.blue);
+                break;
+            case CardType.Earth:
+                ApplyColor(Color.green);
+                break;
+            case CardType.Air:
+                ApplyColor(Color.yellow);
+                break;
         }
     }
 
@@ -49,6 +58,24 @@ public class Segment : MonoBehaviour {
                 if(player.element == Element.Fire)
                     player.rigidBody.velocity = player.rigidBody.velocity * 1.1f;
                 if (player.element == Element.Air)
+                    player.rigidBody.velocity = player.rigidBody.velocity * 0.8f;
+                break;
+            case CardType.Water:
+                if(player.element == Element.Water)
+                    player.rigidBody.velocity = player.rigidBody.velocity * 1.1f;
+                if (player.element == Element.Fire)
+                    player.rigidBody.velocity = player.rigidBody.velocity * 0.8f;
+                break;
+            case CardType.Air:
+                if (player.element == Element.Air)
+                    player.rigidBody.velocity = player.rigidBody.velocity * 1.1f;
+                if (player.element == Element.Earth)
+                    player.rigidBody.velocity = player.rigidBody.velocity * 0.8f;
+                break;
+            case CardType.Earth:
+                if (player.element == Element.Earth)
+                    player.rigidBody.velocity = player.rigidBody.velocity * 1.1f;
+                if (player.element == Element.Water)
                     player.rigidBody.velocity = player.rigidBody.velocity * 0.8f;
                 break;
         }

@@ -55,7 +55,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
                 cardPrefabArray[Mathf.FloorToInt(Random.value * cardPrefabArray.Length)], CanvasController.I.cardZone.transform
             ).GetComponent<Card>();
             foreach (var ai in aiArray)
-                ai.cardTypeDeck.Add(EnumUtil.GetRandomValueFromEnum<CardType>(1));
+                ai.cardTypeDeck.Add(EnumUtil.GetRandomValueFromEnum<CardType>(1, -1));
             yield return new WaitForSeconds(5);
         }
     }
@@ -74,13 +74,16 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
 
     public void ExecuteCardEffect(Player player, Card card, CardType cardType) {
         switch (cardType) {
-            case CardType.Air:
+            case CardType.Neo:
                 Debug.Log("Activated=" + cardType);
                 GameManager.I.playerArray[1].Boost();
                 if (card != null)
                     Destroy(card.gameObject);
                 break;
             case CardType.Fire:
+            case CardType.Water:
+            case CardType.Earth:
+            case CardType.Air:
                 if (card != null)
                     card.Highlight();
                 else
