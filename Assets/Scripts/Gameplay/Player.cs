@@ -5,6 +5,7 @@ using UnityEngine;
 //TODO rename
 public class Player : MonoBehaviour {
     public Element element;
+    public string m_name;
     internal int number;
     internal Rigidbody rigidBody; //TODO protect
     internal Segment currentSegment;

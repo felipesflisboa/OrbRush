@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CanvasController : SingletonMonoBehaviour<CanvasController> {
-    public CardZone cardZone;
+    internal CardZone cardZone;
+    public Text victoryText;
+    public Text timeText;
 
     Canvas _canvas;
     public Canvas Canvas {
@@ -16,5 +19,9 @@ public class CanvasController : SingletonMonoBehaviour<CanvasController> {
 
     void Awake() {
         cardZone = GetComponentInChildren<CardZone>();
+    }
+
+    void Update() { //TODO
+        timeText.text = $"{Time.timeSinceLevelLoad.ToString("F3")}s";
     }
 }

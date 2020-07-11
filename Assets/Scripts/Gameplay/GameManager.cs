@@ -65,6 +65,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
             return;
         Debug.Log($"Player {player.number} won in {Time.timeSinceLevelLoad}s!");
         Time.timeScale = 0;
+        CanvasController.I.victoryText.gameObject.SetActive(true);
+        CanvasController.I.victoryText.text = $"Player {player.m_name} won!";
         occuring = false;
     }
 
