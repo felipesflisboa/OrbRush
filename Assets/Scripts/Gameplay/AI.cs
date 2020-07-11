@@ -8,6 +8,7 @@ public class AI{
 
     public AI(Player pPlayer) {
         player = pPlayer;
+        player.ai = this;
     }
 
     public void StartRoutine(MonoBehaviour routinePlayer) {
@@ -16,6 +17,7 @@ public class AI{
 
     IEnumerator MainRoutine() {
         yield return new WaitForSeconds(1);
+        yield break;//remove
         while (GameManager.I.occuring) {
             yield return new WaitWhile(() => cardTypeDeck.Count == 0);
             GameManager.I.ExecuteCardEffect(player, null, cardTypeDeck[0]);

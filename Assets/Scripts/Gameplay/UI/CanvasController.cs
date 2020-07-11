@@ -8,6 +8,7 @@ public class CanvasController : SingletonMonoBehaviour<CanvasController> {
     public Text startText;
     public Text playerText;
     public Text victoryText;
+    public Text cardAlertText;
     public Text timeText;
 
     Canvas _canvas;
@@ -25,5 +26,6 @@ public class CanvasController : SingletonMonoBehaviour<CanvasController> {
 
     void Update() { //TODO
         timeText.text = $"{Time.timeSinceLevelLoad.ToString("F3")}s";
+        cardAlertText.gameObject.SetActive(cardZone.cardList.Count >= 5); //TODO optimize
     }
 }

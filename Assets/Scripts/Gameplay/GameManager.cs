@@ -54,9 +54,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     IEnumerator CardRoutine() {
         yield return null;
         while (occuring) {
-            var card = Instantiate(
-                cardPrefabArray[Mathf.FloorToInt(Random.value * cardPrefabArray.Length)], CanvasController.I.cardZone.transform
-            ).GetComponent<Card>();
+            CanvasController.I.cardZone.Add(cardPrefabArray[Mathf.FloorToInt(Random.value * cardPrefabArray.Length)]);
             foreach (var ai in aiArray)
                 ai.cardTypeDeck.Add(EnumUtil.GetRandomValueFromEnum<CardType>(1, -1));
             yield return new WaitForSeconds(5);

@@ -9,6 +9,9 @@ public class Player : MonoBehaviour {
     internal int number;
     internal Rigidbody rigidBody; //TODO protect
     internal Segment currentSegment;
+    public AI ai;
+
+    public int CardCount => ai == null ? CanvasController.I.cardZone.cardList.Count : ai.cardTypeDeck.Count;
 
     void Awake() {
         rigidBody = GetComponentInChildren<Rigidbody>();
@@ -16,6 +19,10 @@ public class Player : MonoBehaviour {
 
     public void Boost() {
         rigidBody.velocity = rigidBody.velocity + rigidBody.velocity.normalized * 1.2f;
+    }
+
+    void FixedUpdate() {
+        rigidBody.velocity = rigidBody.velocity * (1 - 0.005f * CardCount);
     }
 
     void OnMouseDown() {
