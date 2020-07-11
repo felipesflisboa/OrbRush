@@ -689,8 +689,10 @@ MonoBehaviour:
   playerPrefab: {fileID: 4183367664832444660, guid: 54b3f1ec3f498ed44b73772770a83047,
     type: 3}
   cardPrefabArray:
-  - {fileID: 4187372817680983988, guid: 0259373064acfb34899dcc8cbb8aa5a5, type: 3}
+  - {fileID: 4187372817680983988, guid: 794b1fdf003779a4fb9e828957f7f13c, type: 3}
   - {fileID: 4187372817680983988, guid: 1575d1885c67e5e40a1de005416edbf8, type: 3}
+  - {fileID: 4187372817680983988, guid: 15727c878188ef54389b99c252eee532, type: 3}
+  - {fileID: 4187372817680983988, guid: 3c09606bef56a5f4a8c93edabe48fa2e, type: 3}
 --- !u!4 &953248772
 Transform:
   m_ObjectHideFlags: 0
