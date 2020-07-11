@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//TODO rename
 public class Player : MonoBehaviour{
     public int number;
-    public Rigidbody rigidBody; //TODO protect
+    internal Rigidbody rigidBody; //TODO protect
+    internal Segment currentSegment;
 
     void Awake() {
         rigidBody = GetComponentInChildren<Rigidbody>();

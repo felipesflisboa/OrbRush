@@ -7,14 +7,6 @@ public class Card : MonoBehaviour{
 
     public void OnClick() {
         Debug.Log("OnClick");
-        switch (type) {
-            case CardType.Air:
-                GameManager.I.playerArray[1].Boost();
-                Destroy(gameObject);
-                break;
-            case CardType.Fire:
-                GameManager.I.selectedCard = this;
-                break;
-        }
+        GameManager.I.ExecuteCardEffect(GameManager.I.currentPlayer, this, type);
     }
 }

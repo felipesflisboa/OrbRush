@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Segment : MonoBehaviour {
     List<Player> playerInsideList = new List<Player>();
-    CardType cardType;
+    internal CardType cardType;
 
     void OnMouseDown() {
         Debug.Log($"Mousedown! {name}");
@@ -18,6 +18,7 @@ public class Segment : MonoBehaviour {
         var player = other.GetComponentInParent<Player>();
         if (player != null) {
             playerInsideList.Add(player);
+            player.currentSegment = this;
             ApplyEffectInPlayer(player);
         }
     }
@@ -30,6 +31,7 @@ public class Segment : MonoBehaviour {
     }
 
     public void ApplyEffect(CardType newCardType) {
+        Debug.Log("Activated=" + newCardType);
         cardType = newCardType;
         foreach (var player in playerInsideList) {
             ApplyEffectInPlayer(player);
@@ -54,6 +56,8 @@ public class Segment : MonoBehaviour {
         if (player != null) {
             if(playerInsideList.Contains(player))
                 playerInsideList.Remove(player);
+            if (player.currentSegment == this)
+                player.currentSegment = null;
         }
     }
 }
