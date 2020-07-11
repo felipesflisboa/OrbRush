@@ -2,10 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
+using Gamelogic.Extensions;
 
 public class Card : MonoBehaviour{
     public CardType type;
     public Image image;
+
+    void Awake() {
+        image.transform.localPosition = image.transform.localPosition.WithY(-1500);
+        image.transform.DOLocalMoveY(0, 0.8f).SetEase(Ease.OutCubic);
+    }
 
     public void Highlight() {
         if (GameManager.I.selectedCard != null && GameManager.I.selectedCard != this)

@@ -37,6 +37,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         CanvasController.I.playerText.text = $"Player {humanPlayer.m_name}";
         Time.timeScale = 1;
 
+        FindObjectOfType<CameraController>().GoToOriginalPos();
+
         aiArray = new AI[3];
         int playerI = 1;
         for (int aiI = 0; aiI < aiArray.Length; aiI++) {
