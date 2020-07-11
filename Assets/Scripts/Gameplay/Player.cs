@@ -10,6 +10,7 @@ public class Player : MonoBehaviour {
     internal Rigidbody rigidBody; //TODO protect
     internal Segment currentSegment;
     public AI ai;
+    int fixedUpdateCount;
 
     public int CardCount => ai == null ? CanvasController.I.cardZone.cardList.Count : ai.cardTypeDeck.Count;
 
@@ -22,8 +23,13 @@ public class Player : MonoBehaviour {
     }
 
     void FixedUpdate() {
-        rigidBody.velocity = rigidBody.velocity * (1 - 0.003f * CardCount);
+        velTest = rigidBody.velocity; //remove
+        if (fixedUpdateCount % 25 == 0) // half-second
+            rigidBody.velocity = rigidBody.velocity * (1 - 0.002f * CardCount);
+        fixedUpdateCount++;
     }
+
+    public Vector3 velTest;
 
     void OnMouseDown() {
         if (GameManager.I.humanPlayer == null) {

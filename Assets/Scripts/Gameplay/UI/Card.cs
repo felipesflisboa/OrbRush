@@ -18,7 +18,7 @@ public class Card : MonoBehaviour{
         if (GameManager.I.selectedCard != null && GameManager.I.selectedCard != this)
             GameManager.I.selectedCard.Unhighlight();
         GameManager.I.selectedCard = this;
-        image.color = new Color32(0xFF, 0xC0, 0xC0, 0xFF);
+        image.color = new Color32(0xFF, 0xF0, 0xA0, 0xFF);
     }
 
     public void Unhighlight() {

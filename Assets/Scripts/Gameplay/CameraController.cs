@@ -33,4 +33,15 @@ public class CameraController : MonoBehaviour{
         }
         return Mathf.Lerp(transform.position.z, z / (GameManager.I.playerArray.Length - 1) + 55, 2 * Time.deltaTime);
     }
+
+    /* //remove
+    float GetCurrentPosZ() {
+        if (playerListWithoutNull == null) {
+            playerListWithoutNull = GameManager.I.playerArray.ToList();
+            playerListWithoutNull.Remove(null);
+        }
+        float z = (playerListWithoutNull.Max((p) => p.transform.position.z) + playerListWithoutNull.Min((p) => p.transform.position.z)) / 2 + 30;
+        return Mathf.Lerp(transform.position.z, z, 2 * Time.deltaTime);
+    }
+    */
 }
