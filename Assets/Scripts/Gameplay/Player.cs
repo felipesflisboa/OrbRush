@@ -22,7 +22,7 @@ public class Player : MonoBehaviour {
     }
 
     void FixedUpdate() {
-        rigidBody.velocity = rigidBody.velocity * (1 - 0.005f * CardCount);
+        rigidBody.velocity = rigidBody.velocity * (1 - 0.003f * CardCount);
     }
 
     void OnMouseDown() {
