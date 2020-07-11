@@ -13,6 +13,6 @@ public class CameraController : MonoBehaviour{
                 continue;
             z += player.transform.position.z;
         }
-        transform.position = transform.position.WithZ(z/(+GameManager.I.playerArray.Length-1) + 25);
+        transform.position = transform.position.WithZ(z/(+GameManager.I.playerArray.Length-1) + 55);
     }
 }
