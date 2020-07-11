@@ -8,7 +8,7 @@ public class Segment : MonoBehaviour {
 
     void OnMouseDown() {
         Debug.Log($"Mousedown! {name}");
-        if (GameManager.I.selectedCard != null && cardType == CardType.None) {
+        if (GameManager.I.selectedCard != null) {
             ApplyEffect(GameManager.I.selectedCard.type);
             Destroy(GameManager.I.selectedCard.gameObject);
         }

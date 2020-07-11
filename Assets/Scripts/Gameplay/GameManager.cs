@@ -89,20 +89,20 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     }
 
     void AIApplyOnNearSegment(Player player, CardType cardType) {
-        for (int i = 0; i < 50; i++) { //TODO count
+        for (int i = 0; i < 10; i++) { //TODO count
             var segmentIndex = segmentList.IndexOf(player.currentSegment);
             var nearIndexArray = new[] { segmentIndex - 1, segmentIndex, segmentIndex + 1 };
             int randomIndex = nearIndexArray[Mathf.FloorToInt(Random.value * nearIndexArray.Length)];
             //TODO break method
-            if (0<=randomIndex && randomIndex<segmentList.Count && segmentList[randomIndex].cardType == CardType.None) {
+            if (0<=randomIndex && randomIndex<segmentList.Count && segmentList[randomIndex].cardType != cardType) {
                 segmentList[randomIndex].ApplyEffect(cardType);
                 return;
             }
         }
         // Try any segment
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 40; i++) {
             int randomIndex = Mathf.FloorToInt(Random.value * segmentList.Count);
-            if (segmentList[randomIndex].cardType == CardType.None) {
+            if (segmentList[randomIndex].cardType != cardType) {
                 segmentList[randomIndex].ApplyEffect(cardType);
                 return;
             }
