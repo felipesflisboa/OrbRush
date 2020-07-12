@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using Gamelogic.Extensions;
 
 public class Segment : MonoBehaviour {
     [SerializeField] Transform[] earthquakePlatformArray = new Transform[0];
     [SerializeField] Transform tornadoDiskTransform;
     List<Player> playerInsideList = new List<Player>();
     internal CardType cardType;
-    bool onEarthquake;
-    bool onTornado; //TODO remove
+    bool onEarthquake; //TODO remove
 
     void OnMouseDown() {
         Debug.Log($"Mousedown! {name}");
@@ -59,6 +59,9 @@ public class Segment : MonoBehaviour {
             case CardType.Lake:
                 ApplyColor(Color.blue);
                 break;
+            case CardType.Tornado:
+                ApplyColor(Color.gray);
+                break;
         }
     }
 
@@ -105,15 +108,6 @@ public class Segment : MonoBehaviour {
             ).SetLoops(-1);
         }
     }
-    
-    //TODO cyclone
-    public void ApplyTornado() {
-        onTornado = true;
-        if (tornadoDiskTransform == null)
-            return;
-        tornadoDiskTransform.gameObject.SetActive(true);
-        tornadoDiskTransform.DOLocalRotate(Vector3.up*90, 0.25f).SetRelative().SetLoops(-1);
-    }
 
     void OnTriggerExit(Collider other) {
         var player = other.GetComponentInParent<Player>();
@@ -123,6 +117,18 @@ public class Segment : MonoBehaviour {
             if (player.currentSegment == this) {
                 player.lastSegment = player.currentSegment;
                 player.currentSegment = null;
+            }
+        }
+    }
+
+    void FixedUpdate() {
+        if (cardType == CardType.Tornado) {
+            foreach (var player in playerInsideList) {
+                if (player.element == Element.Air)
+                    continue;
+                player.rigidBody.AddForce(MathUtil.UnityAngleToNormal(
+                    MathUtil.GetAngle(transform.position.To2DXZ() - player.transform.position.To2DXZ()) - 90
+                )* 400 * Time.deltaTime, ForceMode.Acceleration);
             }
         }
     }
