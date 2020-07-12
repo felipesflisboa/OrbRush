@@ -6,7 +6,9 @@ using Gamelogic.Extensions;
 
 public class Segment : MonoBehaviour {
     [SerializeField] Transform[] earthquakePlatformArray = new Transform[0];
-    [SerializeField] Transform tornadoDiskTransform;
+    [SerializeField] Transform tornadoTransform;
+    [SerializeField] Transform earthquakeTransform; //TODO rename
+    [SerializeField] Transform squirtTransform; //TODO rename lake
     List<Player> playerInsideList = new List<Player>();
     internal CardType cardType;
 
@@ -30,10 +32,12 @@ public class Segment : MonoBehaviour {
     }
 
     void ApplyColor(Color color) {
-        Colorizer colorizer = new Colorizer(transform);
-        colorizer.colorToTint = color;
-        colorizer.setInChildren = true;
-        colorizer.Tint();
+        var oldColorizer = GetComponentInChildren<AutoColorizer>();
+        if(oldColorizer != null)
+            Destroy(oldColorizer);
+        var newColorizer = gameObject.AddComponent<AutoColorizer>();
+        newColorizer.definedColor = color;
+        newColorizer.totalTime = 1.5f;
     }
 
     public void ApplyEffect(CardType newCardType) {
@@ -56,13 +60,18 @@ public class Segment : MonoBehaviour {
                 ApplyColor(Color.yellow);
                 break;
             case CardType.Lake:
-                ApplyColor(Color.blue);
+                ApplyColor(new Color32(0xD0, 0xD0, 0xFF, 0xFF));
+                earthquakeTransform.gameObject.SetActive(false);
+                tornadoTransform.gameObject.SetActive(false);
+                squirtTransform.gameObject.SetActive(true);
                 break;
             case CardType.Tornado:
-                ApplyColor(Color.gray);
+                earthquakeTransform.gameObject.SetActive(false);
+                tornadoTransform.gameObject.SetActive(true);
                 break;
             case CardType.Earthquake:
-                ApplyColor(new Color32(0, 0xA0, 0, 0));
+                earthquakeTransform.gameObject.SetActive(true);
+                tornadoTransform.gameObject.SetActive(false);
                 foreach (var item in earthquakePlatformArray) {
                     item.gameObject.SetActive(true);
                     DOTween.Sequence().Append(
