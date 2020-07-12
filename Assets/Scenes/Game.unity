@@ -3176,6 +3176,8 @@ MonoBehaviour:
   - {fileID: 4187372817680983988, guid: 1575d1885c67e5e40a1de005416edbf8, type: 3}
   - {fileID: 4187372817680983988, guid: 15727c878188ef54389b99c252eee532, type: 3}
   - {fileID: 4187372817680983988, guid: 3c09606bef56a5f4a8c93edabe48fa2e, type: 3}
+  explosionPrefab: {fileID: 1158160664908234460, guid: 85ff8c6d7c7d3b345961b98a2262b20a,
+    type: 3}
 --- !u!4 &953248772
 Transform:
   m_ObjectHideFlags: 0

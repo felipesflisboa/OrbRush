@@ -10,6 +10,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     [SerializeField] Transform[] spawnPointTransformArray;
     [SerializeField] GameObject[] playerPrefabArray;
     [SerializeField] GameObject[] cardPrefabArray;
+    [SerializeField] GameObject explosionPrefab;
 
     internal Player[] playerArray; //TODO protect
     internal Player humanPlayer;
@@ -113,6 +114,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
                         p.rigidBody.AddExplosionForce(700, selectedPlayer.transform.position, radius);
                     }
                 }
+                Destroy(Instantiate(explosionPrefab, selectedPlayer.transform.position, selectedPlayer.transform.rotation), 8f);
                 if (card != null)
                     Destroy(card.gameObject);
                 break;
