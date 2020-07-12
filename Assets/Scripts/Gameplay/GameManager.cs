@@ -12,6 +12,13 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     [SerializeField] GameObject[] cardPrefabArray;
     [SerializeField] GameObject explosionPrefab;
 
+    [SerializeField] AudioSource cycloneSFX;
+    [SerializeField] AudioSource squidSFX;
+    [SerializeField] AudioSource earthquakeSFX;
+    [SerializeField] AudioSource explodeSFX;
+    [SerializeField] AudioSource startSFX;
+    [SerializeField] AudioSource endSFX;
+
     internal Player[] playerArray; //TODO protect
     internal Player humanPlayer;
     internal bool occuring;
@@ -54,6 +61,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         }
 
         StartCoroutine(CardRoutine());
+        startSFX.Play();
         occuring = true;
     }
 
@@ -77,6 +85,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         Debug.Log($"Player {player.number} won in {Time.timeSinceLevelLoad}s!");
         Time.timeScale = 0;
         occuring = false;
+        endSFX.Play();
         yield return new WaitForSecondsRealtime(1.2f);
         CanvasController.I.victoryText.gameObject.SetActive(true);
         CanvasController.I.victoryText.text = $"Player {player.m_name} won!";
@@ -114,6 +123,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
                         p.rigidBody.AddExplosionForce(700, selectedPlayer.transform.position, radius);
                     }
                 }
+                explodeSFX.Play();
                 Destroy(Instantiate(explosionPrefab, selectedPlayer.transform.position, selectedPlayer.transform.rotation), 8f);
                 if (card != null)
                     Destroy(card.gameObject);
@@ -124,6 +134,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
                     selectedPlayer.currentSegment.ApplyEffect(CardType.Earthquake);
                     if (card != null)
                         Destroy(card.gameObject);
+                    earthquakeSFX.Play();
                 }
                 break;
             case CardType.Water:
@@ -132,6 +143,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
                     selectedPlayer.currentSegment.ApplyEffect(CardType.Lake);
                     if (card != null)
                         Destroy(card.gameObject);
+                    squidSFX.Play();
                 }
                 break;
             case CardType.Air:
@@ -140,6 +152,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
                     selectedPlayer.currentSegment.ApplyEffect(CardType.Tornado);
                     if (card != null)
                         Destroy(card.gameObject);
+                    cycloneSFX.Play();
                 }
                 break;
                 /*
