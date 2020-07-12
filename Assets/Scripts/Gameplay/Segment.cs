@@ -18,6 +18,8 @@ public class Segment : MonoBehaviour {
         var player = other.GetComponentInParent<Player>();
         if (player != null) {
             playerInsideList.Add(player);
+            if(player.currentSegment != null) //TODO property
+                player.lastSegment = player.currentSegment;
             player.currentSegment = this;
             ApplyEffectInPlayer(player);
         }
@@ -86,8 +88,10 @@ public class Segment : MonoBehaviour {
         if (player != null) {
             if(playerInsideList.Contains(player))
                 playerInsideList.Remove(player);
-            if (player.currentSegment == this)
+            if (player.currentSegment == this) {
+                player.lastSegment = player.currentSegment;
                 player.currentSegment = null;
+            }
         }
     }
 }

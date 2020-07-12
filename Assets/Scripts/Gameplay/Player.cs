@@ -9,6 +9,7 @@ public class Player : MonoBehaviour {
     internal int number;
     internal Rigidbody rigidBody; //TODO protect
     internal Segment currentSegment;
+    internal Segment lastSegment;
     public AI ai;
     int fixedUpdateCount;
 
