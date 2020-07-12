@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 4183367664832444663}
   - component: {fileID: 4183367664832444662}
   - component: {fileID: 4183367664832444650}
-  - component: {fileID: 4183367664832444661}
   - component: {fileID: 4261193072581082851}
   m_Layer: 0
   m_Name: AirPlayer
@@ -62,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4b63c28b5dd046b42a9110c277690bc3, type: 2}
+  - {fileID: 2100000, guid: c2d2420b689b6954c9c224022c9dafad, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -112,23 +111,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &4183367664832444661
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4183367664832444660}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cbec5b16c6b24dd4e940d91f58303e56, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  definedColor: {r: 0.8356335, g: 0.8490566, b: 0.108134575, a: 1}
-  setInChildren: 1
-  onlyFirstMaterial: 1
-  totalTime: 0
-  overrideColorProperty: 
 --- !u!114 &4261193072581082851
 MonoBehaviour:
   m_ObjectHideFlags: 0
