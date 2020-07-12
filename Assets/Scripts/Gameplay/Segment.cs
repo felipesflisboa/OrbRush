@@ -102,10 +102,10 @@ public class Segment : MonoBehaviour {
                     player.rigidBody.velocity = player.rigidBody.velocity * 0.6f;
                 break;
             case CardType.Lake:
-                player.rigidBody.velocity = player.rigidBody.velocity * 0.5f;
+                player.rigidBody.velocity = player.rigidBody.velocity * 1.4f;
                 break;
             case CardType.Earthquake:
-                player.rigidBody.velocity = player.rigidBody.velocity * 1.6f;
+                //player.rigidBody.velocity = player.rigidBody.velocity * 1.6f;
                 break;
         }
     }
@@ -129,7 +129,7 @@ public class Segment : MonoBehaviour {
                     continue;
                 player.rigidBody.AddForce(MathUtil.UnityAngleToNormal(
                     MathUtil.GetAngle(transform.position.To2DXZ() - player.transform.position.To2DXZ()) - 90
-                )* 400 * Time.deltaTime, ForceMode.Acceleration);
+                )* 350 * Time.deltaTime, ForceMode.Acceleration);
             }
         }
     }

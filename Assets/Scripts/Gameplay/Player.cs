@@ -26,7 +26,7 @@ public class Player : MonoBehaviour {
     void FixedUpdate() {
         velTest = rigidBody.velocity; //remove
         if (fixedUpdateCount % 25 == 0) // half-second
-            rigidBody.velocity = rigidBody.velocity * (1 - 0.003f * CardCount);
+            rigidBody.velocity = rigidBody.velocity * (1 - 0.01f * CardCount);
         fixedUpdateCount++;
     }
 

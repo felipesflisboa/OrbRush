@@ -35,6 +35,6 @@ public class AI {
         }
     }
 
-    float GetSecondBasePerRound(int level) => 24f / (level + 1);
-    float GetSecondIncPerRound(int level) => 36f / (level + 1);
+    float GetSecondBasePerRound(int level) => 18f / (level);
+    float GetSecondIncPerRound(int level) => 24f / (level);
 }
