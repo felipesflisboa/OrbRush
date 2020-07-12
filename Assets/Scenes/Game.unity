@@ -2273,8 +2273,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 430, y: 40}
-  m_SizeDelta: {x: 420, y: 160}
+  m_AnchoredPosition: {x: 467, y: 40}
+  m_SizeDelta: {x: 520, y: 240}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &617607040
 MonoBehaviour:
@@ -2323,7 +2323,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Cards make you slower!
+  m_Text: Your hand is full. Card make your ball slower!"
 --- !u!222 &617607042
 CanvasRenderer:
   m_ObjectHideFlags: 0
