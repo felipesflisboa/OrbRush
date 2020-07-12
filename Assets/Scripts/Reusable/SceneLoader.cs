@@ -24,6 +24,7 @@ public class SceneLoader : MonoBehaviour {
 	[Tooltip("Receives the progress from 0-1f")] public OnProgressChangeCallback onProgressChangeCallback;
 
     public bool loadingDone { private set; get; }
+    internal bool allowSceneActivation; // Only works if there is no callbacks
     AsyncOperation loadSceneOperation;
 	int originalSleepTimeout;
 	float beforeLoadTime;
@@ -42,8 +43,8 @@ public class SceneLoader : MonoBehaviour {
 	}
 
 	IEnumerator MainRoutine() {
-		if(loadFinishedCallback.GetPersistentEventCount()==0)
-			loadFinishedCallback.AddListener(AllowSceneActivation);
+		if(loadFinishedCallback.GetPersistentEventCount()==0 && allowSceneActivation)
+			loadFinishedCallback.AddListener(() => allowSceneActivation = true);
 		if(!clearResources)
 			clearResourcesWeight = 0f;
 		originalSleepTimeout = Screen.sleepTimeout;
@@ -100,8 +101,8 @@ public class SceneLoader : MonoBehaviour {
 		loadFinishedCallback.Invoke();
 	}
 
-	public void AllowSceneActivation(){
-		if(loadingDone)
-			loadSceneOperation.allowSceneActivation = true;
+	void Update(){
+		if(loadingDone && !loadSceneOperation.allowSceneActivation && allowSceneActivation)
+            loadSceneOperation.allowSceneActivation = true;
 	}
 }
