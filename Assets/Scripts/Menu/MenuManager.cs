@@ -33,7 +33,7 @@ public class MenuManager : SingletonMonoBehaviour<MenuManager> {
 
     void Start () {
 		clickCooldownTimer = new Timer(0.75f);
-        StartCoroutine(EnablePanel(SimpleScoreListTimedDrawer.lastScore == null ? MenuPanelType.Title : MenuPanelType.HighScores));
+        StartCoroutine(EnablePanel(SimpleScoreListTimedDrawer.lastScore == null ? MenuPanelType.Title : MenuPanelType.LocalHighScores));
 	}
 
 	IEnumerator EnablePanel(MenuPanelType type) {
@@ -98,6 +98,7 @@ public class MenuManager : SingletonMonoBehaviour<MenuManager> {
         SimpleScoreListTimedDrawer.lastScore = null;
         yield return EnablePanel(MenuPanelType.Loading);
         yield return null;
+        GameManager.level = 1;
         UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
     }
 

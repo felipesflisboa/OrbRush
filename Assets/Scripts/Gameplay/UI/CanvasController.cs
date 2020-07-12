@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class CanvasController : SingletonMonoBehaviour<CanvasController> {
     internal CardZone cardZone;
     public Text startText;
+    public Text levelText;
     public Text playerText;
     public Text victoryText;
     public Text cardAlertText;
@@ -22,6 +23,10 @@ public class CanvasController : SingletonMonoBehaviour<CanvasController> {
 
     void Awake() {
         cardZone = GetComponentInChildren<CardZone>();
+    }
+
+    void Start() {
+        levelText.text = $"Level {GameManager.level}";
     }
 
     void Update() { //TODO

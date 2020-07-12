@@ -4,10 +4,10 @@
 public class ScoreListTimed : ScoreListInt{
 	protected override string KeyLabel{
 		get{
-			return "Impl8";
+			return "Impl9";
 		}
 	}
 	public override string GetStringAsValue(int value){
-		return new System.DateTime(System.TimeSpan.FromMilliseconds(value).Ticks).ToString("mm:ss:fff"); 
+		return $"Level {value}"; 
 	}
 }

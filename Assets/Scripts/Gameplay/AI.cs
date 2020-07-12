@@ -13,8 +13,8 @@ public class AI {
         player.ai = this;
         if (!debugPrint) {
             string s = "";
-            for (int r = 1; r < 10; r++) { 
-                s += $"Round {r} min {GetSecondBasePerRound(r)} max {GetSecondBasePerRound(r)+ GetSecondIncPerRound(r)}\n";
+            for (int l = 1; l < 10; l++) { 
+                s += $"Level {l} min {GetSecondBasePerRound(l)} max {GetSecondBasePerRound(l)+ GetSecondIncPerRound(l)}\n";
             }
             Debug.Log(s);
             debugPrint = true;
@@ -31,10 +31,10 @@ public class AI {
             yield return new WaitWhile(() => cardTypeDeck.Count == 0);
             GameManager.I.ExecuteCardEffect(player, null, cardTypeDeck[0]);
             cardTypeDeck.RemoveAt(0);
-            yield return new WaitForSeconds(GetSecondBasePerRound(1) + GetSecondIncPerRound(1)*Random.value);
+            yield return new WaitForSeconds(GetSecondBasePerRound(1) + GetSecondIncPerRound(GameManager.level)*Random.value);
         }
     }
 
-    float GetSecondBasePerRound(int round) => 24 / (round + 1);
-    float GetSecondIncPerRound(int round) => 36 / (round + 1);
+    float GetSecondBasePerRound(int level) => 24f / (level + 1);
+    float GetSecondIncPerRound(int level) => 36f / (level + 1);
 }

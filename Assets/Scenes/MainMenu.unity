@@ -972,7 +972,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 11408190, guid: e00e0555510e3e34695698e79dce3c2d, type: 3}
       propertyPath: m_Text
-      value: 0:00:00
+      value: Level -
       objectReference: {fileID: 0}
     - target: {fileID: 11408190, guid: e00e0555510e3e34695698e79dce3c2d, type: 3}
       propertyPath: m_FontData.m_Alignment
@@ -2036,7 +2036,7 @@ MonoBehaviour:
   clearLastScoreAfterShowing: 0
   currentScoreLabel: {fileID: 2124339268}
   currentScoreText: {fileID: 518029439}
-  currentScoreDefaultMessage: --:--:---
+  currentScoreDefaultMessage: Level --
 --- !u!224 &1222748629 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 22459518, guid: 0416a2fd66766b648be0197cff5f48b7,

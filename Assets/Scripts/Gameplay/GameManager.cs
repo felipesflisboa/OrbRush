@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 public class GameManager : SingletonMonoBehaviour<GameManager> {
+    public static int level = 1;
+
     [SerializeField] Transform[] spawnPointTransformArray;
     [SerializeField] GameObject[] playerPrefabArray;
     [SerializeField] GameObject[] cardPrefabArray;
@@ -66,13 +69,30 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     public void OnReachGoal(Player player) {
         if (!occuring)
             return;
+        StartCoroutine(EndGameRoutine(player));
+    }
+
+    IEnumerator EndGameRoutine(Player player) {
         Debug.Log($"Player {player.number} won in {Time.timeSinceLevelLoad}s!");
         Time.timeScale = 0;
-        this.Schedule(new WaitForSecondsRealtime(1.2f), () => {
-            CanvasController.I.victoryText.gameObject.SetActive(true);
-            CanvasController.I.victoryText.text = $"Player {player.m_name} won!";
-        });
         occuring = false;
+        yield return new WaitForSecondsRealtime(1.2f);
+        CanvasController.I.victoryText.gameObject.SetActive(true);
+        CanvasController.I.victoryText.text = $"Player {player.m_name} won!";
+        yield return new WaitForSecondsRealtime(4f);
+        FindObjectOfType<Fader>().FadeOut(() => {
+            if (player == humanPlayer) {
+                level++;
+                SceneManager.LoadScene("Game");
+            } else {
+                SimpleScoreListTimedDrawer.lastScore = level;
+                ScoreListTimed scoreList = new ScoreListTimed();
+                scoreList.Load();
+                scoreList.AddScore((int)SimpleScoreListTimedDrawer.lastScore);
+                scoreList.Save();
+                SceneManager.LoadScene("MainMenu");
+            }
+        });
     }
 
     public void ExecuteCardEffect(Player player, Card card, CardType cardType) {
