@@ -61,7 +61,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         while (occuring) {
             CanvasController.I.cardZone.Add(cardPrefabArray[Mathf.FloorToInt(Random.value * cardPrefabArray.Length)]);
             foreach (var ai in aiArray)
-                ai.cardTypeDeck.Add(EnumUtil.GetRandomValueFromEnum<CardType>(1, -3));
+                ai.cardTypeDeck.Add(EnumUtil.GetRandomValueFromEnum<CardType>(1, -4));
             yield return new WaitForSeconds(5);
         }
     }
@@ -119,7 +119,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
             case CardType.Earth:
                 selectedPlayer = GameManager.I.playerArray.First((p) => p!=null && p.element == Element.Earth);
                 if(selectedPlayer.currentSegment != null) {
-                    selectedPlayer.currentSegment.ApplyEarthquake();
+                    selectedPlayer.currentSegment.ApplyEffect(CardType.Earthquake);
                     if (card != null)
                         Destroy(card.gameObject);
                 }

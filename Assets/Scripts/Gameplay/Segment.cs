@@ -9,7 +9,6 @@ public class Segment : MonoBehaviour {
     [SerializeField] Transform tornadoDiskTransform;
     List<Player> playerInsideList = new List<Player>();
     internal CardType cardType;
-    bool onEarthquake; //TODO remove
 
     void OnMouseDown() {
         Debug.Log($"Mousedown! {name}");
@@ -62,6 +61,17 @@ public class Segment : MonoBehaviour {
             case CardType.Tornado:
                 ApplyColor(Color.gray);
                 break;
+            case CardType.Earthquake:
+                ApplyColor(new Color32(0, 0xA0, 0, 0));
+                foreach (var item in earthquakePlatformArray) {
+                    item.gameObject.SetActive(true);
+                    DOTween.Sequence().Append(
+                        item.transform.DOMoveY(0.2f, 0.4f).SetRelative()
+                    ).Append(
+                        item.transform.DOMoveY(-0.2f, 0.001f).SetRelative()
+                    ).SetLoops(-1);
+                }
+                break;
         }
     }
 
@@ -94,18 +104,9 @@ public class Segment : MonoBehaviour {
             case CardType.Lake:
                 player.rigidBody.velocity = player.rigidBody.velocity * 0.5f;
                 break;
-        }
-    }
-
-    public void ApplyEarthquake() {
-        onEarthquake = true;
-        foreach (var item in earthquakePlatformArray) {
-            item.gameObject.SetActive(true);
-            DOTween.Sequence().Append(
-                item.transform.DOMoveY(0.3f, 0.3f).SetRelative()
-            ).Append(
-                item.transform.DOMoveY(-0.3f, 0.001f).SetRelative()
-            ).SetLoops(-1);
+            case CardType.Earthquake:
+                player.rigidBody.velocity = player.rigidBody.velocity * 1.6f;
+                break;
         }
     }
 
