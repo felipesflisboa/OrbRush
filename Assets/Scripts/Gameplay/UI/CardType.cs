@@ -1,3 +1,3 @@
 ﻿public enum CardType {
-    None=0, Fire, Water, Earth, Air, Neo
+    None=0, Fire, Water, Earth, Air, Neo, Lake
 }

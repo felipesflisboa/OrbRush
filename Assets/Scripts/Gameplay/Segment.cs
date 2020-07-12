@@ -1,10 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class Segment : MonoBehaviour {
+    [SerializeField] Transform[] earthquakePlatformArray = new Transform[0];
+    [SerializeField] Transform tornadoDiskTransform;
     List<Player> playerInsideList = new List<Player>();
     internal CardType cardType;
+    bool onEarthquake;
+    bool onTornado; //TODO remove
 
     void OnMouseDown() {
         Debug.Log($"Mousedown! {name}");
@@ -51,6 +56,9 @@ public class Segment : MonoBehaviour {
             case CardType.Air:
                 ApplyColor(Color.yellow);
                 break;
+            case CardType.Lake:
+                ApplyColor(Color.blue);
+                break;
         }
     }
 
@@ -80,7 +88,31 @@ public class Segment : MonoBehaviour {
                 if (player.element == Element.Water)
                     player.rigidBody.velocity = player.rigidBody.velocity * 0.6f;
                 break;
+            case CardType.Lake:
+                player.rigidBody.velocity = player.rigidBody.velocity * 0.5f;
+                break;
         }
+    }
+
+    public void ApplyEarthquake() {
+        onEarthquake = true;
+        foreach (var item in earthquakePlatformArray) {
+            item.gameObject.SetActive(true);
+            DOTween.Sequence().Append(
+                item.transform.DOMoveY(0.3f, 0.3f).SetRelative()
+            ).Append(
+                item.transform.DOMoveY(-0.3f, 0.001f).SetRelative()
+            ).SetLoops(-1);
+        }
+    }
+    
+    //TODO cyclone
+    public void ApplyTornado() {
+        onTornado = true;
+        if (tornadoDiskTransform == null)
+            return;
+        tornadoDiskTransform.gameObject.SetActive(true);
+        tornadoDiskTransform.DOLocalRotate(Vector3.up*90, 0.25f).SetRelative().SetLoops(-1);
     }
 
     void OnTriggerExit(Collider other) {

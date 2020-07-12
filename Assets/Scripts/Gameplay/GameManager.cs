@@ -61,7 +61,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         while (occuring) {
             CanvasController.I.cardZone.Add(cardPrefabArray[Mathf.FloorToInt(Random.value * cardPrefabArray.Length)]);
             foreach (var ai in aiArray)
-                ai.cardTypeDeck.Add(EnumUtil.GetRandomValueFromEnum<CardType>(1, -1));
+                ai.cardTypeDeck.Add(EnumUtil.GetRandomValueFromEnum<CardType>(1, -2));
             yield return new WaitForSeconds(5);
         }
     }
@@ -96,6 +96,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     }
 
     public void ExecuteCardEffect(Player player, Card card, CardType cardType) {
+        Player selectedPlayer = null;
         switch (cardType) {
             case CardType.Neo:
                 Debug.Log("Activated=" + cardType);
@@ -104,14 +105,48 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
                     Destroy(card.gameObject);
                 break;
             case CardType.Fire:
-            case CardType.Water:
+                selectedPlayer = GameManager.I.playerArray.First((p) => p!=null && p.element == Element.Fire);
+                const float radius = 7f;
+                foreach(var item in Physics.OverlapSphere(selectedPlayer.transform.position, radius)) {
+                    Player p = item.GetComponentInParent<Player>();
+                    if(p!= null && p != selectedPlayer) {
+                        p.rigidBody.AddExplosionForce(700, selectedPlayer.transform.position, radius);
+                    }
+                }
+                if (card != null)
+                    Destroy(card.gameObject);
+                break;
             case CardType.Earth:
+                selectedPlayer = GameManager.I.playerArray.First((p) => p!=null && p.element == Element.Earth);
+                if(selectedPlayer.currentSegment != null) {
+                    selectedPlayer.currentSegment.ApplyEarthquake();
+                    if (card != null)
+                        Destroy(card.gameObject);
+                }
+                break;
+            case CardType.Water:
+                selectedPlayer = GameManager.I.playerArray.First((p) => p != null && p.element == Element.Water);
+                if (selectedPlayer.currentSegment != null) {
+                    selectedPlayer.currentSegment.ApplyEffect(CardType.Lake);
+                    if (card != null)
+                        Destroy(card.gameObject);
+                }
+                break;
             case CardType.Air:
+                selectedPlayer = GameManager.I.playerArray.First((p) => p != null && p.element == Element.Air);
+                if (selectedPlayer.currentSegment != null) {
+                    selectedPlayer.currentSegment.ApplyTornado();
+                    if (card != null)
+                        Destroy(card.gameObject);
+                }
+                break;
+                /*
                 if (card != null)
                     card.Highlight();
                 else
                     AIApplyOnNearSegment(player, cardType);
                 break;
+                */
             default:
                 Debug.Log("Activated=" + cardType);
                 break;
