@@ -143,3 +143,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   element: 3
   m_name: Earth
+  velTest: {x: 0, y: 0, z: 0}

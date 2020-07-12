@@ -56,27 +56,27 @@ public class Segment : MonoBehaviour {
         switch (cardType) {
             case CardType.Fire:
                 if(player.element == Element.Fire)
-                    player.rigidBody.velocity = player.rigidBody.velocity * 1.1f;
+                    player.rigidBody.velocity = player.rigidBody.velocity * 1.2f;
                 if (player.element == Element.Air)
-                    player.rigidBody.velocity = player.rigidBody.velocity * 0.8f;
+                    player.rigidBody.velocity = player.rigidBody.velocity * 0.6f;
                 break;
             case CardType.Water:
                 if(player.element == Element.Water)
-                    player.rigidBody.velocity = player.rigidBody.velocity * 1.1f;
+                    player.rigidBody.velocity = player.rigidBody.velocity * 1.2f;
                 if (player.element == Element.Fire)
-                    player.rigidBody.velocity = player.rigidBody.velocity * 0.8f;
+                    player.rigidBody.velocity = player.rigidBody.velocity * 0.6f;
                 break;
             case CardType.Air:
                 if (player.element == Element.Air)
-                    player.rigidBody.velocity = player.rigidBody.velocity * 1.1f;
+                    player.rigidBody.velocity = player.rigidBody.velocity * 1.2f;
                 if (player.element == Element.Earth)
-                    player.rigidBody.velocity = player.rigidBody.velocity * 0.8f;
+                    player.rigidBody.velocity = player.rigidBody.velocity * 0.6f;
                 break;
             case CardType.Earth:
                 if (player.element == Element.Earth)
-                    player.rigidBody.velocity = player.rigidBody.velocity * 1.1f;
+                    player.rigidBody.velocity = player.rigidBody.velocity * 1.2f;
                 if (player.element == Element.Water)
-                    player.rigidBody.velocity = player.rigidBody.velocity * 0.8f;
+                    player.rigidBody.velocity = player.rigidBody.velocity * 0.6f;
                 break;
         }
     }

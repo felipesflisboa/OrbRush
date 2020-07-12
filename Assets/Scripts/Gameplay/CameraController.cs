@@ -21,17 +21,17 @@ public class CameraController : MonoBehaviour{
     void Update(){
         if (GameManager.I.playerArray == null || !followingPlayers)
             return;
-        transform.position = transform.position.WithZ(GetCurrentPosZ());
+        transform.position = GetPos();
     }
 
-    float GetCurrentPosZ() {
-        float z = 0;
+    Vector3 GetPos() {
+        Vector3 ret = Vector3.zero;
         foreach (var player in GameManager.I.playerArray) {
             if (player == null)
                 continue;
-            z += player.transform.position.z;
+            ret += player.transform.position;
         }
-        return Mathf.Lerp(transform.position.z, z / (GameManager.I.playerArray.Length - 1) + 55, 2 * Time.deltaTime);
+        return Vector3.Lerp(transform.position, (ret/ (GameManager.I.playerArray.Length - 1)) + new  Vector3(0, 40, 65), 2 * Time.deltaTime);
     }
 
     /* //remove
