@@ -25,13 +25,16 @@ public class CameraController : MonoBehaviour{
     }
 
     Vector3 GetPos() {
-        Vector3 ret = Vector3.zero;
+        /*
+        Vector3 playerSum = Vector3.zero;
         foreach (var player in GameManager.I.playerArray) {
             if (player == null)
                 continue;
-            ret += player.transform.position;
+            playerSum += player.transform.position;
         }
-        return Vector3.Lerp(transform.position, (ret/ (GameManager.I.playerArray.Length - 1)) + new  Vector3(0, 40, 65), 2 * Time.deltaTime);
+        return Vector3.Lerp(transform.position, (playerSum/ (GameManager.I.playerArray.Length - 1)) + new  Vector3(0, 40, 65), 1.2f * Time.deltaTime);
+        */
+        return Vector3.Lerp(transform.position, GameManager.I.humanPlayer.transform.position + new Vector3(0, 35, 55), 1.2f * Time.deltaTime);
     }
 
     /* //remove
