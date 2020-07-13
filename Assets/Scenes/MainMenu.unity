@@ -2265,7 +2265,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22459518, guid: 0416a2fd66766b648be0197cff5f48b7, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 360
+      value: 420
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0416a2fd66766b648be0197cff5f48b7, type: 3}

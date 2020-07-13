@@ -2867,7 +2867,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Your hand is full. Card make your ball slower!"
+  m_Text: Your hand is full. Cards make your ball slower!"
 --- !u!222 &617607042
 CanvasRenderer:
   m_ObjectHideFlags: 0
