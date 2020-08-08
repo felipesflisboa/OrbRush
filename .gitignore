@@ -5,35 +5,52 @@
 [Tt]emp/
 [Oo]bj/
 [Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+[Mm]emoryCaptures/
 UnityGenerated/
 Assets/AssetStoreTools*
-sysinfo.txt
 *.stackdump
 
 # ===================================== #
-# Visual Studio / MonoDevelop generated #
+# IDE generated 			#
 # ===================================== #
+/[Aa]ssets/Plugins/Editor/JetBrains*
 /.vs/
 [Ee]xported[Oo]bj/
 *.svd
 *.userprefs
 *.csproj
+*.unityproj
+*.booproj
 *.pidb
 *.suo
 *.sln*
 *.user
-*.unityproj
-*.booproj
 *.tmp
+
+# Temporary auto-generated Android Assets
+.gradle/
+/[Aa]ssets/[Ss]treamingAssets/aa.meta
+/[Aa]ssets/[Ss]treamingAssets/aa/*
 
 # UnityVS
 UnityVS/*
 UnityVS.meta
 
+# Builds
+*.apk
+*.aab
+*.unitypackage
+
 # Unity3D generated meta files
 *.pidb.meta
+*.pdb.meta
+*.mdb.meta
 
 # Unity3D Generated File On Crash Reports
+crashlytics-build.properties
 sysinfo.txt
 
 # ============ #
