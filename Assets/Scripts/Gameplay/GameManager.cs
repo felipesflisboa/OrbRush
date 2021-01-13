@@ -56,40 +56,40 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
             if(humanPlayer== playerArray[playerI])
                 playerI++;
             aiArray[aiI] = new AI(playerArray[playerI]);
-            aiArray[aiI].StartRoutine(this);
+            aiArray[aiI].MainLoop();
             playerI++;
         }
 
-        StartCoroutine(CardRoutine());
         startSFX.Play();
         occuring = true;
+        MainLoop();
     }
 
-    IEnumerator CardRoutine() {
-        yield return null;
+    async void MainLoop() {
+        await new WaitForUpdate();
         while (occuring) {
             CanvasController.I.cardZone.Add(cardPrefabArray[Mathf.FloorToInt(Random.value * cardPrefabArray.Length)]);
             foreach (var ai in aiArray)
                 ai.cardTypeDeck.Add(EnumUtil.GetRandomValueFromEnum<CardType>(1, -4));
-            yield return new WaitForSeconds(5);
+            await new WaitForSeconds(5);
         }
     }
 
     public void OnReachGoal(Player player) {
         if (!occuring)
             return;
-        StartCoroutine(EndGameRoutine(player));
+        EndGame(player);
     }
 
-    IEnumerator EndGameRoutine(Player player) {
+    async void EndGame(Player player) {
         Debug.Log($"Player {player.number} won in {Time.timeSinceLevelLoad}s!");
         Time.timeScale = 0;
         occuring = false;
         endSFX.Play();
-        yield return new WaitForSecondsRealtime(1.2f);
+        await new WaitForSecondsRealtime(1.2f);
         CanvasController.I.victoryText.gameObject.SetActive(true);
         CanvasController.I.victoryText.text = $"Player {player.m_name} won!";
-        yield return new WaitForSecondsRealtime(4f);
+        await new WaitForSecondsRealtime(4f);
         FindObjectOfType<Fader>().FadeOut(() => {
             if (player == humanPlayer) {
                 level++;
@@ -110,7 +110,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         switch (cardType) {
             case CardType.Neo:
                 Debug.Log("Activated=" + cardType);
-                GameManager.I.playerArray[1].Boost();
+                playerArray[1].Boost();
                 if (card != null)
                     Destroy(card.gameObject);
                 break;

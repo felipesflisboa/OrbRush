@@ -21,17 +21,13 @@ public class AI {
         }
     }
 
-    public void StartRoutine(MonoBehaviour routinePlayer) {
-        routinePlayer.StartCoroutine(MainRoutine());
-    }
-
-    IEnumerator MainRoutine() {
-        yield return new WaitForSeconds(Random.Range(0.5f, 4f));
+    public async void MainLoop() {
+        await new WaitForSeconds(Random.Range(0.5f, 4f));
         while (GameManager.I.occuring) {
-            yield return new WaitWhile(() => cardTypeDeck.Count == 0);
+            await new WaitWhile(() => cardTypeDeck.Count == 0);
             GameManager.I.ExecuteCardEffect(player, null, cardTypeDeck[0]);
             cardTypeDeck.RemoveAt(0);
-            yield return new WaitForSeconds(GetSecondBasePerRound(1) + GetSecondIncPerRound(GameManager.level)*Random.value);
+            await new WaitForSeconds(GetSecondBasePerRound(1) + GetSecondIncPerRound(GameManager.level)*Random.value);
         }
     }
 

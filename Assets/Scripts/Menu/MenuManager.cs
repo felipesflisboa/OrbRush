@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Linq;
 using DG.Tweening;
+using static IEnumeratorAwaitExtensions;
+using System.Threading.Tasks;
 
 /// <summary>
 /// Sample option class.
@@ -33,20 +35,20 @@ public class MenuManager : SingletonMonoBehaviour<MenuManager> {
 
     void Start () {
 		clickCooldownTimer = new Timer(0.75f);
-        StartCoroutine(EnablePanel(SimpleScoreListTimedDrawer.lastScore == null ? MenuPanelType.Title : MenuPanelType.LocalHighScores));
+        EnablePanel(SimpleScoreListTimedDrawer.lastScore == null ? MenuPanelType.Title : MenuPanelType.LocalHighScores);
 	}
 
-	IEnumerator EnablePanel(MenuPanelType type) {
+    async Task EnablePanel(MenuPanelType type) {
         if (fader != null && Time.timeSinceLevelLoad > 0.1f) 
-            yield return fader.FadeOut().WaitForCompletion();
+            await fader.FadeOut().WaitForCompletion();
         currentPanelOption = type;
         foreach (MenuPanel panel in panelArray)
             panel.gameObject.SetActive(panel.type == type);
         if (fader != null && Time.timeSinceLevelLoad > 0.1f)
-            yield return fader.FadeIn().WaitForCompletion();
+            await fader.FadeIn().WaitForCompletion();
     }
 
-	public void PlayClickSFX(){
+    public void PlayClickSFX(){
         if (clickSFX == null)
             return;
         clickSFX.Play();
@@ -54,27 +56,27 @@ public class MenuManager : SingletonMonoBehaviour<MenuManager> {
 
 #region Buttons
 	public void OnPlayClick(){
-        StartCoroutine(PlayCoroutine());
+        OnPlay();
 	}
 	public void OnInfoClick(){
 		PlayClickSFX();
-		StartCoroutine(EnablePanel(MenuPanelType.Info));
+		EnablePanel(MenuPanelType.Info);
 	}
 	public void OnHighScoresClick(){
 		PlayClickSFX();
-        StartCoroutine(EnablePanel(MenuPanelType.HighScores));
+        EnablePanel(MenuPanelType.HighScores);
     }
     public void OnLocalHighScoresClick() {
         PlayClickSFX();
-        StartCoroutine(EnablePanel(MenuPanelType.LocalHighScores));
+        EnablePanel(MenuPanelType.LocalHighScores);
     }
     public void OnGameSparksHighScoresClick() {
         PlayClickSFX();
-        StartCoroutine(EnablePanel(MenuPanelType.GameSparksHighScores));
+        EnablePanel(MenuPanelType.GameSparksHighScores);
     }
     public void OnRenameClick() {
         PlayClickSFX();
-        StartCoroutine(EnablePanel(MenuPanelType.Rename));
+        EnablePanel(MenuPanelType.Rename);
     }
     public void OnExitClick(){
 		PlayClickSFX();
@@ -93,11 +95,11 @@ public class MenuManager : SingletonMonoBehaviour<MenuManager> {
 	}
 #endregion
 
-    IEnumerator PlayCoroutine() {
+    async void OnPlay() {
         PlayClickSFX();
         SimpleScoreListTimedDrawer.lastScore = null;
-        yield return EnablePanel(MenuPanelType.Loading);
-        yield return null;
+        await EnablePanel(MenuPanelType.Loading);
+        await new WaitForUpdate();
         GameManager.level = 1;
         UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
     }
@@ -110,6 +112,6 @@ public class MenuManager : SingletonMonoBehaviour<MenuManager> {
 	}
 
     public void BackToTitle() {
-        StartCoroutine(EnablePanel(MenuPanelType.Title));
+        EnablePanel(MenuPanelType.Title);
     }
 }

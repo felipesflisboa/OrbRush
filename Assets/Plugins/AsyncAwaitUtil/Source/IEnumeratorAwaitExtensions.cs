@@ -50,6 +50,10 @@ public static class IEnumeratorAwaitExtensions
         return GetAwaiterReturnVoid(instruction);
     }
 
+    public static SimpleCoroutineAwaiter GetAwaiter(this YieldInstruction instruction) { //mod
+        return GetAwaiterReturnVoid(instruction);
+    }
+
     public static SimpleCoroutineAwaiter<AsyncOperation> GetAwaiter(this AsyncOperation instruction)
     {
         return GetAwaiterReturnSelf(instruction);
