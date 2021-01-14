@@ -10,6 +10,7 @@ public class Player : MonoBehaviour {
     internal Rigidbody rigidBody; //TODO protect
     internal Segment currentSegment;
     internal Segment lastSegment;
+    internal bool reachGoal;
     public AI ai;
     int fixedUpdateCount;
 

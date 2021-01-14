@@ -23,7 +23,7 @@ public class AI {
 
     public async void MainLoop() {
         await new WaitForSeconds(Random.Range(0.5f, 4f));
-        while (GameManager.I.occuring) {
+        while (!player.reachGoal) {
             await new WaitWhile(() => cardTypeDeck.Count == 0);
             GameManager.I.ExecuteCardEffect(player, null, cardTypeDeck[0]);
             cardTypeDeck.RemoveAt(0);

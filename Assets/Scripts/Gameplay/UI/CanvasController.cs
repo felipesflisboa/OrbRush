@@ -30,7 +30,7 @@ public class CanvasController : SingletonMonoBehaviour<CanvasController> {
     }
 
     void Update() { //TODO
-        timeText.text = $"{Time.timeSinceLevelLoad.ToString("F3")}s";
+        timeText.text = $"{GameManager.I.CurrentTime.ToString("F3")}s";
         cardAlertText.gameObject.SetActive(cardZone.cardList.Count >= 5); //TODO optimize
     }
 }

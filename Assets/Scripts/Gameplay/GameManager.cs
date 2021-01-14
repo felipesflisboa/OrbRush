@@ -21,10 +21,15 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
 
     internal Player[] playerArray; //TODO protect
     internal Player humanPlayer;
-    internal bool occuring;
+    internal GameState state;
     internal Card selectedCard;
     internal List<Segment> segmentList;
+    float endTime;
     AI[] aiArray;
+
+    int PlayerReachGoalCount => playerArray.Sum(player => player!= null && player.reachGoal ? 1 : 0);
+    int PlayerCount => spawnPointTransformArray.Length;
+    public float CurrentTime => GameState.Ocurring==state ? Time.timeSinceLevelLoad : endTime;
 
     void Start() {
         Time.timeScale = 0;
@@ -61,48 +66,61 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         }
 
         startSFX.Play();
-        occuring = true;
+        state = GameState.Ocurring;
         MainLoop();
     }
 
     async void MainLoop() {
         await new WaitForUpdate();
-        while (occuring) {
+        while (state == GameState.Ocurring) { //TODO check each player individually
             CanvasController.I.cardZone.Add(cardPrefabArray[Mathf.FloorToInt(Random.value * cardPrefabArray.Length)]);
             foreach (var ai in aiArray)
-                ai.cardTypeDeck.Add(EnumUtil.GetRandomValueFromEnum<CardType>(1, -4));
+                if(ai.player.reachGoal)
+                    ai.cardTypeDeck.Add(EnumUtil.GetRandomValueFromEnum<CardType>(1, -4));
             await new WaitForSeconds(5);
         }
     }
 
     public void OnReachGoal(Player player) {
-        if (!occuring)
-            return;
-        EndGame(player);
+        player.reachGoal = true;
+        if (state == GameState.Ocurring)
+            EndGame(player);
     }
 
-    async void EndGame(Player player) {
-        Debug.Log($"Player {player.number} won in {Time.timeSinceLevelLoad}s!");
-        Time.timeScale = 0;
-        occuring = false;
+    async void EndGame(Player winnerPlayer) {
+        EndGameState(winnerPlayer);
         endSFX.Play();
         await new WaitForSecondsRealtime(1.2f);
-        CanvasController.I.victoryText.gameObject.SetActive(true);
-        CanvasController.I.victoryText.text = $"Player {player.m_name} won!";
-        await new WaitForSecondsRealtime(4f);
-        FindObjectOfType<Fader>().FadeOut(() => {
-            if (player == humanPlayer) {
-                level++;
-                SceneManager.LoadScene("Game");
-            } else {
-                SimpleScoreListTimedDrawer.lastScore = level;
-                ScoreListTimed scoreList = new ScoreListTimed();
-                scoreList.Load();
-                scoreList.AddScore((int)SimpleScoreListTimedDrawer.lastScore);
-                scoreList.Save();
-                SceneManager.LoadScene("MainMenu");
-            }
-        });
+        CanvasController.I.victoryText.gameObject.SetActive(true); //TODO
+        CanvasController.I.victoryText.text = $"Player {winnerPlayer.m_name} won!";
+        await new WaitForSecondsRealtime(2.5f);
+        await new WaitMultiple(this, 1, new WaitForSecondsRealtime(4f), new WaitUntil(() => PlayerReachGoalCount >= PlayerCount - 1));
+        await new WaitForSecondsRealtime(0.5f);
+        FindObjectOfType<Fader>().FadeOut(() => GoToNextScene(winnerPlayer));
+    }
+
+    void EndGameState(Player winnerPlayer) {
+        endTime = CurrentTime;
+        state = GameState.End;
+        Debug.Log($"Player {winnerPlayer.number} won in {CurrentTime}s!");
+    }
+
+    void GoToNextScene(Player winnerPlayer) {
+        if (winnerPlayer == humanPlayer) {
+            level++;
+            SceneManager.LoadScene("Game");
+        } else {
+            SaveLastScore();
+            SceneManager.LoadScene("MainMenu");
+        }
+    }
+
+    void SaveLastScore() {
+        SimpleScoreListTimedDrawer.lastScore = level;
+        ScoreListTimed scoreList = new ScoreListTimed();
+        scoreList.Load();
+        scoreList.AddScore((int)SimpleScoreListTimedDrawer.lastScore);
+        scoreList.Save();
     }
 
     public void ExecuteCardEffect(Player player, Card card, CardType cardType) {
