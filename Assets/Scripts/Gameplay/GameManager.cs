@@ -8,9 +8,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     public static int level = 1;
 
     [SerializeField] Transform[] spawnPointTransformArray;
-    [SerializeField] GameObject[] playerPrefabArray;
-    [SerializeField] GameObject[] cardPrefabArray;
-    [SerializeField] GameObject explosionPrefab;
+    [SerializeField, PrefabReference] GameObject[] playerPrefabArray;
+    [SerializeField, PrefabReference] GameObject[] cardPrefabArray;
+    [SerializeField, PrefabReference] GameObject explosionPrefab;
 
     [SerializeField] AudioSource cycloneSFX;
     [SerializeField] AudioSource squidSFX;

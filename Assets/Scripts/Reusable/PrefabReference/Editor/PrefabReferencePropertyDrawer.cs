@@ -30,12 +30,4 @@ public class PrefabReferencePropertyDrawer : PropertyDrawer{
             return (property.objectReferenceValue as Component)?.gameObject;
         return null;
     }
-
-    /* //remove
-    System.Type GetType(SerializedProperty property) {
-        System.Type parentType = property.serializedObject.targetObject.GetType();
-        System.Reflection.FieldInfo fi = parentType.GetField(property.propertyPath);
-        return fi.FieldType;
-    }
-    */
 }
