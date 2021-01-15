@@ -12,6 +12,7 @@ public class PrefabReferencePropertyDrawer : PropertyDrawer{
             if (!(property.objectReferenceValue is GameObject) && !(property.objectReferenceValue is Component))
                 Debug.LogWarningFormat("PrefabReference only works with Components and GameObject. {0} isn't neither!", property.displayName);
         }
+        label.text = "■ "+label.text;
         EditorGUI.PropertyField(position, property, label, true);
     }
 
