@@ -20,6 +20,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     [SerializeField] AudioSource endSFX;
 
     internal Player[] playerArray; //TODO protect
+    internal Player[] nonNullPlayerArray;
     internal Player humanPlayer;
     internal GameState state;
     internal Card selectedCard;
@@ -27,7 +28,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     float endTime;
     AI[] aiArray;
 
-    int PlayerReachGoalCount => playerArray.Sum(player => player!= null && player.reachGoal ? 1 : 0);
+    int PlayerReachGoalCount => nonNullPlayerArray.Sum(player => player.reachGoal ? 1 : 0);
     int PlayerCount => spawnPointTransformArray.Length;
     public float CurrentTime => GameState.Ocurring==state ? Time.timeSinceLevelLoad : endTime;
 
@@ -44,6 +45,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
             ).GetComponent<Player>();
             playerArray[i].number = i;
         }
+        nonNullPlayerArray = playerArray.Where(player => player!=null).ToArray();
 
         CanvasController.I.startText.gameObject.SetActive(true);
     }
