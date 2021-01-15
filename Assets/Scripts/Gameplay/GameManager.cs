@@ -19,6 +19,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     [SerializeField] AudioSource startSFX;
     [SerializeField] AudioSource endSFX;
 
+    internal MusicController musicController;
     internal Player[] playerArray; //TODO protect
     internal Player[] nonNullPlayerArray;
     internal Player humanPlayer;
@@ -31,8 +32,11 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     int PlayerReachGoalCount => nonNullPlayerArray.Sum(player => player.reachGoal ? 1 : 0);
     int PlayerCount => spawnPointTransformArray.Length;
     public float CurrentTime => GameState.Ocurring==state ? Time.timeSinceLevelLoad : endTime;
+    public bool Paused => Time.timeScale == 0 && state != GameState.BeforeStart;
 
     void Start() {
+        musicController = FindObjectOfType<MusicController>();
+
         Time.timeScale = 0;
         segmentList = FindObjectsOfType<Segment>().ToList();
         segmentList.Sort((a, b) => a.transform.position.z.CompareTo(b.transform.position.z));
@@ -69,10 +73,10 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
 
         startSFX.Play();
         state = GameState.Ocurring;
-        MainLoop();
+        DrawCardLoop();
     }
 
-    async void MainLoop() {
+    async void DrawCardLoop() {
         await new WaitForUpdate();
         while (state == GameState.Ocurring) { //TODO check each player individually
             CanvasController.I.cardZone.Add(cardPrefabArray[Mathf.FloorToInt(Random.value * cardPrefabArray.Length)]);
@@ -81,6 +85,11 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
                     ai.cardTypeDeck.Add(EnumUtil.GetRandomValueFromEnum<CardType>(1, -4));
             await new WaitForSeconds(5);
         }
+    }
+
+    void Update() {
+        if (Input.GetKeyDown(KeyCode.P))
+            TogglePause();
     }
 
     public void OnReachGoal(Player player) {
@@ -208,5 +217,17 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
             }
         }
         Debug.LogWarning("Can't apply effect on valid segment!");
+    }
+
+    public void TogglePause() {
+        if (state != GameState.Ocurring)
+            return;
+        Time.timeScale = Paused ? 1 : 0;
+        if(musicController != null) {
+            if (Paused)
+                musicController.Pause();
+            else
+                musicController.Play();
+        }
     }
 }

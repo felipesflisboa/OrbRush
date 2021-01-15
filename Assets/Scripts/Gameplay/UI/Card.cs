@@ -27,7 +27,8 @@ public class Card : MonoBehaviour{
     }
 
     public void OnClick() {
-        Debug.Log("OnClick");
+        if (GameManager.I.Paused)
+            return;
         GameManager.I.ExecuteCardEffect(GameManager.I.humanPlayer, this, type);
     }
 }
