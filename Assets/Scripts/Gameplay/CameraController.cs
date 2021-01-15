@@ -7,16 +7,20 @@ using System.Linq;
 
 public class CameraController : MonoBehaviour{
     [SerializeField] Vector3 characterSelectionPos;
+    [SerializeField] Vector3 pivotBonusPos;
+    [SerializeField] Vector3 bigDistancePivotBonusPos;
     [SerializeField] Vector3 camBonusPos;
     [Tooltip("x/time: biggest distance between players\ny/value: local Z Pos"), SerializeField] AnimationCurve zPerDistanceBetweenPlayers;
     Vector3 initialPos;
     float maxDistanceBetweenPlayers; // for debug display
+    float distanceLimit;
     bool followingPlayers;
-
-    //TODO adjust when too distant. Focus human players only
+    
     Vector3 PivotPos {
         get {
-            return new Vector3(
+            if (GetMaxDistanceBetweenPlayers() > distanceLimit)
+                return GameManager.I.humanPlayer.transform.position.WithY(0)+ bigDistancePivotBonusPos;
+            return pivotBonusPos + new Vector3(
                 (
                     GameManager.I.nonNullPlayerArray.Max(p => p.transform.position.x) + 
                     GameManager.I.nonNullPlayerArray.Min(p => p.transform.position.x)
@@ -30,10 +34,11 @@ public class CameraController : MonoBehaviour{
         }
     }
 
-    Vector3 TargetPos => PivotPos + camBonusPos - transform.forward * zPerDistanceBetweenPlayers.Evaluate(GetMaxZDistanceBetweenPlayers());
+    Vector3 TargetPos => PivotPos - transform.forward * zPerDistanceBetweenPlayers.Evaluate(GetMaxDistanceBetweenPlayers());
 
     void Awake() {
         initialPos = transform.position;
+        distanceLimit = zPerDistanceBetweenPlayers.keys.Max(key => key.time);
         transform.position = characterSelectionPos;
     }
 
@@ -46,21 +51,21 @@ public class CameraController : MonoBehaviour{
             return;
         transform.position = GetPos();
 #if UNITY_EDITOR
-        maxDistanceBetweenPlayers = GetMaxZDistanceBetweenPlayers();
+        maxDistanceBetweenPlayers = GetMaxDistanceBetweenPlayers();
 #endif
     }
 
     Vector3 GetPos() {
-        return Vector3.Lerp(transform.position, TargetPos, 2f * Time.deltaTime);
+        return Vector3.Lerp(transform.position, TargetPos, 1.2f * Time.deltaTime);
     }
 
-    float GetMaxZDistanceBetweenPlayers() {
+    float GetMaxDistanceBetweenPlayers() {
         float ret = 0;
         for (int i = 0; i < GameManager.I.nonNullPlayerArray.Length - 1; i++) {
             for (int j = i + 1; j < GameManager.I.nonNullPlayerArray.Length; j++) {
-                ret = Mathf.Max(ret, Mathf.Abs(
-                    GameManager.I.nonNullPlayerArray[i].transform.position.z - GameManager.I.nonNullPlayerArray[j].transform.position.z
-                ));
+                ret = Mathf.Max(ret, Mathf.Abs(Vector3.Distance(
+                    GameManager.I.nonNullPlayerArray[i].transform.position, GameManager.I.nonNullPlayerArray[j].transform.position
+                )));
             }
         }
         return ret;

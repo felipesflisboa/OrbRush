@@ -7130,12 +7130,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterSelectionPos: {x: 0, y: 4, z: 2}
-  camBonusPos: {x: 0, y: 0, z: 18}
+  pivotBonusPos: {x: 0, y: 0, z: 25}
+  bigDistancePivotBonusPos: {x: 0, y: 0, z: 40}
+  camBonusPos: {x: 0, y: 0, z: 0}
   zPerDistanceBetweenPlayers:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 20
+      time: 25
       value: 25
       inSlope: 0
       outSlope: 0
@@ -7144,8 +7146,8 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 35
-      value: 70
+      time: 65
+      value: 75
       inSlope: 0
       outSlope: 0
       tangentMode: 136
