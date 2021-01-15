@@ -20,17 +20,7 @@ public class CameraController : MonoBehaviour{
         get {
             if (GetMaxDistanceBetweenPlayers() > distanceLimit)
                 return GameManager.I.humanPlayer.transform.position.WithY(0)+ bigDistancePivotBonusPos;
-            return pivotBonusPos + new Vector3(
-                (
-                    GameManager.I.nonNullPlayerArray.Max(p => p.transform.position.x) + 
-                    GameManager.I.nonNullPlayerArray.Min(p => p.transform.position.x)
-                ) / 2,
-                0,
-                (
-                    GameManager.I.nonNullPlayerArray.Max(p => p.transform.position.z) + 
-                    GameManager.I.nonNullPlayerArray.Min(p => p.transform.position.z)
-                ) / 2
-            );
+            return pivotBonusPos + GetPlayerMidPoint(GameManager.I.nonNullPlayerArray);
         }
     }
 
@@ -42,10 +32,6 @@ public class CameraController : MonoBehaviour{
         transform.position = characterSelectionPos;
     }
 
-    public void GoToOriginalPos() {
-        transform.DOMove(initialPos, 0.5f).SetEase(Ease.OutQuad).OnComplete(() => followingPlayers = true);
-    }
-
     void Update(){
         if (GameManager.I.playerArray == null || !followingPlayers)
             return;
@@ -53,6 +39,18 @@ public class CameraController : MonoBehaviour{
 #if UNITY_EDITOR
         maxDistanceBetweenPlayers = GetMaxDistanceBetweenPlayers();
 #endif
+    }
+
+    public void GoToOriginalPos() {
+        transform.DOMove(initialPos, 0.5f).SetEase(Ease.OutQuad).OnComplete(() => followingPlayers = true);
+    }
+
+    Vector3 GetPlayerMidPoint(Player[] playerArray) {
+        return new Vector3(
+            (playerArray.Max(p => p.transform.position.x) + playerArray.Min(p => p.transform.position.x)) / 2,
+            0,
+            (playerArray.Max(p => p.transform.position.z) + playerArray.Min(p => p.transform.position.z)) / 2
+        );
     }
 
     Vector3 GetPos() {
