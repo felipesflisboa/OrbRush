@@ -55,7 +55,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         CanvasController.I.playerText.text = $"Player {humanPlayer.m_name}";
         Time.timeScale = 1;
 
-        FindObjectOfType<CameraController>().GoToOriginalPos();
+        FindObjectOfType<CameraController>().StartFollowingPlayers();
 
         aiArray = new AI[3];
         int playerI = 1;

@@ -41,8 +41,8 @@ public class CameraController : MonoBehaviour{
 #endif
     }
 
-    public void GoToOriginalPos() {
-        transform.DOMove(initialPos, 0.5f).SetEase(Ease.OutQuad).OnComplete(() => followingPlayers = true);
+    public void StartFollowingPlayers() {
+        followingPlayers = true;
     }
 
     Vector3 GetPlayerMidPoint(Player[] playerArray) {
