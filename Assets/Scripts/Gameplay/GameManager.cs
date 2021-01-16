@@ -122,7 +122,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         while (state == GameState.Ocurring) { //TODO check each player individually
             CanvasController.I.cardZone.Add(cardPrefabArray[Mathf.FloorToInt(Random.value * cardPrefabArray.Length)]);
             foreach (var player in playerArray)
-                if(player!=null && player.ai != null && player.reachGoal)
+                if(player!=null && player.ai != null && !player.reachGoal)
                     player.ai.cardTypeDeck.Add(EnumUtil.GetRandomValueFromEnum<CardType>(1, -4));
             await new WaitForSeconds(5);
         }
