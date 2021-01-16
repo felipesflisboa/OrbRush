@@ -15,7 +15,7 @@ public class PlayerHUD : MonoBehaviour{
     [SerializeField] int playerNumber;
     Player player;
 
-    const float BALL_SIZE_MULTIPLIER = 0.1f;
+    const float BALL_SIZE_MULTIPLIER = 0.02f;
 
     bool Initialized => player != null; //remove
     public float DisplayVelocity => player.Velocity * 3.6f* BALL_SIZE_MULTIPLIER;
