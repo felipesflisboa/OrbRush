@@ -602,7 +602,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 0.00
+  m_Text: 0.000
 --- !u!114 &1388181715432505704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -872,13 +872,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e772a55fa2aade04493c72ce83df296f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colorGroup:
-    fireColor: {r: 0.7, g: 0.070000015, b: 0.070000015, a: 0.8784314}
-    waterColor: {r: 0.070000015, g: 0.4405883, b: 0.7, a: 0.8784314}
-    earthColor: {r: 0.070000015, g: 0.7, b: 0.11307693, a: 0.8784314}
-    airColor: {r: 0.6685, g: 0.7, b: 0.25200003, a: 0.8784314}
   backgroundImage: {fileID: 1388181714489253271}
   speedText: {fileID: 1388181715432505707}
   accelerationText: {fileID: 1388181714586148311}
   cardText: {fileID: 1388181715286511771}
   playerNumber: 0
+  colorGroup:
+    fireColor: {r: 0.7, g: 0.070000015, b: 0.070000015, a: 0.8784314}
+    waterColor: {r: 0.070000015, g: 0.4405883, b: 0.7, a: 0.8784314}
+    earthColor: {r: 0.070000015, g: 0.7, b: 0.11307693, a: 0.8784314}
+    airColor: {r: 0.6685, g: 0.7, b: 0.25200003, a: 0.8784314}
+  tooManyCardColor: {r: 0.8773585, g: 0.11173906, b: 0.11173906, a: 1}
+  cardSmallWarnColor: {r: 0.9245283, g: 0.3009078, b: 0.3009078, a: 1}
+  cardBigWarnColor: {r: 0.8926359, g: 0.9433962, b: 0.14684942, a: 1}

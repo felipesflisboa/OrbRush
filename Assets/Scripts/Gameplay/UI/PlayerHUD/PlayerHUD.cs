@@ -7,7 +7,6 @@ using DG.Tweening;
 //TODO color
 //TODO pulse start on 4 and raise until 6 or more cards
 public class PlayerHUD : MonoBehaviour{
-    [SerializeField] PlayerHUDColorGroup colorGroup;
     [SerializeField] Image backgroundImage;
     [SerializeField] Text speedText;
     [SerializeField] Text accelerationText;
@@ -15,10 +14,31 @@ public class PlayerHUD : MonoBehaviour{
     [SerializeField] int playerNumber;
     Player player;
 
+    [SerializeField] PlayerHUDColorGroup colorGroup;
+    [SerializeField] Color tooManyCardColor;
+    [SerializeField] Color cardSmallWarnColor;
+    [SerializeField] Color cardBigWarnColor;
+    Color initialTextColor;
+
     const float BALL_SIZE_MULTIPLIER = 0.02f;
 
     bool Initialized => player != null; //remove
     public float DisplayVelocity => player.Velocity * 3.6f* BALL_SIZE_MULTIPLIER;
+
+    Color CardTextColor {
+        get {
+            if (player.CardCount >= 5) {
+                return cardSmallWarnColor;
+            } else if(player.CardCount >= 3) {
+                return cardBigWarnColor;
+            }
+            return initialTextColor;
+        }
+    }
+
+    void Awake() {
+        initialTextColor = cardText.color;
+    }
 
     void Start() {
         UpdateLoop();
@@ -41,10 +61,8 @@ public class PlayerHUD : MonoBehaviour{
     void Refresh() {
         speedText.text = DisplayVelocity.ToString("F2");
         accelerationText.text = $"{(100 * Mathf.Pow(player.HalfSecondAccelerationRatio, 2)):F0}%";
+        accelerationText.color = CardTextColor;
         cardText.text = player.CardCount.ToString();
-        if (player.CardCount >= 4) {
-            accelerationText.text = $"! {accelerationText.text}";
-            cardText.text = $"! {cardText.text}";
-        }
+        cardText.color = CardTextColor;
     }
 }
