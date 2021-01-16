@@ -183,7 +183,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
                 Debug.Log("Activated=" + cardType);
                 playerArray[1].Boost();
                 if (card != null)
-                    Destroy(card.gameObject);
+                    card.Remove();
                 break;
             case CardType.Fire:
                 selectedPlayer = GameManager.I.playerArray.First((p) => p!=null && p.element == Element.Fire);
@@ -197,14 +197,14 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
                 explodeSFX.Play();
                 Destroy(Instantiate(explosionPrefab, selectedPlayer.transform.position, selectedPlayer.transform.rotation), 8f);
                 if (card != null)
-                    Destroy(card.gameObject);
+                    card.Remove();
                 break;
             case CardType.Earth:
                 selectedPlayer = GameManager.I.playerArray.First((p) => p!=null && p.element == Element.Earth);
                 if(selectedPlayer.currentSegment != null) {
                     selectedPlayer.currentSegment.ApplyEffect(CardType.Earthquake);
                     if (card != null)
-                        Destroy(card.gameObject);
+                        card.Remove();
                     earthquakeSFX.Play();
                 }
                 break;
@@ -213,7 +213,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
                 if (selectedPlayer.currentSegment != null) {
                     selectedPlayer.currentSegment.ApplyEffect(CardType.Lake);
                     if (card != null)
-                        Destroy(card.gameObject);
+                        card.Remove();
                     squidSFX.Play();
                 }
                 break;
@@ -222,7 +222,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
                 if (selectedPlayer.currentSegment != null) {
                     selectedPlayer.currentSegment.ApplyEffect(CardType.Tornado);
                     if (card != null)
-                        Destroy(card.gameObject);
+                        card.Remove();
                     cycloneSFX.Play();
                 }
                 break;

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 //TODO rename
@@ -14,7 +15,7 @@ public class Player : MonoBehaviour {
     public AI ai;
     int fixedUpdateCount;
 
-    public int CardCount => ai == null ? CanvasController.I.cardZone.cardList.Count : ai.cardTypeDeck.Count;
+    public int CardCount => ai == null ? CanvasController.I.cardZone.ValidCardCount: ai.cardTypeDeck.Count;
     public float Velocity => VelocityV3.magnitude;
     public float HalfSecondAccelerationRatio => 1 - 0.01f * CardCount;
 

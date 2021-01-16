@@ -5,9 +5,10 @@ using UnityEngine.UI;
 using DG.Tweening;
 using Gamelogic.Extensions;
 
-public class Card : MonoBehaviour{
+public class Card : MonoBehaviour {
     public CardType type;
     public Image image;
+    public bool valid { get; private set; } = true;
 
     void Awake() {
         image.transform.localPosition = image.transform.localPosition.WithY(-1500);
@@ -26,8 +27,13 @@ public class Card : MonoBehaviour{
         GameManager.I.selectedCard = null;
     }
 
+    public void Remove() {
+        valid = false;
+        image.DOFade(0, 0.25f).SetEase(Ease.InSine).OnComplete(() => Destroy(gameObject));
+    }
+
     public void OnClick() {
-        if (GameManager.I.Paused)
+        if (GameManager.I.Paused || !valid)
             return;
         GameManager.I.ExecuteCardEffect(GameManager.I.humanPlayer, this, type);
     }
