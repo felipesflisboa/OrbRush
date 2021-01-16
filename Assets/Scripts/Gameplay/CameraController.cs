@@ -53,7 +53,8 @@ public class CameraController : MonoBehaviour {
         ).SetEase(Ease.InOutSine).SetUpdate(true).OnComplete(() => followingPlayers = true);
         await DOTween.To(Rotate, 0, 1, initialAnimationDuration * 0.98f).SetEase(Ease.InOutSine).SetUpdate(true).WaitForCompletion();
         transform.DORotate(initialRot.eulerAngles, 0.3f).SetUpdate(true);
-        CanvasController.I.startText.gameObject.SetActive(true);
+        if(GameManager.I.state == GameState.BeforeStart)
+            CanvasController.I.startText.gameObject.SetActive(true);
     }
 
     void Rotate(float ratio) {
