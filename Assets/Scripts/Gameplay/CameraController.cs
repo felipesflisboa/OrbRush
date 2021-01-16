@@ -5,17 +5,23 @@ using UnityEngine;
 using DG.Tweening;
 using System.Linq;
 
-public class CameraController : MonoBehaviour{
-    [SerializeField] Vector3 characterSelectionPos;
+public class CameraController : MonoBehaviour {
     [SerializeField] Vector3 pivotBonusPos;
     [SerializeField] Vector3 bigDistancePivotBonusPos;
     [SerializeField] Vector3 camBonusPos;
     [Tooltip("x/time: biggest distance between players\ny/value: local Z Pos"), SerializeField] AnimationCurve zPerDistanceBetweenPlayers;
-    Vector3 initialPos;
+    Vector3 initialAnimationTargetPos;
+    Quaternion initialRot;
+
+    [Header("Start animation/position")]
+    [SerializeField] float initialAnimationDuration;
+    [SerializeField] float initialAnimationYBonus;
+    [SerializeField] float initialAnimationSpinCount;
+    [SerializeField] Vector3 characterSelectionPos;
     float maxDistanceBetweenPlayers; // for debug display
     float distanceLimit;
     bool followingPlayers;
-    
+
     Vector3 PivotPos {
         get {
             if (GetMaxDistanceBetweenPlayers() > distanceLimit)
@@ -25,11 +31,36 @@ public class CameraController : MonoBehaviour{
     }
 
     Vector3 TargetPos => PivotPos - transform.forward * zPerDistanceBetweenPlayers.Evaluate(GetMaxDistanceBetweenPlayers());
+    Vector3 RelativePosInAnimation => characterSelectionPos.WithY(transform.position.y) - initialAnimationTargetPos;
+    // bool InitialAnimationPlaying => !followingPlayers; //remove
 
     void Awake() {
-        initialPos = transform.position;
+        initialRot = transform.rotation;
         distanceLimit = zPerDistanceBetweenPlayers.keys.Max(key => key.time);
         transform.position = characterSelectionPos;
+    }
+
+    void Start() {
+        PlayInitialAnimation();
+    }
+
+    async void PlayInitialAnimation() {
+        transform.position = transform.position.WithIncY(initialAnimationYBonus);
+        initialAnimationTargetPos = GameManager.I.SpawnPointCenter;
+        Rotate(0);
+        transform.DOBlendableMoveBy(
+            initialAnimationYBonus * Vector3.down, initialAnimationDuration
+        ).SetEase(Ease.InOutSine).SetUpdate(true).OnComplete(() => followingPlayers = true);
+        await DOTween.To(Rotate, 0, 1, initialAnimationDuration * 0.98f).SetEase(Ease.InOutSine).SetUpdate(true).WaitForCompletion();
+        transform.DORotate(initialRot.eulerAngles, 0.3f).SetUpdate(true);
+        CanvasController.I.startText.gameObject.SetActive(true);
+    }
+
+    void Rotate(float ratio) {
+        transform.position = Quaternion.Euler(
+            Vector3.up * initialAnimationSpinCount * 360 *(1 - ratio)
+        ) * RelativePosInAnimation + initialAnimationTargetPos;
+        transform.LookAt(initialAnimationTargetPos);
     }
 
     void Update(){
@@ -39,10 +70,6 @@ public class CameraController : MonoBehaviour{
 #if UNITY_EDITOR
         maxDistanceBetweenPlayers = GetMaxDistanceBetweenPlayers();
 #endif
-    }
-
-    public void StartFollowingPlayers() {
-        followingPlayers = true;
     }
 
     Vector3 GetPlayerMidPoint(Player[] playerArray) {

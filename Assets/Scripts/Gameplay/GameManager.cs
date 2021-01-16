@@ -34,6 +34,20 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     public float CurrentTime => GameState.Ocurring==state ? Time.timeSinceLevelLoad : endTime;
     public bool Paused => Time.timeScale == 0 && state != GameState.BeforeStart;
 
+    public Vector3 SpawnPointCenter{
+        get{
+            int validSize = 0;
+            Vector3 ret = Vector3.zero;
+            foreach (var spawnPoint in spawnPointTransformArray) {
+                if (spawnPoint == null)
+                    continue;
+                ret += spawnPoint.position;
+                validSize++;
+            }
+            return ret / validSize;
+        }
+    }
+
     void Start() {
         musicController = FindObjectOfType<MusicController>();
 
@@ -50,16 +64,12 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
             playerArray[i].number = i;
         }
         nonNullPlayerArray = playerArray.Where(player => player!=null).ToArray();
-
-        CanvasController.I.startText.gameObject.SetActive(true);
     }
 
     public void StartGame() {
         CanvasController.I.startText.gameObject.SetActive(false);
         CanvasController.I.playerText.text = $"Player {humanPlayer.m_name}";
         Time.timeScale = 1;
-
-        FindObjectOfType<CameraController>().StartFollowingPlayers();
 
         aiArray = new AI[3];
         int playerI = 1;
