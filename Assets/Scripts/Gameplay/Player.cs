@@ -15,6 +15,13 @@ public class Player : MonoBehaviour {
     int fixedUpdateCount;
 
     public int CardCount => ai == null ? CanvasController.I.cardZone.cardList.Count : ai.cardTypeDeck.Count;
+    public float Velocity => VelocityV3.magnitude;
+    public float HalfSecondAccelerationRatio => 1 - 0.01f * CardCount;
+
+    public Vector3 VelocityV3 {
+        get => rigidBody.velocity;
+        set => rigidBody.velocity = value;
+    }
 
     void Awake() {
         rigidBody = GetComponentInChildren<Rigidbody>();
@@ -25,18 +32,13 @@ public class Player : MonoBehaviour {
     }
 
     void FixedUpdate() {
-        velTest = rigidBody.velocity; //remove
-        if (fixedUpdateCount % 25 == 0) // half-second
-            rigidBody.velocity = rigidBody.velocity * (1 - 0.01f * CardCount);
+        if (fixedUpdateCount % 25 == 0) // half-second //TODO count other way
+            VelocityV3 *= HalfSecondAccelerationRatio;
         fixedUpdateCount++;
     }
 
-    public Vector3 velTest;
-
     void OnMouseDown() {
-        if (GameManager.I.humanPlayer == null) {
-            GameManager.I.humanPlayer = this;
-            GameManager.I.StartGame();
-        }
+        if (GameManager.I.humanPlayer == null)  //TODO check mode
+            GameManager.I.StartGame(this);
     }
 }

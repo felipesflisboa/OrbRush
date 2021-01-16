@@ -27,7 +27,6 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     internal Card selectedCard;
     internal List<Segment> segmentList;
     float endTime;
-    AI[] aiArray;
 
     int PlayerReachGoalCount => nonNullPlayerArray.Sum(player => player.reachGoal ? 1 : 0);
     int PlayerCount => spawnPointTransformArray.Length;
@@ -56,31 +55,63 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         segmentList.Sort((a, b) => a.transform.position.z.CompareTo(b.transform.position.z));
         // zoneList.Sort((a, b) => Mathf.Approximately(a.transform.position.z, b.transform.position.z) ? a.transform.position.x.CompareTo(b.transform.position.x) : a.transform.position.z.CompareTo(b.transform.position.z));
 
-        playerArray = new Player[spawnPointTransformArray.Length];
-        for (int i = 1; i < spawnPointTransformArray.Length; i++) {
-            playerArray[i] = Instantiate(
-                playerPrefabArray[i], spawnPointTransformArray[i].position, spawnPointTransformArray[i].rotation
-            ).GetComponent<Player>();
-            playerArray[i].number = i;
-        }
-        nonNullPlayerArray = playerArray.Where(player => player!=null).ToArray();
+        CreatePlayers();
     }
 
-    public void StartGame() {
-        CanvasController.I.startText.gameObject.SetActive(false);
-        CanvasController.I.playerText.text = $"Player {humanPlayer.m_name}";
-        Time.timeScale = 1;
+    void CreatePlayers() {
+        for (int i = 1; i < spawnPointTransformArray.Length; i++)
+            Instantiate(playerPrefabArray[i], spawnPointTransformArray[i].position, spawnPointTransformArray[i].rotation);
+    }
 
+    void InitializePlayerArray(Player firstPlayer) {
+        playerArray = new Player[spawnPointTransformArray.Length];
+        playerArray[1] = firstPlayer;
+        humanPlayer = firstPlayer;
+        int playerIndex = 2;
+        foreach (var player in FindObjectsOfType<Player>()) {
+            if (player == humanPlayer)
+                continue;
+            InitializePlayer(player, playerIndex++);
+        }
+        nonNullPlayerArray = playerArray.Where(player => player != null).ToArray();
+    }
+
+    void InitializePlayer(Player player, int number) {
+        playerArray[number] = player;
+        player.number = number;
+        new AI(player);
+        player.ai.MainLoop();
+    }
+
+    
+    /* //remove
+    void InitializePlayers(Player firstPlayer) {
+        Player[] newPlayerArray = new Player[playerArray.Length];
+        newPlayerArray[1] = humanPlayer;
+        int newI = 2;
+        for (int oldI = 1; oldI < playerArray.Length; oldI++) {
+            if (newPlayerArray[1] == playerArray[oldI])
+                continue;
+            newPlayerArray[newI++] = 
+
+        }
         aiArray = new AI[3];
         int playerI = 1;
         for (int aiI = 0; aiI < aiArray.Length; aiI++) {
-            if(humanPlayer== playerArray[playerI])
+            if (humanPlayer == playerArray[playerI])
                 playerI++;
             aiArray[aiI] = new AI(playerArray[playerI]);
             aiArray[aiI].MainLoop();
             playerI++;
         }
+        nonNullPlayerArray = playerArray.Where(player => player != null).ToArray();
+    }
+    */
 
+    public void StartGame(Player firstPlayer) {
+        CanvasController.I.startText.gameObject.SetActive(false);
+        Time.timeScale = 1;
+        InitializePlayerArray(firstPlayer);
         startSFX.Play();
         state = GameState.Ocurring;
         DrawCardLoop();
@@ -90,9 +121,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         await new WaitForUpdate();
         while (state == GameState.Ocurring) { //TODO check each player individually
             CanvasController.I.cardZone.Add(cardPrefabArray[Mathf.FloorToInt(Random.value * cardPrefabArray.Length)]);
-            foreach (var ai in aiArray)
-                if(ai.player.reachGoal)
-                    ai.cardTypeDeck.Add(EnumUtil.GetRandomValueFromEnum<CardType>(1, -4));
+            foreach (var player in playerArray)
+                if(player!=null && player.ai != null && player.reachGoal)
+                    player.ai.cardTypeDeck.Add(EnumUtil.GetRandomValueFromEnum<CardType>(1, -4));
             await new WaitForSeconds(5);
         }
     }
@@ -144,6 +175,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         scoreList.Save();
     }
 
+    //TODO CardHandlers
     public void ExecuteCardEffect(Player player, Card card, CardType cardType) {
         Player selectedPlayer = null;
         switch (cardType) {

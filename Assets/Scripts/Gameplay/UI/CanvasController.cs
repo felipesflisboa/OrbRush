@@ -7,7 +7,6 @@ public class CanvasController : SingletonMonoBehaviour<CanvasController> {
     internal CardZone cardZone;
     public Text startText;
     public Text levelText;
-    public Text playerText;
     public Text victoryText;
     public Text cardAlertText;
     public Text timeText;
@@ -31,6 +30,6 @@ public class CanvasController : SingletonMonoBehaviour<CanvasController> {
 
     void Update() { //TODO
         timeText.text = $"{GameManager.I.CurrentTime.ToString("F3")}s";
-        cardAlertText.gameObject.SetActive(cardZone.cardList.Count >= 5); //TODO optimize
+        cardAlertText.gameObject.SetActive(cardZone.cardList.Count >= 6); //TODO optimize //TODO only when 1P
     }
 }
