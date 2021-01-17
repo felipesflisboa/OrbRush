@@ -1,3 +1,3 @@
 ﻿public enum MenuPanelType {
-    None = 0, Title, Info, Loading, HighScores, LocalHighScores, GameSparksHighScores, Rename
+    None = 0, Title, Info, Loading, Dummy, LocalHighScores
 }

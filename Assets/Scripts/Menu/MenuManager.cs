@@ -2,8 +2,8 @@
 using System.Collections;
 using System.Linq;
 using DG.Tweening;
-using static IEnumeratorAwaitExtensions;
 using System.Threading.Tasks;
+using UnityEngine.UI;
 
 /// <summary>
 /// Sample option class.
@@ -11,26 +11,27 @@ using System.Threading.Tasks;
 /// </summary>
 public class MenuManager : SingletonMonoBehaviour<MenuManager> {
 	[SerializeField] AudioSource clickSFX;
+    [SerializeField] Button playButton;
+    [SerializeField] Button infoButton;
+    [SerializeField] Button localHighScoresButton;
     MenuPanelType currentPanelOption;
 	MenuPanel[] panelArray;
     Fader fader;
 	Timer clickCooldownTimer;
 
-    bool ShouldReturnToTitleAtClick {
-        get {
-            return !new[] { MenuPanelType.Title, MenuPanelType.Rename, MenuPanelType.Loading }.Contains(currentPanelOption);
-        }
-    }
-
-    bool FadeActive {
-        get {
-            return fader != null && fader.ImageActive;
-        }
-    }
+    bool FadeActive =>  fader != null && fader.ImageActive;
+    bool ShouldReturnToTitleAtClick => !new[] { MenuPanelType.Title, MenuPanelType.Loading }.Contains(currentPanelOption);
 
     void Awake() {
         fader = GetComponentInChildren<Fader>(true);
         panelArray = GetComponentsInChildren<MenuPanel>(true);
+        AssignButtonListeners();
+    }
+
+    void AssignButtonListeners() {
+        playButton.onClick.AddListener(OnPlayClick);
+        infoButton.onClick.AddListener(OnInfoClick);
+        localHighScoresButton.onClick.AddListener(OnLocalHighScoresClick);
     }
 
     void Start () {
@@ -62,21 +63,9 @@ public class MenuManager : SingletonMonoBehaviour<MenuManager> {
 		PlayClickSFX();
 		EnablePanel(MenuPanelType.Info);
 	}
-	public void OnHighScoresClick(){
-		PlayClickSFX();
-        EnablePanel(MenuPanelType.HighScores);
-    }
     public void OnLocalHighScoresClick() {
         PlayClickSFX();
         EnablePanel(MenuPanelType.LocalHighScores);
-    }
-    public void OnGameSparksHighScoresClick() {
-        PlayClickSFX();
-        EnablePanel(MenuPanelType.GameSparksHighScores);
-    }
-    public void OnRenameClick() {
-        PlayClickSFX();
-        EnablePanel(MenuPanelType.Rename);
     }
     public void OnExitClick(){
 		PlayClickSFX();

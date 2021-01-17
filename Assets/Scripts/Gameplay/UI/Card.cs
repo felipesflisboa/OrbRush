@@ -8,6 +8,7 @@ using Gamelogic.Extensions;
 public class Card : MonoBehaviour {
     public CardType type;
     public Image image;
+    public Button button;
     Tweener movementTween;
     float targetLocalY = 1;
     public bool valid { get; private set; } = true;
@@ -15,6 +16,10 @@ public class Card : MonoBehaviour {
     public RectTransform RectTransform => transform as RectTransform;
 
     const float ANIMATION_DURATION = 0.8f;
+
+    void Awake() {
+        button.onClick.AddListener(OnClick);
+    }
 
     void Start() {
         InitialAnimation();
