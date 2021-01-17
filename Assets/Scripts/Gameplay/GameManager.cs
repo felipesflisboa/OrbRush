@@ -181,8 +181,6 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
 
     //TODO CardHandlers
     public void ExecuteCardEffect(Player player, Card card, CardType cardType) {
-        if (state != GameState.Ocurring)
-            return;
         Player selectedPlayer = null;
         switch (cardType) {
             case CardType.Neo:
