@@ -45,7 +45,12 @@ public class Card : MonoBehaviour {
 
     public void Remove() {
         valid = false;
-        image.DOFade(0, 0.25f).SetEase(Ease.InSine).OnComplete(() => Destroy(gameObject));
+        PlayRemoveAnimation(0.2f, () => Destroy(gameObject));
+    }
+
+    public void PlayRemoveAnimation(float time, System.Action callback) {
+        image.DOFade(0, time).SetEase(Ease.InSine).OnComplete(() => callback());
+        transform.DOScale(transform.localScale.x*1.2f, time).SetEase(Ease.OutSine);
     }
 
     public void RefreshPosition(float localY) {
