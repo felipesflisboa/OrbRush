@@ -160,7 +160,7 @@ GameObject:
   - component: {fileID: 7025990892361152946}
   - component: {fileID: 4551974608054944271}
   m_Layer: 8
-  m_Name: Far Left Collider
+  m_Name: Far Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -175,7 +175,7 @@ Transform:
   m_GameObject: {fileID: 2789641306289421583}
   m_LocalRotation: {x: -0, y: -0.19509031, z: -0, w: 0.98078537}
   m_LocalPosition: {x: -2.14, y: 1, z: 0.3}
-  m_LocalScale: {x: 0.19999999, y: 2, z: 2}
+  m_LocalScale: {x: 0.25, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 169592843473804368}
   m_RootOrder: 1
@@ -333,7 +333,7 @@ GameObject:
   - component: {fileID: 4469671965172251258}
   - component: {fileID: 1039920629138475648}
   m_Layer: 8
-  m_Name: Mid Left Collider
+  m_Name: Mid Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -348,7 +348,7 @@ Transform:
   m_GameObject: {fileID: 4312336464324885917}
   m_LocalRotation: {x: -0, y: -0.5735764, z: -0, w: 0.8191521}
   m_LocalPosition: {x: -0.9, y: 1, z: -0.9}
-  m_LocalScale: {x: 0.20000002, y: 2, z: 2}
+  m_LocalScale: {x: 0.25, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 169592843473804368}
   m_RootOrder: 2
@@ -426,7 +426,7 @@ GameObject:
   - component: {fileID: 6076158046065029879}
   - component: {fileID: 2155935007669923243}
   m_Layer: 8
-  m_Name: Base Collider
+  m_Name: Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -519,7 +519,7 @@ GameObject:
   - component: {fileID: 6465677211298455075}
   - component: {fileID: 5024345333623325366}
   m_Layer: 8
-  m_Name: Mid Right Collider
+  m_Name: Mid Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -534,7 +534,7 @@ Transform:
   m_GameObject: {fileID: 5764424904796795066}
   m_LocalRotation: {x: -0, y: 0.5735764, z: -0, w: 0.8191521}
   m_LocalPosition: {x: 0.9, y: 1, z: -0.9}
-  m_LocalScale: {x: 0.20000002, y: 2, z: 2}
+  m_LocalScale: {x: 0.25, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 169592843473804368}
   m_RootOrder: 3
@@ -612,7 +612,7 @@ GameObject:
   - component: {fileID: 5300881106683373263}
   - component: {fileID: 7018749460825434605}
   m_Layer: 8
-  m_Name: Far Right Collider
+  m_Name: Far Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -627,7 +627,7 @@ Transform:
   m_GameObject: {fileID: 7201386809645017076}
   m_LocalRotation: {x: -0, y: 0.19509031, z: -0, w: 0.98078537}
   m_LocalPosition: {x: 2.14, y: 1, z: 0.3}
-  m_LocalScale: {x: 0.19999999, y: 2, z: 2}
+  m_LocalScale: {x: 0.25, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 169592843473804368}
   m_RootOrder: 4
