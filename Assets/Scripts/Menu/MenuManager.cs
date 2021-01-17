@@ -35,7 +35,7 @@ public class MenuManager : SingletonMonoBehaviour<MenuManager> {
     }
 
     void Start () {
-		clickCooldownTimer = new Timer(0.75f);
+        clickCooldownTimer = new Timer(0.75f);
         EnablePanel(SimpleScoreListTimedDrawer.lastScore == null ? MenuPanelType.Title : MenuPanelType.LocalHighScores);
 	}
 

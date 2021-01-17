@@ -11,6 +11,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     [SerializeField, PrefabReference] GameObject[] playerPrefabArray;
     [SerializeField, PrefabReference] GameObject[] cardPrefabArray;
     [SerializeField, PrefabReference] GameObject explosionPrefab;
+    [SerializeField] Material[] skyboxMaterialPerLevel;
 
     [SerializeField] AudioSource cycloneSFX;
     [SerializeField] AudioSource squidSFX;
@@ -49,16 +50,19 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
 
     void Start() {
         musicController = FindObjectOfType<MusicController>();
-
         Time.timeScale = 0;
-        segmentList = FindObjectsOfType<Segment>().ToList();
-        segmentList.Sort((a, b) => a.transform.position.z.CompareTo(b.transform.position.z));
-        // zoneList.Sort((a, b) => Mathf.Approximately(a.transform.position.z, b.transform.position.z) ? a.transform.position.x.CompareTo(b.transform.position.x) : a.transform.position.z.CompareTo(b.transform.position.z));
-
-        CreatePlayers();
+        segmentList = CreateSegmentList();
+        RenderSettings.skybox = skyboxMaterialPerLevel[level % skyboxMaterialPerLevel.Length];
+        InstantiatePlayers();
     }
 
-    void CreatePlayers() {
+    List<Segment> CreateSegmentList() {
+        List<Segment> ret = FindObjectsOfType<Segment>().ToList();
+        ret.Sort((a, b) => a.transform.position.z.CompareTo(b.transform.position.z));
+        return ret;
+    }
+
+    void InstantiatePlayers() {
         for (int i = 1; i < spawnPointTransformArray.Length; i++)
             Instantiate(playerPrefabArray[i], spawnPointTransformArray[i].position, spawnPointTransformArray[i].rotation);
     }

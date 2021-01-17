@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: fe4b65c20a8055048a85c3af2da23d8b, type: 2}
+  m_SkyboxMaterial: {fileID: 2100000, guid: b49c0e76e6a5f214a984f5a6cc85b9c2, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -4192,6 +4192,17 @@ MonoBehaviour:
   - {fileID: 4187372817680983988, guid: 3c09606bef56a5f4a8c93edabe48fa2e, type: 3}
   explosionPrefab: {fileID: 1158160664908234460, guid: 85ff8c6d7c7d3b345961b98a2262b20a,
     type: 3}
+  skyboxMaterialPerLevel:
+  - {fileID: 2100000, guid: a89c63ab8857bf4468661ac62df2b5ed, type: 2}
+  - {fileID: 2100000, guid: 12232873d21fe614592b55e5d7e2ca5b, type: 2}
+  - {fileID: 2100000, guid: baf2eab2f11525547ab79fad50d0adfd, type: 2}
+  - {fileID: 2100000, guid: 40108ce22fe45d9419c315a5875d6bad, type: 2}
+  - {fileID: 2100000, guid: 64e7cadbdb6e74d4c83ee7172ff995c6, type: 2}
+  - {fileID: 2100000, guid: 99e0d8f8a7c9b8d43a0d88dd3c543fef, type: 2}
+  - {fileID: 2100000, guid: 55c0d70e7faf55e4984bbd29e2d8b89e, type: 2}
+  - {fileID: 2100000, guid: 6b9c2461559dba741a79191faf18c0f2, type: 2}
+  - {fileID: 2100000, guid: 1752c1e9408e54c43a1f03855d38c28f, type: 2}
+  - {fileID: 2100000, guid: c9684c438124a2349bee3f238b6bd260, type: 2}
   cycloneSFX: {fileID: 1410047054}
   squidSFX: {fileID: 77114975}
   earthquakeSFX: {fileID: 550762220}
