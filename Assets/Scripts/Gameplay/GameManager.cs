@@ -186,7 +186,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
                     card.Remove();
                 break;
             case CardType.Fire:
-                selectedPlayer = GameManager.I.playerArray.First((p) => p!=null && p.element == Element.Fire);
+                selectedPlayer = playerArray.First((p) => p!=null && p.element == Element.Fire);
                 const float radius = 7f;
                 foreach(var item in Physics.OverlapSphere(selectedPlayer.transform.position, radius)) {
                     Player p = item.GetComponentInParent<Player>();
@@ -200,7 +200,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
                     card.Remove();
                 break;
             case CardType.Earth:
-                selectedPlayer = GameManager.I.playerArray.First((p) => p!=null && p.element == Element.Earth);
+                selectedPlayer = playerArray.First((p) => p!=null && p.element == Element.Earth);
                 if(selectedPlayer.currentSegment != null) {
                     selectedPlayer.currentSegment.ApplyEffect(CardType.Earthquake);
                     if (card != null)
@@ -209,7 +209,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
                 }
                 break;
             case CardType.Water:
-                selectedPlayer = GameManager.I.playerArray.First((p) => p != null && p.element == Element.Water);
+                selectedPlayer = playerArray.First((p) => p != null && p.element == Element.Water);
                 if (selectedPlayer.currentSegment != null) {
                     selectedPlayer.currentSegment.ApplyEffect(CardType.Lake);
                     if (card != null)
@@ -218,7 +218,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
                 }
                 break;
             case CardType.Air:
-                selectedPlayer = GameManager.I.playerArray.First((p) => p != null && p.element == Element.Air);
+                selectedPlayer = playerArray.First((p) => p != null && p.element == Element.Air);
                 if (selectedPlayer.currentSegment != null) {
                     selectedPlayer.currentSegment.ApplyEffect(CardType.Tornado);
                     if (card != null)
