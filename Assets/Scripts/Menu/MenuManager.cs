@@ -11,7 +11,8 @@ using UnityEngine.UI;
 /// </summary>
 public class MenuManager : SingletonMonoBehaviour<MenuManager> {
 	[SerializeField] AudioSource clickSFX;
-    [SerializeField] Button playButton;
+    [SerializeField] Button marathonButton;
+    [SerializeField] Button quickRaceButton;
     [SerializeField] Button infoButton;
     [SerializeField] Button localHighScoresButton;
     MenuPanelType currentPanelOption;
@@ -29,7 +30,8 @@ public class MenuManager : SingletonMonoBehaviour<MenuManager> {
     }
 
     void AssignButtonListeners() {
-        playButton.onClick.AddListener(OnPlayClick);
+        marathonButton.onClick.AddListener(OnMarathonClick);
+        quickRaceButton.onClick.AddListener(OnQuickRaceClick);
         infoButton.onClick.AddListener(OnInfoClick);
         localHighScoresButton.onClick.AddListener(OnLocalHighScoresClick);
     }
@@ -56,10 +58,13 @@ public class MenuManager : SingletonMonoBehaviour<MenuManager> {
     }
 
 #region Buttons
-	public void OnPlayClick(){
-        OnPlay();
-	}
-	public void OnInfoClick(){
+	public void OnMarathonClick(){
+        OnPlay(new MarathonData());
+    }
+    public void OnQuickRaceClick() {
+        OnPlay(new QuickRaceData());
+    }
+    public void OnInfoClick(){
 		PlayClickSFX();
 		EnablePanel(MenuPanelType.Info);
 	}
@@ -84,12 +89,12 @@ public class MenuManager : SingletonMonoBehaviour<MenuManager> {
 	}
 #endregion
 
-    async void OnPlay() {
+    async void OnPlay(ModeData modeData) {
         PlayClickSFX();
         SimpleScoreListTimedDrawer.lastScore = null;
         await EnablePanel(MenuPanelType.Loading);
         await new WaitForUpdate();
-        GameManager.level = 1;
+        GameManager.modeData = modeData;
         UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
     }
 

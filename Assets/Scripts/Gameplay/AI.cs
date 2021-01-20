@@ -5,12 +5,13 @@ using UnityEngine;
 public class AI {
     internal Player player;
     internal List<CardType> cardTypeDeck = new List<CardType>(); //TODO rename class
+    int level;
 
     static bool debugPrint = false;
 
-    public AI(Player pPlayer) {
+    public AI(int pLevel, Player pPlayer) {
+        level = pLevel;
         player = pPlayer;
-        player.ai = this;
         if (!debugPrint) {
             string s = "";
             for (int l = 1; l < 10; l++) { 
@@ -19,6 +20,7 @@ public class AI {
             Debug.Log(s);
             debugPrint = true;
         }
+        MainLoop();
     }
 
     public async void MainLoop() {
@@ -28,7 +30,7 @@ public class AI {
             if(GameManager.Active)
                 GameManager.I.ExecuteCardEffect(player, null, cardTypeDeck[0]);
             cardTypeDeck.RemoveAt(0);
-            await new WaitForSeconds(GetSecondBasePerRound(GameManager.level) + GetSecondIncPerRound(GameManager.level)*Random.value);
+            await new WaitForSeconds(GetSecondBasePerRound(level) + GetSecondIncPerRound(level) *Random.value);
         }
     }
 

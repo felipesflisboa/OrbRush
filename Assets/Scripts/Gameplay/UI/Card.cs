@@ -63,8 +63,8 @@ public class Card : MonoBehaviour {
     }
 
     public void OnClick() {
-        if (GameManager.I.Paused || !valid)
+        if (GameManager.I.Paused || !valid || GameManager.I.CanClickPlayer==null)
             return;
-        GameManager.I.ExecuteCardEffect(GameManager.I.humanPlayer, this, type);
+        GameManager.I.ExecuteCardEffect(GameManager.I.CanClickPlayer, this, type);
     }
 }

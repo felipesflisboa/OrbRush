@@ -8,16 +8,19 @@ public class Player : MonoBehaviour {
     public Element element;
     public string m_name;
     internal int number;
+    internal InputHandler inputHandler;
     internal Rigidbody rigidBody; //TODO protect
     internal Segment currentSegment;
     internal Segment lastSegment;
     internal bool reachGoal;
-    public AI ai;
+    public AI ai { get; private set; }
     int fixedUpdateCount;
 
-    public int CardCount => ai == null ? CanvasController.I.cardZone.ValidCardCount: ai.cardTypeDeck.Count;
+    public int CardCount => IsCPU ? ai.cardTypeDeck.Count : CanvasController.I.cardZone.ValidCardCount;
     public float Velocity => VelocityV3.magnitude;
     public float HalfSecondAccelerationRatio => 1 - 0.01f * CardCount;
+    public bool IsCPU => ai != null;
+    public bool Initialized => inputHandler != null;
 
     public Vector3 VelocityV3 {
         get => rigidBody.velocity;
@@ -26,6 +29,13 @@ public class Player : MonoBehaviour {
 
     void Awake() {
         rigidBody = GetComponentInChildren<Rigidbody>();
+    }
+
+    public void Initialize(int pNumber, InputType inputType, int aiLevel) {
+        number = pNumber;
+        inputHandler = new InputHandler(inputType);
+        if (aiLevel > 0)
+            ai = new AI(aiLevel, this);
     }
 
     public void Boost() {
@@ -39,7 +49,7 @@ public class Player : MonoBehaviour {
     }
 
     void OnMouseDown() {
-        if (GameManager.I.humanPlayer == null)  //TODO check mode
-            GameManager.I.StartGame(this);
+        if (GameManager.I.state == GameState.SelectPlayer && GameManager.modeData is MarathonData)  //TODO check mode
+            GameManager.I.StartMarathon(this);
     }
 }

@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+//TODO remove singleton
 public class CanvasController : SingletonMonoBehaviour<CanvasController> {
+    internal PlayerSelectScreen playerSelectScreen;
     internal CardZone cardZone;
+    public RectTransform hudRectTransform;
     public Text startText;
     public Text levelText;
     public Text victoryText;
@@ -21,11 +24,19 @@ public class CanvasController : SingletonMonoBehaviour<CanvasController> {
     }
 
     void Awake() {
-        cardZone = GetComponentInChildren<CardZone>();
+        Initialize();
+    }
+
+    void Initialize() {
+        cardZone = GetComponentInChildren<CardZone>(true);
+        playerSelectScreen = GetComponentInChildren<PlayerSelectScreen>(true);
+        hudRectTransform.gameObject.SetActive(false);
+        cardZone.gameObject.SetActive(false);
+        playerSelectScreen.gameObject.SetActive(false);
     }
 
     void Start() {
-        levelText.text = $"Level {GameManager.level}";
+        levelText.text = GameManager.modeData is MarathonData ? $"Level {(GameManager.modeData as MarathonData).level}" : string.Empty;
     }
 
     void Update() { //TODO

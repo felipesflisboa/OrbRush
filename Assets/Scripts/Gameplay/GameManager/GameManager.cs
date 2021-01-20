@@ -4,14 +4,15 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.SceneManagement;
 
+//TODO Block CPU only game
 public class GameManager : SingletonMonoBehaviour<GameManager> {
-    public static int level = 1;
+    public static ModeData modeData;
 
     [SerializeField] Transform[] spawnPointTransformArray;
     [SerializeField, PrefabReference] GameObject[] playerPrefabArray;
     [SerializeField, PrefabReference] GameObject[] cardPrefabArray;
     [SerializeField, PrefabReference] GameObject explosionPrefab;
-    [SerializeField] Material[] skyboxMaterialPerLevel;
+    [SerializeField] Material[] marathonSkyboxMaterialPerLevel; 
 
     [SerializeField] AudioSource cycloneSFX;
     [SerializeField] AudioSource squidSFX;
@@ -20,19 +21,23 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     [SerializeField] AudioSource startSFX;
     [SerializeField] AudioSource endSFX;
 
+    [Header("Debug")]
+    [SerializeField] bool standaloneSceneStartsAsMarathon = true;
+
     internal MusicController musicController;
     internal Player[] playerArray; //TODO protect
     internal Player[] nonNullPlayerArray;
-    internal Player humanPlayer;
     internal GameState state;
     internal Card selectedCard;
     internal List<Segment> segmentList;
+    CameraController cameraController;
     float endTime;
 
     int PlayerReachGoalCount => nonNullPlayerArray.Sum(player => player.reachGoal ? 1 : 0);
     int PlayerCount => spawnPointTransformArray.Length;
+    public Player CanClickPlayer => nonNullPlayerArray.FirstOrDefault(p => p.inputHandler.CanClick);
     public float CurrentTime => GameState.Ocurring==state ? Time.timeSinceLevelLoad : endTime;
-    public bool Paused => Time.timeScale == 0 && state != GameState.BeforeStart;
+    public bool Paused => Time.timeScale == 0 && state == GameState.Ocurring;
 
     public Vector3 SpawnPointCenter{
         get{
@@ -48,12 +53,33 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         }
     }
 
+    void Awake() {
+        cameraController = FindObjectOfType<CameraController>();
+        FormatModeData();
+    }
+
     void Start() {
         musicController = FindObjectOfType<MusicController>();
         Time.timeScale = 0;
         segmentList = CreateSegmentList();
-        RenderSettings.skybox = skyboxMaterialPerLevel[level % skyboxMaterialPerLevel.Length];
+        state = GameState.OnInitialAnimation;
+        ConfigureSkybox();
         InstantiatePlayers();
+    }
+
+    void FormatModeData() {
+        if (modeData != null)
+            return;
+#if UNITY_EDITOR
+        modeData = standaloneSceneStartsAsMarathon ? (ModeData)new MarathonData() : new QuickRaceData();
+#else
+        Debug.LogError("No mode defined!");
+#endif
+    }
+
+    void ConfigureSkybox() {
+        if (modeData is MarathonData)
+            RenderSettings.skybox = marathonSkyboxMaterialPerLevel[(modeData as MarathonData).level % marathonSkyboxMaterialPerLevel.Length];
     }
 
     List<Segment> CreateSegmentList() {
@@ -67,55 +93,84 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
             Instantiate(playerPrefabArray[i], spawnPointTransformArray[i].position, spawnPointTransformArray[i].rotation);
     }
 
-    void InitializePlayerArray(Player firstPlayer) {
+    void InitializePlayerArrayInQuickRace() {
+        Player[] playerTempArray = FindObjectsOfType<Player>();
         playerArray = new Player[spawnPointTransformArray.Length];
-        playerArray[1] = firstPlayer;
-        humanPlayer = firstPlayer;
+        for(int i = 0; i < CanvasController.I.playerSelectScreen.panelArray.Length; i++) {
+            PlayerSelectPanel panel = CanvasController.I.playerSelectScreen.GetPanelWithCPULast()[i];
+            InitializePlayer(
+                i + 1,
+                playerTempArray.FirstOrDefault(player => player.element == panel.element),
+                panel.GetInputType(),
+                panel.IsCPU() ? 0 : GetCPULevelPerType(panel.type)
+            );
+        }
+        nonNullPlayerArray = CreateNonNullPlayerArray();
+    }
+
+    void InitializePlayerArrayInMarathon(Player firstPlayer) {
+        playerArray = new Player[spawnPointTransformArray.Length];
+        InitializePlayer(1, firstPlayer, InputType.Click);
         int playerIndex = 2;
         foreach (var player in FindObjectsOfType<Player>()) {
-            if (player == humanPlayer)
+            if (player.Initialized)
                 continue;
-            InitializePlayer(player, playerIndex++);
+            InitializePlayer(playerIndex++, player, InputType.CPU, (modeData as MarathonData).level);
         }
-        nonNullPlayerArray = playerArray.Where(player => player != null).ToArray();
+        nonNullPlayerArray = CreateNonNullPlayerArray();
     }
 
-    void InitializePlayer(Player player, int number) {
+    Player[] CreateNonNullPlayerArray() => playerArray.Where(player => player != null).ToArray(); //remove
+
+    int GetCPULevelPerType(PlayerType playerType) {
+        switch (playerType) {
+            case PlayerType.CPUEasy:    return 1;
+            case PlayerType.CPUNormal:  return 3;
+            case PlayerType.CPUHard:    return 6;
+        }
+        Debug.LogError($"Invalid type {playerType}!");
+        return 0;
+    }
+
+    void InitializePlayer(int number, Player player, InputType inputType, int aiLevel = 0) {
         playerArray[number] = player;
-        player.number = number;
-        new AI(player);
-        player.ai.MainLoop();
+        player.Initialize(number, inputType, aiLevel);
     }
 
-    
-    /* //remove
-    void InitializePlayers(Player firstPlayer) {
-        Player[] newPlayerArray = new Player[playerArray.Length];
-        newPlayerArray[1] = humanPlayer;
-        int newI = 2;
-        for (int oldI = 1; oldI < playerArray.Length; oldI++) {
-            if (newPlayerArray[1] == playerArray[oldI])
-                continue;
-            newPlayerArray[newI++] = 
-
+    public void OnCameraInitialAnimationEnd() {
+        state = GameState.SelectPlayer;
+        switch (modeData) {
+            case MarathonData m:
+                if (m.element == Element.None)
+                    CanvasController.I.startText.gameObject.SetActive(true);
+                else
+                    StartMarathon(FindObjectsOfType<Player>().First(p => p.element == m.element));
+                break;
+            case QuickRaceData qr:
+                CanvasController.I.playerSelectScreen.gameObject.SetActive(true);
+                break;
         }
-        aiArray = new AI[3];
-        int playerI = 1;
-        for (int aiI = 0; aiI < aiArray.Length; aiI++) {
-            if (humanPlayer == playerArray[playerI])
-                playerI++;
-            aiArray[aiI] = new AI(playerArray[playerI]);
-            aiArray[aiI].MainLoop();
-            playerI++;
-        }
-        nonNullPlayerArray = playerArray.Where(player => player != null).ToArray();
     }
-    */
 
-    public void StartGame(Player firstPlayer) {
+    public void StartMarathon(Player selectedPlayer = null) {
+        InitializePlayerArrayInMarathon(selectedPlayer);
+        StartGame();
+    }
+
+    public void StartQuickRace() {
+        InitializePlayerArrayInQuickRace();
+        StartGame();
+    }
+
+    void StartGame() {
+        //TODO put on Canvas
+        CanvasController.I.playerSelectScreen.gameObject.SetActive(false);
         CanvasController.I.startText.gameObject.SetActive(false);
+        CanvasController.I.hudRectTransform.gameObject.SetActive(true);
+        CanvasController.I.cardZone.gameObject.SetActive(true);
+
+        cameraController.OnGameStart();
         Time.timeScale = 1;
-        InitializePlayerArray(firstPlayer);
         startSFX.Play();
         state = GameState.Ocurring;
         DrawCardLoop();
@@ -162,17 +217,25 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     }
 
     void GoToNextScene(Player winnerPlayer) {
-        if (winnerPlayer == humanPlayer) {
-            level++;
-            SceneManager.LoadScene("Game");
-        } else {
+        if (!winnerPlayer.IsCPU && modeData is MarathonData) 
+            GoToNextRace();
+        else
+            BackToMainMenu(true);
+    }
+
+    void GoToNextRace() {
+        (modeData as MarathonData).level++;
+        SceneManager.LoadScene("Game");
+    }
+
+    void BackToMainMenu(bool gameLost) {
+        if (gameLost && modeData is MarathonData)
             SaveLastScore();
-            SceneManager.LoadScene("MainMenu");
-        }
+        SceneManager.LoadScene("MainMenu");
     }
 
     void SaveLastScore() {
-        SimpleScoreListTimedDrawer.lastScore = level;
+        SimpleScoreListTimedDrawer.lastScore = (modeData as MarathonData).level;
         ScoreListTimed scoreList = new ScoreListTimed();
         scoreList.Load();
         scoreList.AddScore((int)SimpleScoreListTimedDrawer.lastScore);
@@ -230,7 +293,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
                     cycloneSFX.Play();
                 }
                 break;
-                /*
+                /* //remove
                 if (card != null)
                     card.Highlight();
                 else
