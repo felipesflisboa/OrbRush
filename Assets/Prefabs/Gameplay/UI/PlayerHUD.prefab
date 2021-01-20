@@ -824,6 +824,7 @@ GameObject:
   - component: {fileID: 1388181716120031689}
   - component: {fileID: 1388181716120031691}
   - component: {fileID: 1388181716120031688}
+  - component: {fileID: 5608517559263956445}
   m_Layer: 5
   m_Name: PlayerHUD
   m_TagString: Untagged
@@ -885,3 +886,15 @@ MonoBehaviour:
   tooManyCardColor: {r: 0.8773585, g: 0.11173906, b: 0.11173906, a: 1}
   cardSmallWarnColor: {r: 0.9245283, g: 0.3009078, b: 0.3009078, a: 1}
   cardBigWarnColor: {r: 0.8926359, g: 0.9433962, b: 0.14684942, a: 1}
+--- !u!225 &5608517559263956445
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1388181716120031694}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
