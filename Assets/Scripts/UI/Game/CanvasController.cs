@@ -75,8 +75,10 @@ public class CanvasController : SingletonMonoBehaviour<CanvasController> {
     void RefreshCardAlert() {
         if (!canShowCardAlert)
             return;
-        foreach (var cardZone in cardZoneArray)
-            if(cardZone.Active)
-                cardAlertText.gameObject.SetActive(cardZone.cardList.Count >= 6);
+        foreach (var cardZone in cardZoneArray) {
+            if (cardZone == null || !cardZone.Active)
+                continue;
+            cardAlertText.gameObject.SetActive(cardZone.cardList.Count >= 6);
+        }
     }
 }

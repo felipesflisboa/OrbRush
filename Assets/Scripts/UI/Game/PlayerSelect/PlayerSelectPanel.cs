@@ -79,7 +79,7 @@ public class PlayerSelectPanel : MonoBehaviour {
     public int GetJoystickNumber(PlayerType type) => (int)type - 2;
     public bool IsTypeExclusive(PlayerType type) => new[] { PlayerType.Click, PlayerType.Keyboard }.Contains(type) || IsJoystick(type);
     public bool InputIsConnected(PlayerType type) => GetJoystickNumber(type) <= Input.GetJoystickNames().Length;
-    public bool IsCPU(PlayerType type) => new[] { PlayerType.CPUEasy, PlayerType.CPUEasy, PlayerType.CPUEasy }.Contains(type);
+    public bool IsCPU(PlayerType type) => new[] { PlayerType.CPUEasy, PlayerType.CPUNormal, PlayerType.CPUHard }.Contains(type);
     public bool IsCPU() => IsCPU(type);
 
     bool CanSelectNow(PlayerType type) {
