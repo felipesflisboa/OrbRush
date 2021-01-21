@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-//TODO rename
-public class Player : MonoBehaviour {
+public class Orb : MonoBehaviour {
     public Element element;
     public string m_name;
     internal int number;

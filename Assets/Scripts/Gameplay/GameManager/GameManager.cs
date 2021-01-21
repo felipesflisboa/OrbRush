@@ -9,7 +9,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     public static ModeData modeData;
 
     [SerializeField] Transform[] spawnPointTransformArray;
-    [SerializeField, PrefabReference] GameObject[] playerPrefabArray;
+    [SerializeField, PrefabReference] GameObject[] orbPrefabArray;
     [SerializeField, PrefabReference] GameObject[] cardPrefabArray;
     [SerializeField, PrefabReference] GameObject explosionPrefab;
     [SerializeField] Material[] marathonSkyboxMaterialPerLevel; 
@@ -25,17 +25,17 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     [SerializeField] bool standaloneSceneStartsAsMarathon = true;
 
     internal MusicController musicController;
-    internal Player[] playerArray; //TODO protect
-    internal Player[] nonNullPlayerArray;
+    internal Orb[] orbArray; //TODO protect
+    internal Orb[] nonNullOrbArray;
     internal GameState state;
     internal Card selectedCard;
     internal List<Segment> segmentList;
     CameraController cameraController;
     float endTime;
 
-    int PlayerReachGoalCount => nonNullPlayerArray.Sum(player => player.reachGoal ? 1 : 0);
-    int PlayerCount => spawnPointTransformArray.Length;
-    public Player CanClickPlayer => nonNullPlayerArray.FirstOrDefault(p => p.inputHandler.CanClick);
+    int OrbReachGoalCount => nonNullOrbArray.Sum(orb => orb.reachGoal ? 1 : 0);
+    int OrbCount => spawnPointTransformArray.Length;
+    public Orb ClickInputOrb => nonNullOrbArray.FirstOrDefault(p => p.inputHandler.CanClick);
     public float CurrentTime => GameState.Ocurring==state ? Time.timeSinceLevelLoad : endTime;
     public bool Paused => Time.timeScale == 0 && state == GameState.Ocurring;
 
@@ -64,7 +64,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         segmentList = CreateSegmentList();
         state = GameState.OnInitialAnimation;
         ConfigureSkybox();
-        InstantiatePlayers();
+        InstantiateOrbs();
     }
 
     void FormatModeData() {
@@ -88,39 +88,39 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         return ret;
     }
 
-    void InstantiatePlayers() {
+    void InstantiateOrbs() {
         for (int i = 1; i < spawnPointTransformArray.Length; i++)
-            Instantiate(playerPrefabArray[i], spawnPointTransformArray[i].position, spawnPointTransformArray[i].rotation);
+            Instantiate(orbPrefabArray[i], spawnPointTransformArray[i].position, spawnPointTransformArray[i].rotation);
     }
 
-    void InitializePlayerArrayInQuickRace() {
-        Player[] playerTempArray = FindObjectsOfType<Player>();
-        playerArray = new Player[spawnPointTransformArray.Length];
+    void InitializeOrbArrayInQuickRace() {
+        Orb[] orbTempArray = FindObjectsOfType<Orb>();
+        orbArray = new Orb[spawnPointTransformArray.Length];
         for(int i = 0; i < CanvasController.I.playerSelectScreen.panelArray.Length; i++) {
             PlayerSelectPanel panel = CanvasController.I.playerSelectScreen.GetPanelWithCPULast()[i];
-            InitializePlayer(
+            InitializeOrb(
                 i + 1,
-                playerTempArray.FirstOrDefault(player => player.element == panel.element),
+                orbTempArray.FirstOrDefault(orb => orb.element == panel.element),
                 panel.GetInputType(),
                 panel.IsCPU() ? 0 : GetCPULevelPerType(panel.type)
             );
         }
-        nonNullPlayerArray = CreateNonNullPlayerArray();
+        nonNullOrbArray = CreateNonNullOrbArray();
     }
 
-    void InitializePlayerArrayInMarathon(Player firstPlayer) {
-        playerArray = new Player[spawnPointTransformArray.Length];
-        InitializePlayer(1, firstPlayer, InputType.Click);
-        int playerIndex = 2;
-        foreach (var player in FindObjectsOfType<Player>()) {
-            if (player.Initialized)
+    void InitializeOrbArrayInMarathon(Orb firstPlayerOrb) {
+        orbArray = new Orb[spawnPointTransformArray.Length];
+        InitializeOrb(1, firstPlayerOrb, InputType.Click);
+        int orbIndex = 2;
+        foreach (var orb in FindObjectsOfType<Orb>()) {
+            if (orb.Initialized)
                 continue;
-            InitializePlayer(playerIndex++, player, InputType.CPU, (modeData as MarathonData).level);
+            InitializeOrb(orbIndex++, orb, InputType.CPU, (modeData as MarathonData).level);
         }
-        nonNullPlayerArray = CreateNonNullPlayerArray();
+        nonNullOrbArray = CreateNonNullOrbArray();
     }
 
-    Player[] CreateNonNullPlayerArray() => playerArray.Where(player => player != null).ToArray(); //remove
+    Orb[] CreateNonNullOrbArray() => orbArray.Where(player => player != null).ToArray(); //remove
 
     int GetCPULevelPerType(PlayerType playerType) {
         switch (playerType) {
@@ -132,9 +132,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         return 0;
     }
 
-    void InitializePlayer(int number, Player player, InputType inputType, int aiLevel = 0) {
-        playerArray[number] = player;
-        player.Initialize(number, inputType, aiLevel);
+    void InitializeOrb(int number, Orb orb, InputType inputType, int aiLevel = 0) {
+        orbArray[number] = orb;
+        orb.Initialize(number, inputType, aiLevel);
     }
 
     public void OnCameraInitialAnimationEnd() {
@@ -144,7 +144,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
                 if (m.element == Element.None)
                     CanvasController.I.startText.gameObject.SetActive(true);
                 else
-                    StartMarathon(FindObjectsOfType<Player>().First(p => p.element == m.element));
+                    StartMarathon(FindObjectsOfType<Orb>().First(p => p.element == m.element));
                 break;
             case QuickRaceData qr:
                 CanvasController.I.playerSelectScreen.gameObject.SetActive(true);
@@ -152,13 +152,13 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         }
     }
 
-    public void StartMarathon(Player selectedPlayer = null) {
-        InitializePlayerArrayInMarathon(selectedPlayer);
+    public void StartMarathon(Orb selectedOrb = null) {
+        InitializeOrbArrayInMarathon(selectedOrb);
         StartGame();
     }
 
     public void StartQuickRace() {
-        InitializePlayerArrayInQuickRace();
+        InitializeOrbArrayInQuickRace();
         StartGame();
     }
 
@@ -180,9 +180,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         await new WaitForUpdate();
         while (state == GameState.Ocurring) { //TODO check each player individually
             CanvasController.I.cardZone.Add(cardPrefabArray[Mathf.FloorToInt(Random.value * cardPrefabArray.Length)]);
-            foreach (var player in playerArray)
-                if(player!=null && player.ai != null && !player.reachGoal)
-                    player.ai.cardTypeDeck.Add(EnumUtil.GetRandomValueFromEnum<CardType>(1, -4));
+            foreach (var orb in orbArray)
+                if(orb!=null && orb.ai != null && !orb.reachGoal)
+                    orb.ai.cardTypeDeck.Add(EnumUtil.GetRandomValueFromEnum<CardType>(1, -4));
             await new WaitForSeconds(5);
         }
     }
@@ -192,32 +192,32 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
             TogglePause();
     }
 
-    public void OnReachGoal(Player player) {
-        player.reachGoal = true;
+    public void OnReachGoal(Orb orb) {
+        orb.reachGoal = true;
         if (state == GameState.Ocurring)
-            EndGame(player);
+            EndGame(orb);
     }
 
-    async void EndGame(Player winnerPlayer) {
-        EndGameState(winnerPlayer);
+    async void EndGame(Orb winnerOrb) {
+        EndGameState(winnerOrb);
         endSFX.Play();
         await new WaitForSecondsRealtime(1.2f);
         CanvasController.I.victoryText.gameObject.SetActive(true); //TODO
-        CanvasController.I.victoryText.text = $"Player {winnerPlayer.m_name} won!";
+        CanvasController.I.victoryText.text = $"Player {winnerOrb.m_name} won!";
         await new WaitForSecondsRealtime(2.5f);
-        await new WaitMultiple(this, 1, new WaitForSecondsRealtime(4f), new WaitUntil(() => PlayerReachGoalCount >= PlayerCount - 1));
+        await new WaitMultiple(this, 1, new WaitForSecondsRealtime(4f), new WaitUntil(() => OrbReachGoalCount >= OrbCount - 1));
         await new WaitForSecondsRealtime(0.5f);
-        FindObjectOfType<Fader>().FadeOut(() => GoToNextScene(winnerPlayer));
+        FindObjectOfType<Fader>().FadeOut(() => GoToNextScene(winnerOrb));
     }
 
-    void EndGameState(Player winnerPlayer) {
+    void EndGameState(Orb winnerOrb) {
         endTime = CurrentTime;
         state = GameState.End;
-        Debug.Log($"Player {winnerPlayer.number} won in {CurrentTime}s!");
+        Debug.Log($"Player {winnerOrb.number} won in {CurrentTime}s!");
     }
 
-    void GoToNextScene(Player winnerPlayer) {
-        if (!winnerPlayer.IsCPU && modeData is MarathonData) 
+    void GoToNextScene(Orb winnerOrb) {
+        if (!winnerOrb.IsCPU && modeData is MarathonData) 
             GoToNextRace();
         else
             BackToMainMenu(true);
@@ -243,51 +243,51 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     }
 
     //TODO CardHandlers
-    public void ExecuteCardEffect(Player player, Card card, CardType cardType) {
-        Player selectedPlayer = null;
+    public void ExecuteCardEffect(Orb orb, Card card, CardType cardType) {
+        Orb selectedOrb = null;
         switch (cardType) {
             case CardType.Neo:
                 Debug.Log("Activated=" + cardType);
-                playerArray[1].Boost();
+                orbArray[1].Boost();
                 if (card != null)
                     card.Remove();
                 break;
             case CardType.Fire:
-                selectedPlayer = playerArray.First((p) => p!=null && p.element == Element.Fire);
+                selectedOrb = orbArray.First((p) => p!=null && p.element == Element.Fire);
                 const float radius = 7f;
-                foreach(var item in Physics.OverlapSphere(selectedPlayer.transform.position, radius)) {
-                    Player p = item.GetComponentInParent<Player>();
-                    if(p!= null && p != selectedPlayer) {
-                        p.rigidBody.AddExplosionForce(700, selectedPlayer.transform.position, radius);
+                foreach(var item in Physics.OverlapSphere(selectedOrb.transform.position, radius)) {
+                    Orb p = item.GetComponentInParent<Orb>();
+                    if(p!= null && p != selectedOrb) {
+                        p.rigidBody.AddExplosionForce(700, selectedOrb.transform.position, radius);
                     }
                 }
                 explodeSFX.Play();
-                Destroy(Instantiate(explosionPrefab, selectedPlayer.transform.position, selectedPlayer.transform.rotation), 8f);
+                Destroy(Instantiate(explosionPrefab, selectedOrb.transform.position, selectedOrb.transform.rotation), 8f);
                 if (card != null)
                     card.Remove();
                 break;
             case CardType.Earth:
-                selectedPlayer = playerArray.First((p) => p!=null && p.element == Element.Earth);
-                if(selectedPlayer.currentSegment != null) {
-                    selectedPlayer.currentSegment.ApplyEffect(CardType.Earthquake);
+                selectedOrb = orbArray.First((p) => p!=null && p.element == Element.Earth);
+                if(selectedOrb.currentSegment != null) {
+                    selectedOrb.currentSegment.ApplyEffect(CardType.Earthquake);
                     if (card != null)
                         card.Remove();
                     earthquakeSFX.Play();
                 }
                 break;
             case CardType.Water:
-                selectedPlayer = playerArray.First((p) => p != null && p.element == Element.Water);
-                if (selectedPlayer.currentSegment != null) {
-                    selectedPlayer.currentSegment.ApplyEffect(CardType.Lake);
+                selectedOrb = orbArray.First((p) => p != null && p.element == Element.Water);
+                if (selectedOrb.currentSegment != null) {
+                    selectedOrb.currentSegment.ApplyEffect(CardType.Lake);
                     if (card != null)
                         card.Remove();
                     squidSFX.Play();
                 }
                 break;
             case CardType.Air:
-                selectedPlayer = playerArray.First((p) => p != null && p.element == Element.Air);
-                if (selectedPlayer.currentSegment != null) {
-                    selectedPlayer.currentSegment.ApplyEffect(CardType.Tornado);
+                selectedOrb = orbArray.First((p) => p != null && p.element == Element.Air);
+                if (selectedOrb.currentSegment != null) {
+                    selectedOrb.currentSegment.ApplyEffect(CardType.Tornado);
                     if (card != null)
                         card.Remove();
                     cycloneSFX.Play();
@@ -306,9 +306,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         }
     }
 
-    void AIApplyOnNearSegment(Player player, CardType cardType) {
+    void AIApplyOnNearSegment(Orb orb, CardType cardType) {
         for (int i = 0; i < 10; i++) { //TODO count
-            var segmentIndex = segmentList.IndexOf(player.currentSegment);
+            var segmentIndex = segmentList.IndexOf(orb.currentSegment);
             var nearIndexArray = new[] { segmentIndex - 1, segmentIndex, segmentIndex + 1 };
             int randomIndex = nearIndexArray[Mathf.FloorToInt(Random.value * nearIndexArray.Length)];
             //TODO break method

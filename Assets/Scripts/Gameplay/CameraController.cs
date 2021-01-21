@@ -9,11 +9,11 @@ public class CameraController : MonoBehaviour {
     [SerializeField] Vector3 pivotBonusPos;
     [SerializeField] Vector3 bigDistancePivotBonusPos;
     [SerializeField] Vector3 camBonusPos;
-    [Tooltip("x/time: biggest distance between players\ny/value: local Z Pos"), SerializeField] AnimationCurve zPerDistanceBetweenPlayers;
+    [Tooltip("x/time: biggest distance between orbs\ny/value: local Z Pos"), SerializeField] AnimationCurve zPerDistanceBetweenOrbs;
     Quaternion initialRot;
-    float maxDistanceBetweenPlayers; // for debug display
+    float maxDistanceBetweenOrbs; // for debug display
     float distanceLimit;
-    bool followingPlayers;
+    bool followingOrbs;
 
     [Header("Start animation/position")]
     [SerializeField] float initialAnimationDuration;
@@ -26,29 +26,29 @@ public class CameraController : MonoBehaviour {
 
     Vector3 PivotPos {
         get {
-            if (GetMaxDistanceBetweenPlayers() > distanceLimit) {
+            if (GetMaxDistanceBetweenOrbs() > distanceLimit) {
                 int playerCount = 0;
                 Vector3 sumPos = Vector3.zero;
-                foreach (var player in GameManager.I.nonNullPlayerArray) {
-                    if (player.IsCPU)
+                foreach (var orb in GameManager.I.nonNullOrbArray) {
+                    if (orb.IsCPU)
                         continue;
-                    sumPos += player.transform.position.WithY(0);
+                    sumPos += orb.transform.position.WithY(0);
                     playerCount++;
                 }
                 if(playerCount > 0)
                     return sumPos/ playerCount;
             }
-            return pivotBonusPos + GetPlayerMidPoint(GameManager.I.nonNullPlayerArray);
+            return pivotBonusPos + GetOrbMidPoint(GameManager.I.nonNullOrbArray);
         }
     }
 
-    Vector3 TargetPos => PivotPos - transform.forward * zPerDistanceBetweenPlayers.Evaluate(GetMaxDistanceBetweenPlayers());
+    Vector3 TargetPos => PivotPos - transform.forward * zPerDistanceBetweenOrbs.Evaluate(GetMaxDistanceBetweenOrbs());
     Vector3 RelativePosInAnimation => initialAnimationPos - initialAnimationTargetPos;
-    bool InitialAnimationPlaying => !followingPlayers;
+    bool InitialAnimationPlaying => !followingOrbs;
 
     void Awake() {
         initialRot = transform.rotation;
-        distanceLimit = zPerDistanceBetweenPlayers.keys.Max(key => key.time);
+        distanceLimit = zPerDistanceBetweenOrbs.keys.Max(key => key.time);
     }
 
     void Start() {
@@ -72,7 +72,7 @@ public class CameraController : MonoBehaviour {
     public void OnGameStart() {
 
         transform.DORotate(initialRot.eulerAngles, 0.8f).SetEase(Ease.InOutSine);
-        followingPlayers = true;
+        followingOrbs = true;
     }
 
     void Rotate(float ratio) {
@@ -83,19 +83,19 @@ public class CameraController : MonoBehaviour {
     }
 
     void Update(){
-        if (GameManager.I.playerArray == null || !followingPlayers)
+        if (GameManager.I.orbArray == null || !followingOrbs)
             return;
         transform.position = GetPos();
 #if UNITY_EDITOR
-        maxDistanceBetweenPlayers = GetMaxDistanceBetweenPlayers();
+        maxDistanceBetweenOrbs = GetMaxDistanceBetweenOrbs();
 #endif
     }
 
-    Vector3 GetPlayerMidPoint(Player[] playerArray) {
+    Vector3 GetOrbMidPoint(Orb[] orbArray) {
         return new Vector3(
-            (playerArray.Max(p => p.transform.position.x) + playerArray.Min(p => p.transform.position.x)) / 2,
+            (orbArray.Max(p => p.transform.position.x) + orbArray.Min(p => p.transform.position.x)) / 2,
             0,
-            (playerArray.Max(p => p.transform.position.z) + playerArray.Min(p => p.transform.position.z)) / 2
+            (orbArray.Max(p => p.transform.position.z) + orbArray.Min(p => p.transform.position.z)) / 2
         );
     }
 
@@ -103,12 +103,12 @@ public class CameraController : MonoBehaviour {
         return Vector3.Lerp(transform.position, TargetPos, 1.2f * Time.deltaTime);
     }
 
-    float GetMaxDistanceBetweenPlayers() {
+    float GetMaxDistanceBetweenOrbs() {
         float ret = 0;
-        for (int i = 0; i < GameManager.I.nonNullPlayerArray.Length - 1; i++) {
-            for (int j = i + 1; j < GameManager.I.nonNullPlayerArray.Length; j++) {
+        for (int i = 0; i < GameManager.I.nonNullOrbArray.Length - 1; i++) {
+            for (int j = i + 1; j < GameManager.I.nonNullOrbArray.Length; j++) {
                 ret = Mathf.Max(ret, Mathf.Abs(Vector3.Distance(
-                    GameManager.I.nonNullPlayerArray[i].transform.position, GameManager.I.nonNullPlayerArray[j].transform.position
+                    GameManager.I.nonNullOrbArray[i].transform.position, GameManager.I.nonNullOrbArray[j].transform.position
                 )));
             }
         }
@@ -116,7 +116,7 @@ public class CameraController : MonoBehaviour {
     }
 
     void OnDrawGizmosSelected() {
-        if (!Application.isPlaying || GameManager.I.playerArray == null)
+        if (!Application.isPlaying || GameManager.I.orbArray == null)
             return;
         Gizmos.color = Color.blue.WithAlpha(0.5f);
         Gizmos.DrawSphere(PivotPos, 0.5f);

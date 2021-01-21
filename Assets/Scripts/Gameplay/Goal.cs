@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Goal : MonoBehaviour {
     void OnTriggerEnter(Collider other) {
-        var player = other.GetComponentInParent<Player>();
+        var player = other.GetComponentInParent<Orb>();
         if (player != null) 
             GameManager.I.OnReachGoal(player);
     }

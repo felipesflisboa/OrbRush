@@ -12,7 +12,7 @@ public class PlayerHUD : MonoBehaviour{
     [SerializeField] Text accelerationText;
     [SerializeField] Text cardText;
     [SerializeField] int playerNumber;
-    Player player;
+    Orb player;
 
     [SerializeField] PlayerHUDColorGroup colorGroup;
     [SerializeField] Color tooManyCardColor;
@@ -45,7 +45,7 @@ public class PlayerHUD : MonoBehaviour{
     }
 
     void Initialize() {
-        player = GameManager.I.playerArray[playerNumber];
+        player = GameManager.I.orbArray[playerNumber];
         backgroundImage.DOColor(colorGroup.getColor(player.element), 1.2f);
     }
 

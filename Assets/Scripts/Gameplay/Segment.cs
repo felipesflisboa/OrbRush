@@ -9,7 +9,7 @@ public class Segment : MonoBehaviour {
     [SerializeField] Transform tornadoTransform;
     [SerializeField] Transform earthquakeTransform; //TODO rename
     [SerializeField] Transform squirtTransform; //TODO rename lake
-    List<Player> playerInsideList = new List<Player>();
+    List<Orb> playerInsideList = new List<Orb>();
     internal CardType cardType;
 
     void OnMouseDown() {
@@ -21,7 +21,7 @@ public class Segment : MonoBehaviour {
     }
 
     void OnTriggerEnter(Collider other) {
-        var player = other.GetComponentInParent<Player>();
+        var player = other.GetComponentInParent<Orb>();
         if (player != null) {
             playerInsideList.Add(player);
             if(player.currentSegment != null) //TODO property
@@ -84,7 +84,7 @@ public class Segment : MonoBehaviour {
         }
     }
 
-    public void ApplyEffectInPlayer(Player player) {
+    public void ApplyEffectInPlayer(Orb player) {
         switch (cardType) {
             case CardType.Fire:
                 if(player.element == Element.Fire)
@@ -120,7 +120,7 @@ public class Segment : MonoBehaviour {
     }
 
     void OnTriggerExit(Collider other) {
-        var player = other.GetComponentInParent<Player>();
+        var player = other.GetComponentInParent<Orb>();
         if (player != null) {
             if(playerInsideList.Contains(player))
                 playerInsideList.Remove(player);

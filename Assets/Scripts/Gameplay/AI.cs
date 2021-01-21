@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class AI {
-    internal Player player;
+    internal Orb player;
     internal List<CardType> cardTypeDeck = new List<CardType>(); //TODO rename class
     int level;
 
     static bool debugPrint = false;
 
-    public AI(int pLevel, Player pPlayer) {
+    public AI(int pLevel, Orb pPlayer) {
         level = pLevel;
         player = pPlayer;
         if (!debugPrint) {

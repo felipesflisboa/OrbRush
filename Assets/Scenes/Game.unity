@@ -4521,6 +4521,12 @@ MonoBehaviour:
   - {fileID: 1150436550}
   - {fileID: 2071540085}
   - {fileID: 673974649}
+  orbPrefabArray:
+  - {fileID: 0}
+  - {fileID: 4183367664832444660, guid: 54b3f1ec3f498ed44b73772770a83047, type: 3}
+  - {fileID: 4183367664832444660, guid: 9fca229bf58ef6a439a55fce350d243e, type: 3}
+  - {fileID: 4183367664832444660, guid: 2f0e6bc2b4432f14394af7ecde20d5ed, type: 3}
+  - {fileID: 4183367664832444660, guid: 06e9a6f26e12687449f802b745c2df83, type: 3}
   playerPrefabArray:
   - {fileID: 0}
   - {fileID: 4183367664832444660, guid: 54b3f1ec3f498ed44b73772770a83047, type: 3}
@@ -8410,7 +8416,7 @@ MonoBehaviour:
   pivotBonusPos: {x: 0, y: 0, z: 23}
   bigDistancePivotBonusPos: {x: 0, y: 0, z: 40}
   camBonusPos: {x: 0, y: 0, z: 0}
-  zPerDistanceBetweenPlayers:
+  zPerDistanceBetweenOrbs:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
