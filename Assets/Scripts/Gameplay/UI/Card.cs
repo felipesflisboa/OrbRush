@@ -7,8 +7,9 @@ using Gamelogic.Extensions;
 
 public class Card : MonoBehaviour {
     public CardType type;
-    public Image image;
-    public Button button;
+    [SerializeField] Image image;
+    [SerializeField] Button button;
+    internal CardZone zone;
     Tweener movementTween;
     float targetLocalY = 1;
     public bool valid { get; private set; } = true;
@@ -63,7 +64,7 @@ public class Card : MonoBehaviour {
     }
 
     public void OnClick() {
-        if (GameManager.I.Paused || !valid || GameManager.I.ClickInputOrb==null)
+        if (GameManager.I.Paused || !valid || !zone.inputHandler.CanClick)
             return;
         GameManager.I.ExecuteCardEffect(GameManager.I.ClickInputOrb, this, type);
     }

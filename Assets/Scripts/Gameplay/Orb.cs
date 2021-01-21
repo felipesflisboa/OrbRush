@@ -7,6 +7,7 @@ public class Orb : MonoBehaviour {
     public Element element;
     public string m_name;
     internal int number;
+    internal CardZone cardZone;
     internal InputHandler inputHandler;
     internal Rigidbody rigidBody; //TODO protect
     internal Segment currentSegment;
@@ -15,7 +16,7 @@ public class Orb : MonoBehaviour {
     public AI ai { get; private set; }
     int fixedUpdateCount;
 
-    public int CardCount => IsCPU ? ai.cardTypeDeck.Count : CanvasController.I.cardZone.ValidCardCount;
+    public int CardCount => IsCPU ? ai.cardTypeDeck.Count : cardZone.ValidCardCount;
     public float Velocity => VelocityV3.magnitude;
     public float HalfSecondAccelerationRatio => 1 - 0.01f * CardCount;
     public bool IsCPU => ai != null;
@@ -30,11 +31,20 @@ public class Orb : MonoBehaviour {
         rigidBody = GetComponentInChildren<Rigidbody>();
     }
 
-    public void Initialize(int pNumber, InputType inputType, int aiLevel) {
+    public void InitializeAsCPU(int pNumber, InputType inputType, int aiLevel) {
+        Initialize(pNumber, inputType);
+        ai = new AI(aiLevel, this);
+    }
+
+    public void InitializeAsHuman(int pNumber, InputType inputType, CardZone pCardZone) {
+        Initialize(pNumber, inputType);
+        cardZone = pCardZone;
+        cardZone.inputHandler = inputHandler;
+    }
+
+    void Initialize(int pNumber, InputType inputType) {
         number = pNumber;
         inputHandler = new InputHandler(inputType);
-        if (aiLevel > 0)
-            ai = new AI(aiLevel, this);
     }
 
     public void Boost() {
@@ -42,6 +52,8 @@ public class Orb : MonoBehaviour {
     }
 
     void FixedUpdate() {
+        if (!Initialized)
+            return;
         if (fixedUpdateCount % 25 == 0) // half-second //TODO count other way
             VelocityV3 *= HalfSecondAccelerationRatio;
         fixedUpdateCount++;

@@ -102,7 +102,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
                 i + 1,
                 orbTempArray.FirstOrDefault(orb => orb.element == panel.element),
                 panel.GetInputType(),
-                panel.IsCPU() ? 0 : GetCPULevelPerType(panel.type)
+                panel.IsCPU() ? GetCPULevelPerType(panel.type) : 0
             );
         }
         nonNullOrbArray = CreateNonNullOrbArray();
@@ -134,7 +134,10 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
 
     void InitializeOrb(int number, Orb orb, InputType inputType, int aiLevel = 0) {
         orbArray[number] = orb;
-        orb.Initialize(number, inputType, aiLevel);
+        if(aiLevel == 0)
+            orb.InitializeAsHuman(number, inputType, CanvasController.I.NextAvailableCardZone);
+        else
+            orb.InitializeAsCPU(number, inputType, aiLevel);
     }
 
     public void OnCameraInitialAnimationEnd() {
@@ -163,12 +166,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     }
 
     void StartGame() {
-        //TODO put on Canvas
-        CanvasController.I.playerSelectScreen.gameObject.SetActive(false);
-        CanvasController.I.startText.gameObject.SetActive(false);
-        CanvasController.I.hudRectTransform.gameObject.SetActive(true);
-        CanvasController.I.cardZone.gameObject.SetActive(true);
-
+        CanvasController.I.OnGameStart();
         cameraController.OnGameStart();
         Time.timeScale = 1;
         startSFX.Play();
@@ -177,13 +175,21 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     }
 
     async void DrawCardLoop() {
-        await new WaitForUpdate();
-        while (state == GameState.Ocurring) { //TODO check each player individually
-            CanvasController.I.cardZone.Add(cardPrefabArray[Mathf.FloorToInt(Random.value * cardPrefabArray.Length)]);
-            foreach (var orb in orbArray)
-                if(orb!=null && orb.ai != null && !orb.reachGoal)
-                    orb.ai.cardTypeDeck.Add(EnumUtil.GetRandomValueFromEnum<CardType>(1, -4));
+        while (state == GameState.Ocurring) {
+            foreach (var orb in nonNullOrbArray) {
+                if (orb.reachGoal)
+                    continue;
+                DrawCardForOrb(orb);
+            }
             await new WaitForSeconds(5);
+        }
+    }
+
+    void DrawCardForOrb(Orb orb) {
+        if (orb.IsCPU) {
+            orb.ai.cardTypeDeck.Add(EnumUtil.GetRandomValueFromEnum<CardType>(1, -4));
+        } else {
+            orb.cardZone.Add(cardPrefabArray[Mathf.FloorToInt(Random.value * cardPrefabArray.Length)]);
         }
     }
 

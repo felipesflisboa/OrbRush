@@ -6,17 +6,25 @@ using UnityEngine;
 public class CardZone : MonoBehaviour {
     [SerializeField] RectTransform rangeRectTransform;
     [SerializeField] float initialCardBonusY;
+    internal InputHandler inputHandler;
     float cardHeight;
 
     public readonly List<Card> cardList = new List<Card>();
 
+    public bool Active => inputHandler != null;
     public int ValidCardCount => cardList.Count(c => c.valid);
 
     public void Add(GameObject prefab) {
-        cardList.Add(Instantiate(prefab, transform).GetComponent<Card>());
+        cardList.Add(CreateCard(prefab));
         if (cardHeight == 0)
             cardHeight = cardList[cardList.Count - 1].RectTransform.rect.height;
         RefreshPosition();
+    }
+
+    Card CreateCard(GameObject prefab) {
+        Card ret = Instantiate(prefab, transform).GetComponent<Card>();
+        ret.zone = this;
+        return ret;
     }
 
     void Update() {
