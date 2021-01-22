@@ -33,15 +33,11 @@ public class Card : MonoBehaviour {
     }
 
     public void Highlight() {
-        if (GameManager.I.selectedCard != null && GameManager.I.selectedCard != this)
-            GameManager.I.selectedCard.Unhighlight();
-        GameManager.I.selectedCard = this;
         image.color = new Color32(0xFF, 0xF0, 0xA0, 0xFF);
     }
 
     public void Unhighlight() {
         image.color = Color.white;
-        GameManager.I.selectedCard = null;
     }
 
     public void Remove() {
@@ -63,9 +59,14 @@ public class Card : MonoBehaviour {
         movementTween = RectTransform.DOLocalMoveY(targetLocalY, ANIMATION_DURATION).SetEase(Ease.InOutSine);
     }
 
-    public void OnClick() {
-        if (GameManager.I.Paused || !valid || !zone.inputHandler.CanClick)
+    void OnClick() {
+        if(zone.InputHandler.CanClick)
+            TryToUse();
+    }
+
+    public void TryToUse() {
+        if (GameManager.I.Paused || !valid)
             return;
-        GameManager.I.ExecuteCardEffect(GameManager.I.ClickInputOrb, this, type);
+        GameManager.I.ExecuteCardEffect(this, type);
     }
 }

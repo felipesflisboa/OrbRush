@@ -12,6 +12,7 @@ public class Segment : MonoBehaviour {
     List<Orb> playerInsideList = new List<Orb>();
     internal CardType cardType;
 
+    /* //remove
     void OnMouseDown() {
         Debug.Log($"Mousedown! {name}");
         if (GameManager.I.selectedCard != null) {
@@ -19,6 +20,7 @@ public class Segment : MonoBehaviour {
             Destroy(GameManager.I.selectedCard.gameObject);
         }
     }
+    */
 
     void OnTriggerEnter(Collider other) {
         var player = other.GetComponentInParent<Orb>();

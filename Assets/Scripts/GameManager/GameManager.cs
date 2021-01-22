@@ -28,7 +28,6 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     internal Orb[] orbArray; //TODO protect
     internal Orb[] nonNullOrbArray;
     internal GameState state;
-    internal Card selectedCard;
     internal List<Segment> segmentList;
     CameraController cameraController;
     float endTime;
@@ -249,7 +248,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     }
 
     //TODO CardHandlers
-    public void ExecuteCardEffect(Orb orb, Card card, CardType cardType) {
+    public void ExecuteCardEffect(Card card, CardType cardType) {
         Orb selectedOrb = null;
         switch (cardType) {
             case CardType.Neo:

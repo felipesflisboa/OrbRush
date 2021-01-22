@@ -39,7 +39,7 @@ public class Orb : MonoBehaviour {
     public void InitializeAsHuman(int pNumber, InputType inputType, CardZone pCardZone) {
         Initialize(pNumber, inputType);
         cardZone = pCardZone;
-        cardZone.inputHandler = inputHandler;
+        cardZone.Initialize(this);
     }
 
     void Initialize(int pNumber, InputType inputType) {

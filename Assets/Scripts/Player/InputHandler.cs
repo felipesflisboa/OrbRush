@@ -1,54 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 //TODO use inheritance
 //TODO make AI use it.
 public class InputHandler {
     InputType type;
-
-    const string INPUT_KEY = "PlayerInput{0}";
+    AxisPressCheck verticalAxisPressCheck;
 
     public bool CanClick => type == InputType.Click;
 
-    public float VerticalInputAxis {
+    public bool HasCursor {
         get {
-            switch (type) {
-                case InputType.Keyboard: return Input.GetAxis("Vertical");
-                case InputType.Joystick1: return Input.GetAxis("VerticalJoystick1");
-                case InputType.Joystick2: return Input.GetAxis("VerticalJoystick2");
-                case InputType.Joystick3: return Input.GetAxis("VerticalJoystick3");
-                case InputType.Joystick4: return Input.GetAxis("VerticalJoystick4");
-            }
-            throw new System.NotImplementedException();
+            return new[] {
+                InputType.Keyboard, InputType.Joystick1, InputType.Joystick2, InputType.Joystick3, InputType.Joystick4
+            }.Contains(type);
         }
     }
 
-    public float HorizontalInputAxis {
-        get {
-            switch (type) {
-                case InputType.Keyboard: return Input.GetAxis("Horizontal");
-                case InputType.Joystick1: return Input.GetAxis("HorizontalJoystick1");
-                case InputType.Joystick2: return Input.GetAxis("HorizontalJoystick2");
-                case InputType.Joystick3: return Input.GetAxis("HorizontalJoystick3");
-                case InputType.Joystick4: return Input.GetAxis("HorizontalJoystick4");
-            }
-            throw new System.NotImplementedException();
-        }
-    }
-
-    public float HorizontalInputAxisRaw {
-        get {
-            switch (type) {
-                case InputType.Keyboard: return Input.GetAxisRaw("Horizontal");
-                case InputType.Joystick1: return Input.GetAxisRaw("HorizontalJoystick1");
-                case InputType.Joystick2: return Input.GetAxisRaw("HorizontalJoystick2");
-                case InputType.Joystick3: return Input.GetAxisRaw("HorizontalJoystick3");
-                case InputType.Joystick4: return Input.GetAxisRaw("HorizontalJoystick4");
-            }
-            throw new System.NotImplementedException();
-        }
-    }
+    public float VerticalInputAxisDown => verticalAxisPressCheck == null ? 0f : verticalAxisPressCheck.GetAxisOnPress();
 
     public bool ConfirmTriggered {
         get {
@@ -59,11 +30,36 @@ public class InputHandler {
                 case InputType.Joystick3: return Input.GetButtonDown("Fire1Joystick3");
                 case InputType.Joystick4: return Input.GetButtonDown("Fire1Joystick4");
             }
-            throw new System.NotImplementedException();
+            return false;
         }
+    }
+
+    string VerticalAxisButtonName {
+        get {
+            switch (type) {
+                case InputType.Keyboard: return "Vertical";
+                case InputType.Joystick1: return "VerticalJoystick1";
+                case InputType.Joystick2: return "VerticalJoystick2";
+                case InputType.Joystick3: return "VerticalJoystick3";
+                case InputType.Joystick4: return "VerticalJoystick4";
+            }
+            return null;
+        }
+
     }
 
     public InputHandler(InputType pType) {
         type = pType;
+        InitializePressCheck();
+    }
+
+    void InitializePressCheck() {
+        if (VerticalAxisButtonName != null)
+            verticalAxisPressCheck = new AxisPressCheck(VerticalAxisButtonName, 0.4f);
+    }
+
+    public void Update() {
+        if (VerticalAxisButtonName != null)
+            verticalAxisPressCheck.Update();
     }
 }
