@@ -63,15 +63,6 @@ public class PlayerSelectPanel : MonoBehaviour {
         return "None";
     }
 
-    public InputType GetInputType() => GetInputType(type);
-
-    public InputType GetInputType(PlayerType playerType) {
-        return (InputType) Mathf.Min(
-            (int)playerType, 
-            Enum.GetNames(typeof(InputType)).Length-1
-        );
-    }
-
     public bool IsJoystick(PlayerType type) {
         return new[] { PlayerType.Joystick1, PlayerType.Joystick2, PlayerType.Joystick3, PlayerType.Joystick4 }.Contains(type);
     }

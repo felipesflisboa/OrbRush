@@ -100,7 +100,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
             InitializeOrb(
                 i + 1,
                 orbTempArray.FirstOrDefault(orb => orb.element == panel.element),
-                panel.GetInputType(),
+                InputHandler.Factory(panel.type),
                 panel.IsCPU() ? GetCPULevelPerType(panel.type) : 0
             );
         }
@@ -109,12 +109,12 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
 
     void InitializeOrbArrayInMarathon(Orb firstPlayerOrb) {
         orbArray = new Orb[spawnPointTransformArray.Length];
-        InitializeOrb(1, firstPlayerOrb, InputType.Click);
+        InitializeOrb(1, firstPlayerOrb, new ClickInputHandler());
         int orbIndex = 2;
         foreach (var orb in FindObjectsOfType<Orb>()) {
             if (orb.Initialized)
                 continue;
-            InitializeOrb(orbIndex++, orb, InputType.CPU, (modeData as MarathonData).level);
+            InitializeOrb(orbIndex++, orb, new CPUInputHandler(), (modeData as MarathonData).level);
         }
         nonNullOrbArray = CreateNonNullOrbArray();
     }
@@ -131,12 +131,12 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         return 0;
     }
 
-    void InitializeOrb(int number, Orb orb, InputType inputType, int aiLevel = 0) {
+    void InitializeOrb(int number, Orb orb, InputHandler inputHandler, int aiLevel = 0) {
         orbArray[number] = orb;
         if(aiLevel == 0)
-            orb.InitializeAsHuman(number, inputType, CanvasController.I.NextAvailableCardZone);
+            orb.InitializeAsHuman(number, inputHandler, CanvasController.I.NextAvailableCardZone);
         else
-            orb.InitializeAsCPU(number, inputType, aiLevel);
+            orb.InitializeAsCPU(number, inputHandler, aiLevel);
     }
 
     public void OnCameraInitialAnimationEnd() {

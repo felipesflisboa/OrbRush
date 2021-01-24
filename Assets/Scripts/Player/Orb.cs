@@ -22,7 +22,7 @@ public class Orb : MonoBehaviour {
     public bool IsCPU => ai != null;
     public bool Initialized => inputHandler != null;
 
-    public Vector3 VelocityV3 {
+    public Vector3 VelocityV3 {  
         get => rigidBody.velocity;
         set => rigidBody.velocity = value;
     }
@@ -31,20 +31,20 @@ public class Orb : MonoBehaviour {
         rigidBody = GetComponentInChildren<Rigidbody>();
     }
 
-    public void InitializeAsCPU(int pNumber, InputType inputType, int aiLevel) {
-        Initialize(pNumber, inputType);
+    public void InitializeAsCPU(int pNumber, InputHandler pInputHandler, int aiLevel) {
+        Initialize(pNumber, pInputHandler);
         ai = new AI(aiLevel, this);
     }
 
-    public void InitializeAsHuman(int pNumber, InputType inputType, CardZone pCardZone) {
-        Initialize(pNumber, inputType);
+    public void InitializeAsHuman(int pNumber, InputHandler pInputHandler, CardZone pCardZone) {
+        Initialize(pNumber, pInputHandler);
         cardZone = pCardZone;
         cardZone.Initialize(this);
     }
 
-    void Initialize(int pNumber, InputType inputType) {
+    void Initialize(int pNumber, InputHandler pInputHandler) {
         number = pNumber;
-        inputHandler = new InputHandler(inputType);
+        inputHandler = pInputHandler;
     }
 
     public void Boost() {
