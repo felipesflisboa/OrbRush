@@ -7,9 +7,10 @@ using Gamelogic.Extensions;
 
 public class Card : MonoBehaviour {
     public CardType type;
-    [SerializeField] Image image;
+    [SerializeField] RectTransform[] highlightRectArray;
     [SerializeField] Button button;
     internal CardZone zone;
+    CanvasGroup canvasGroup;
     Tweener movementTween;
     float targetLocalY = 1;
     public bool valid { get; private set; } = true;
@@ -20,6 +21,8 @@ public class Card : MonoBehaviour {
 
     void Awake() {
         button.onClick.AddListener(OnClick);
+        canvasGroup = GetComponent<CanvasGroup>();
+        Unhighlight();
     }
 
     void Start() {
@@ -33,11 +36,13 @@ public class Card : MonoBehaviour {
     }
 
     public void Highlight() {
-        image.color = new Color32(0xFF, 0xF0, 0xA0, 0xFF);
+        foreach (var rectTransform in highlightRectArray)
+            rectTransform.gameObject.SetActive(true);
     }
 
     public void Unhighlight() {
-        image.color = Color.white;
+        foreach (var rectTransform in highlightRectArray)
+            rectTransform.gameObject.SetActive(false);
     }
 
     public void Remove() {
@@ -46,7 +51,7 @@ public class Card : MonoBehaviour {
     }
 
     public void PlayRemoveAnimation(float time, System.Action callback) {
-        image.DOFade(0, time).SetEase(Ease.InSine).OnComplete(() => callback());
+        canvasGroup.DOFade(0f, time).SetEase(Ease.InSine).OnComplete(() => callback());
         transform.DOScale(transform.localScale.x*1.2f, time).SetEase(Ease.OutSine);
     }
 
