@@ -222,18 +222,23 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     }
 
     void GoToNextScene(Orb winnerOrb) {
-        if (!winnerOrb.IsCPU && modeData is MarathonData) 
+        if (modeData is MarathonData) {
+            if(winnerOrb.IsCPU)
+                BackToMainMenu(true);
+            else
+                GoToNextRace();
+        } else {
             GoToNextRace();
-        else
-            BackToMainMenu(true);
+        }
     }
 
     void GoToNextRace() {
-        (modeData as MarathonData).level++;
+        if(modeData is MarathonData)
+            (modeData as MarathonData).level++;
         SceneManager.LoadScene("Game");
     }
 
-    void BackToMainMenu(bool gameLost) {
+    public void BackToMainMenu(bool gameLost = true) {
         if (gameLost && modeData is MarathonData)
             SaveLastScore();
         SceneManager.LoadScene("MainMenu");

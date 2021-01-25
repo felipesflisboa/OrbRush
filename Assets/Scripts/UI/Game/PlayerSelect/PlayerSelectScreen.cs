@@ -7,10 +7,12 @@ using UnityEngine.UI;
 public class PlayerSelectScreen : MonoBehaviour{
     internal PlayerSelectPanel[] panelArray;
     [SerializeField] Button confirmButton;
+    [SerializeField] Button quitButton;
 
     void Awake() {
         panelArray = GetComponentsInChildren<PlayerSelectPanel>(true).OrderBy(psp => psp.number).ToArray();
         confirmButton.onClick.AddListener(() => GameManager.I.StartQuickRace());
+        quitButton.onClick.AddListener(() => GameManager.I.BackToMainMenu());
     }
 
     public PlayerSelectPanel[] GetPanelWithCPULast() => panelArray.OrderBy(psp => psp.IsCPU() ? 1 : 0).ToArray();
