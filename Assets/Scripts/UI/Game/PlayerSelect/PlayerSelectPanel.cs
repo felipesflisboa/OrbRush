@@ -45,7 +45,7 @@ public class PlayerSelectPanel : MonoBehaviour {
             backgroundImage.DOColor(new Color(0.5f, 0.5f, 0.5f), 0.1f)
         ).Append(
             backgroundImage.DOColor(imageOriginalColor, 0.2f)
-        );
+        ).SetUpdate(true);
     }
 
     string GetTypeName(PlayerType type) {
