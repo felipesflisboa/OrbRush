@@ -70,8 +70,8 @@ public class CardZone : MonoBehaviour {
     Card GetNextValidCardOnList(Card currentCard=null, int indexIncrement = 1) {
         if(currentCard != null) {
             for (
-                int i = (cardList.IndexOf(currentCard) + indexIncrement + cardList.Count) % cardList.Count; 
-                cardList[i] != currentCard; 
+                int i = cardList.IndexOf(currentCard) + indexIncrement; 
+                0 < i && i < cardList.Count && cardList[i] != currentCard; 
                 i = (i + indexIncrement + cardList.Count) % cardList.Count
             ) {
                 if (cardList[i] == null || !cardList[i].valid)
