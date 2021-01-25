@@ -99,7 +99,7 @@ public class MenuManager : SingletonMonoBehaviour<MenuManager> {
     }
 
 	void Update(){
-		if(Input.GetButtonDown("Fire1") && !FadeActive && ShouldReturnToTitleAtClick && clickCooldownTimer.CheckAndUpdate()) {
+		if(Input.GetButtonDown("Click") && !FadeActive && ShouldReturnToTitleAtClick && clickCooldownTimer.CheckAndUpdate()) {
             PlayClickSFX();
             BackToTitle();
         }
