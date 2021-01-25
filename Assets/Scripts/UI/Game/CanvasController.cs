@@ -8,12 +8,10 @@ using UnityEngine.UI;
 public class CanvasController : SingletonMonoBehaviour<CanvasController> {
     [Tooltip("Per player")] public CardZone[] cardZoneArray;
     internal PlayerSelectScreen playerSelectScreen;
-    public RectTransform hudRectTransform;
+    HUD hud;
     public Text startText;
-    public Text levelText;
     public Text victoryText;
     public Text cardAlertText;
-    public Text timeText;
     bool canShowCardAlert;
 
     public CardZone NextAvailableCardZone => cardZoneArray.First(cz => cz!=null && !cz.Active);
@@ -34,7 +32,8 @@ public class CanvasController : SingletonMonoBehaviour<CanvasController> {
     void Initialize() {
         InitializeCardZone();
         playerSelectScreen = GetComponentInChildren<PlayerSelectScreen>(true);
-        hudRectTransform.gameObject.SetActive(false);
+        hud = GetComponentInChildren<HUD>();
+        hud.gameObject.SetActive(false);
         playerSelectScreen.gameObject.SetActive(false);
         cardAlertText.gameObject.SetActive(false);
     }
@@ -50,7 +49,7 @@ public class CanvasController : SingletonMonoBehaviour<CanvasController> {
     public void OnGameStart() {
         playerSelectScreen.gameObject.SetActive(false);
         startText.gameObject.SetActive(false);
-        hudRectTransform.gameObject.SetActive(true);
+        hud.gameObject.SetActive(true);
         EnableActiveCardZones();
         canShowCardAlert = cardZoneArray.Count(cz => cz != null && cz.Active) == 1;
     }
@@ -63,12 +62,7 @@ public class CanvasController : SingletonMonoBehaviour<CanvasController> {
         }
     }
 
-    void Start() {
-        levelText.text = GameManager.modeData is MarathonData ? $"Level {(GameManager.modeData as MarathonData).level}" : string.Empty;
-    }
-
     void Update() {
-        timeText.text = $"{GameManager.I.CurrentTime.ToString("00.000")} s";
         RefreshCardAlert();
     }
 
