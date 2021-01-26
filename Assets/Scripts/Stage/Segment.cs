@@ -10,17 +10,10 @@ public class Segment : MonoBehaviour {
     [SerializeField] Transform earthquakeTransform; //TODO rename
     [SerializeField] Transform squirtTransform; //TODO rename lake
     List<Orb> playerInsideList = new List<Orb>();
+    float cardEffectEndTime;
     internal CardType cardType;
 
-    /* //remove
-    void OnMouseDown() {
-        Debug.Log($"Mousedown! {name}");
-        if (GameManager.I.selectedCard != null) {
-            ApplyEffect(GameManager.I.selectedCard.type);
-            Destroy(GameManager.I.selectedCard.gameObject);
-        }
-    }
-    */
+    const float CARD_EFFECT_DURATION = 10f;
 
     void OnTriggerEnter(Collider other) {
         var player = other.GetComponentInParent<Orb>();
@@ -35,20 +28,29 @@ public class Segment : MonoBehaviour {
 
     void ApplyColor(Color color) {
         var oldColorizer = GetComponentInChildren<AutoColorizer>();
-        if(oldColorizer != null)
+        if(oldColorizer == null) {
+            if (color == Color.white)
+                return;
+        } else {
+            if (oldColorizer.definedColor == color)
+                return;
             Destroy(oldColorizer);
+        }
+        CreateColorizer(color, 1.5f);
+    }
+
+    void CreateColorizer(Color color, float time) {
         var newColorizer = gameObject.AddComponent<AutoColorizer>();
         newColorizer.definedColor = color;
-        newColorizer.totalTime = 1.5f;
+        newColorizer.totalTime = time;
     }
 
     public void ApplyEffect(CardType newCardType) {
-        Debug.Log("Activated=" + newCardType);
-        cardType = newCardType;
-        foreach (var player in playerInsideList) {
+        foreach (var player in playerInsideList)
             ApplyEffectInPlayer(player);
-        }
-        switch (cardType) {
+        cardType = newCardType;
+        cardEffectEndTime = CARD_EFFECT_DURATION + Time.timeSinceLevelLoad;
+        switch (newCardType) {
             case CardType.Fire:
                 ApplyColor(Color.red);
                 break;
@@ -62,19 +64,18 @@ public class Segment : MonoBehaviour {
                 ApplyColor(Color.yellow);
                 break;
             case CardType.Lake:
+                DisableCardEffectTransforms();
                 ApplyColor(new Color32(0xD0, 0xD0, 0xFF, 0xFF));
-                earthquakeTransform.gameObject.SetActive(false);
-                tornadoTransform.gameObject.SetActive(false);
                 squirtTransform.gameObject.SetActive(true);
                 break;
             case CardType.Tornado:
-                earthquakeTransform.gameObject.SetActive(false);
+                DisableCardEffectTransforms();
                 tornadoTransform.gameObject.SetActive(true);
                 tornadoTransform.position = GameManager.I.GetOrb(Element.Air).transform.position.WithY(tornadoTransform.position.y);
                 break;
             case CardType.Earthquake:
+                DisableCardEffectTransforms();
                 earthquakeTransform.gameObject.SetActive(true);
-                tornadoTransform.gameObject.SetActive(false);
                 foreach (var item in earthquakePlatformArray) {
                     item.gameObject.SetActive(true);
                     DOTween.Sequence().Append(
@@ -144,5 +145,22 @@ public class Segment : MonoBehaviour {
                 )* 350 * Time.deltaTime, ForceMode.Acceleration);
             }
         }
+    }
+
+    void Update() {
+        if(cardEffectEndTime!= 0 && cardEffectEndTime < Time.timeSinceLevelLoad)
+            RemoveCardEffect();
+    }
+
+    void RemoveCardEffect() {
+        DisableCardEffectTransforms();
+        ApplyColor(Color.white);
+        cardType = CardType.None;
+        cardEffectEndTime = 0;
+    }
+
+    void DisableCardEffectTransforms() {
+        earthquakeTransform.gameObject.SetActive(false);
+        tornadoTransform.gameObject.SetActive(false);
     }
 }
