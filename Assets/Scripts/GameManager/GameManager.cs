@@ -108,6 +108,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     }
 
     void InitializeOrbArrayInMarathon(Orb firstPlayerOrb) {
+        (modeData as MarathonData).element = firstPlayerOrb.element;
         orbArray = new Orb[spawnPointTransformArray.Length];
         InitializeOrb(1, firstPlayerOrb, new ClickInputHandler());
         int orbIndex = 2;
@@ -154,7 +155,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         }
     }
 
-    public void StartMarathon(Orb selectedOrb = null) {
+    public void StartMarathon(Orb selectedOrb) {
         InitializeOrbArrayInMarathon(selectedOrb);
         StartGame();
     }
