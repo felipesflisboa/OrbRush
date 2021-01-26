@@ -4970,7 +4970,7 @@ MonoBehaviour:
   explodeSFX: {fileID: 666456975}
   startSFX: {fileID: 220875921}
   endSFX: {fileID: 122412476}
-  standaloneSceneStartsAsMarathon: 0
+  standaloneSceneStartsAsMarathon: 1
 --- !u!4 &953248772
 Transform:
   m_ObjectHideFlags: 0

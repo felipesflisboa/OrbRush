@@ -136,15 +136,19 @@ public class Segment : MonoBehaviour {
     }
 
     void FixedUpdate() {
-        if (cardType == CardType.Tornado) {
-            foreach (var player in playerInsideList) {
-                if (player.element == Element.Air)
-                    continue;
-                player.rigidBody.AddForce(MathUtil.UnityAngleToNormal(
-                    MathUtil.GetAngle(tornadoTransform.position.To2DXZ() - player.transform.position.To2DXZ()) - 90
-                )* 350 * Time.deltaTime, ForceMode.Acceleration);
-            }
+        if (cardType == CardType.Tornado)
+            ApplyTornadoEffect();
+    }
+
+    void ApplyTornadoEffect() {
+        foreach (var player in playerInsideList) {
+            if (player.element == Element.Air)
+                continue;
+            player.rigidBody.AddForce(MathUtil.UnityAngleToNormal(
+                MathUtil.GetAngle(tornadoTransform.position.To2DXZ() - player.transform.position.To2DXZ()) - 90
+            ) * 350 * Time.deltaTime, ForceMode.Acceleration);
         }
+
     }
 
     void Update() {
