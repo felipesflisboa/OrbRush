@@ -70,6 +70,7 @@ public class Segment : MonoBehaviour {
             case CardType.Tornado:
                 earthquakeTransform.gameObject.SetActive(false);
                 tornadoTransform.gameObject.SetActive(true);
+                tornadoTransform.position = GameManager.I.GetOrb(Element.Air).transform.position.WithY(tornadoTransform.position.y);
                 break;
             case CardType.Earthquake:
                 earthquakeTransform.gameObject.SetActive(true);
@@ -139,7 +140,7 @@ public class Segment : MonoBehaviour {
                 if (player.element == Element.Air)
                     continue;
                 player.rigidBody.AddForce(MathUtil.UnityAngleToNormal(
-                    MathUtil.GetAngle(transform.position.To2DXZ() - player.transform.position.To2DXZ()) - 90
+                    MathUtil.GetAngle(tornadoTransform.position.To2DXZ() - player.transform.position.To2DXZ()) - 90
                 )* 350 * Time.deltaTime, ForceMode.Acceleration);
             }
         }

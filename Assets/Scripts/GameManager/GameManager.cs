@@ -252,6 +252,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         scoreList.Save();
     }
 
+    public Orb GetOrb(Element element) => nonNullOrbArray.First(o => o.element == element);
+
     //TODO CardHandlers
     public void ExecuteCardEffect(Card card, CardType cardType) {
         Orb selectedOrb = null;
@@ -263,7 +265,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
                     card.Remove();
                 break;
             case CardType.Fire:
-                selectedOrb = orbArray.First((p) => p!=null && p.element == Element.Fire);
+                selectedOrb = GetOrb(Element.Fire);
                 const float radius = 7f;
                 foreach(var item in Physics.OverlapSphere(selectedOrb.transform.position, radius)) {
                     Orb p = item.GetComponentInParent<Orb>();
