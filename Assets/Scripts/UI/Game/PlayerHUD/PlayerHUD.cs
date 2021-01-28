@@ -14,7 +14,7 @@ public class PlayerHUD : MonoBehaviour{
     [SerializeField] int playerNumber;
     Orb player;
 
-    [SerializeField] PlayerHUDColorGroup colorGroup;
+    [SerializeField] ElementColorGroup colorGroup;
     [SerializeField] Color tooManyCardColor;
     [SerializeField] Color cardSmallWarnColor;
     [SerializeField] Color cardBigWarnColor;
@@ -46,7 +46,7 @@ public class PlayerHUD : MonoBehaviour{
 
     void Initialize() {
         player = GameManager.I.orbArray[playerNumber];
-        backgroundImage.DOColor(colorGroup.getColor(player.element), 1.2f);
+        backgroundImage.DOColor(colorGroup.GetColor(player.element), 1.2f);
     }
 
     async void UpdateLoop() {

@@ -11,6 +11,7 @@ public class PlayerSelectPanel : MonoBehaviour {
     public int number;
     public Element element;
     internal PlayerType type;
+    [SerializeField] ElementColorGroup elementColorGroup;
     [SerializeField] Text text;
     [SerializeField] Button previousButton;
     [SerializeField] Button nextButton;
@@ -18,10 +19,11 @@ public class PlayerSelectPanel : MonoBehaviour {
     Color imageOriginalColor;
 
     int TypeCount => Enum.GetNames(typeof(PlayerType)).Length;
+    Color ImageColor => elementColorGroup.GetColor(element);
 
     void Awake() {
         type = number == 1 ? PlayerType.Click : PlayerType.CPUEasy;
-        imageOriginalColor = backgroundImage.color;
+        backgroundImage.color = ImageColor;
         previousButton.onClick.AddListener(() => IncType(-1));
         nextButton.onClick.AddListener(() => IncType(1));
     }
@@ -44,7 +46,7 @@ public class PlayerSelectPanel : MonoBehaviour {
         DOTween.Sequence().Append(
             backgroundImage.DOColor(new Color(0.5f, 0.5f, 0.5f), 0.1f)
         ).Append(
-            backgroundImage.DOColor(imageOriginalColor, 0.2f)
+            backgroundImage.DOColor(ImageColor, 0.2f)
         ).SetUpdate(true);
     }
 
