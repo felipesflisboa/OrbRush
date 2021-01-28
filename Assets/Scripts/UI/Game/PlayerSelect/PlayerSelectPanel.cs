@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using TMPro;
 
 //TODO save and restore last type combination
 public class PlayerSelectPanel : MonoBehaviour {
@@ -12,10 +13,10 @@ public class PlayerSelectPanel : MonoBehaviour {
     public Element element;
     internal PlayerType type;
     [SerializeField] ElementColorGroup elementColorGroup;
-    [SerializeField] Text text;
+    [SerializeField] TextMeshProUGUI text;
     [SerializeField] Button previousButton;
     [SerializeField] Button nextButton;
-    [SerializeField] Image backgroundImage;
+    [SerializeField] private Image backgroundImage;
     Color imageOriginalColor;
 
     int TypeCount => Enum.GetNames(typeof(PlayerType)).Length;

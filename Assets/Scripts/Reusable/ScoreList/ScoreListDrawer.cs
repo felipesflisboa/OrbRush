@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 /// <summary>
 /// Draw a Score List. Put on an empty object as pivot.
-/// Version 4.6
+/// Version 4.7
 /// </summary>
 public abstract class ScoreListDrawer<TScoreList, TScoreListGeneric> : MonoBehaviour
 		where TScoreListGeneric : struct, System.IComparable
@@ -15,8 +15,8 @@ public abstract class ScoreListDrawer<TScoreList, TScoreListGeneric> : MonoBehav
 	bool showedLastScore;
 
 	[Header("Current Score")]
-	public Text currentScoreLabel; // Current Score label to be show
-	public Text currentScoreText; // Current Score text value to be show
+    public Transform currentScoreLabelTransform; // Current Score label to be show
+    public Transform currentScoreValueTransform; // Current Score value to be show
 	public string currentScoreDefaultMessage; // When empty, simply disable 
 
 	// Override this property with a static variable
@@ -51,21 +51,24 @@ public abstract class ScoreListDrawer<TScoreList, TScoreListGeneric> : MonoBehav
 	}
 
 	protected virtual void RefreshCurrentScore(TScoreList scoreList) {
-		if (currentScoreLabel != null)
-			currentScoreLabel.gameObject.SetActive(LastScore != null || !string.IsNullOrEmpty(currentScoreDefaultMessage));
-		if (currentScoreText != null) {
+		if (currentScoreLabelTransform != null)
+            currentScoreLabelTransform.gameObject.SetActive(LastScore != null || !string.IsNullOrEmpty(currentScoreDefaultMessage));
+		if (currentScoreValueTransform != null) {
 			if (LastScore == null && string.IsNullOrEmpty(currentScoreDefaultMessage)) {
-				currentScoreText.gameObject.SetActive(false);
+                currentScoreValueTransform.gameObject.SetActive(false);
 			} else {
-				currentScoreText.gameObject.SetActive(true);
-				currentScoreText.text = LastScore == null ? currentScoreDefaultMessage : scoreList.GetStringAsValue((TScoreListGeneric)LastScore);
+                currentScoreValueTransform.gameObject.SetActive(true);
+                if (LastScore == null)
+                    SetText(currentScoreValueTransform, currentScoreDefaultMessage);
+                else
+                    SetText(currentScoreValueTransform, scoreList.GetStringAsValue((TScoreListGeneric)LastScore));
 			}
 		}
 	}
 
-	protected Text CreateTextScore(TScoreList scoreList, int index) {
-		Text ret = Instantiate(textScorePrefab, textScoreParent).GetComponent<Text>();
-		ret.text = FormatText(index + 1, scoreList.GetString(index));
+	protected Transform CreateTextScore(TScoreList scoreList, int index) {
+        Transform ret = Instantiate(textScorePrefab, textScoreParent).transform;
+		SetText(ret, FormatText(index + 1, scoreList.GetString(index)));
 		if (!showedLastScore && IsNewRecord(scoreList.values[index])) {
 			FormatTextNewRecord(ret);
 			showedLastScore = true;
@@ -75,9 +78,9 @@ public abstract class ScoreListDrawer<TScoreList, TScoreListGeneric> : MonoBehav
 
 	protected virtual string FormatText(int number, string valueString) {
 		return string.Format("{0:00}. {1}", number, valueString);
-	}
+    }
 
-	protected bool IsNewRecord(TScoreListGeneric score) {
+    protected bool IsNewRecord(TScoreListGeneric score) {
 		return LastScore != null && Mathf.Approximately(
 			(float)System.Convert.ChangeType(score, typeof(float)),
 			(float)System.Convert.ChangeType(LastScore, typeof(float))
@@ -87,10 +90,10 @@ public abstract class ScoreListDrawer<TScoreList, TScoreListGeneric> : MonoBehav
 	/// <summary>
 	/// Receive a text component and format it with New Record text.
 	/// </summary>
-	protected virtual void FormatTextNewRecord(Text text) {
+	protected virtual void FormatTextNewRecord(Transform textTransform) {
 		if (newRecordFormatMessage.Trim() == string.Empty)
 			return;
-		text.text = string.Format(newRecordFormatMessage, text.text);
+		SetText(textTransform, string.Format(newRecordFormatMessage, GetText(textTransform)));
 	}
 
 	/// <summary>
@@ -99,5 +102,19 @@ public abstract class ScoreListDrawer<TScoreList, TScoreListGeneric> : MonoBehav
 	public virtual void Clear() {
 		foreach (Transform child in textScoreParent)
 			Destroy(child.gameObject);
-	}
+    }
+
+    /// <summary>
+    /// Set text component string. created to easily change between Unity UI, TextMeshPro and others.
+    /// </summary>
+    protected virtual void SetText(Transform textTransform, string value) {
+        textTransform.GetComponent<Text>().text = value;
+    }
+
+    /// <summary>
+    /// Get text component string.
+    /// </summary>
+    protected virtual string GetText(Transform textTransform) {
+        return textTransform.GetComponent<Text>().text;
+    }
 }

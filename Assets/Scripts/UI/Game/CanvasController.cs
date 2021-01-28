@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 //TODO remove singleton
 public class CanvasController : SingletonMonoBehaviour<CanvasController> {
     [Tooltip("Per player")] public CardZone[] cardZoneArray;
     internal PlayerSelectScreen playerSelectScreen;
     HUD hud;
-    public Text startText;
-    public Text victoryText;
-    public Text cardAlertText;
+    public TextMeshProUGUI startText;
+    public TextMeshProUGUI victoryText;
+    public TextMeshProUGUI cardAlertText;
     bool canShowCardAlert;
 
     public CardZone NextAvailableCardZone => cardZoneArray.First(cz => cz!=null && !cz.Active);

@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using TMPro;
 
 //TODO color
 //TODO pulse start on 4 and raise until 6 or more cards
 public class PlayerHUD : MonoBehaviour{
     [SerializeField] Image backgroundImage;
-    [SerializeField] Text speedText;
-    [SerializeField] Text accelerationText;
-    [SerializeField] Text cardText;
+    [SerializeField] TextMeshProUGUI speedText;
+    [SerializeField] TextMeshProUGUI accelerationText;
+    [SerializeField] TextMeshProUGUI cardText;
     [SerializeField] int playerNumber;
     Orb player;
 
