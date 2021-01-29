@@ -208,7 +208,7 @@ GameObject:
   - component: {fileID: 64904877}
   - component: {fileID: 64904878}
   m_Layer: 5
-  m_Name: pnlPlayerSelectScreen
+  m_Name: PlayerSelectScreen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -670,7 +670,7 @@ PrefabInstance:
     - target: {fileID: 1388181716120031694, guid: 63197f6d125c77043905020d0d4decae,
         type: 3}
       propertyPath: m_Name
-      value: pnlPlayer4
+      value: Player4
       objectReference: {fileID: 0}
     - target: {fileID: 2986232162643907418, guid: 63197f6d125c77043905020d0d4decae,
         type: 3}
@@ -892,7 +892,7 @@ GameObject:
   - component: {fileID: 104605389}
   - component: {fileID: 104605388}
   m_Layer: 5
-  m_Name: txtSeconds
+  m_Name: SecondsText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1488,7 +1488,7 @@ PrefabInstance:
     - target: {fileID: 931995778688058455, guid: 532661e5842164f47926db776fc84b06,
         type: 3}
       propertyPath: m_Name
-      value: pnlCardZone4
+      value: CardZone4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 532661e5842164f47926db776fc84b06, type: 3}
@@ -2097,7 +2097,7 @@ GameObject:
   - component: {fileID: 350733739}
   - component: {fileID: 350733738}
   m_Layer: 5
-  m_Name: btnQuit
+  m_Name: QuitButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2424,7 +2424,7 @@ PrefabInstance:
     - target: {fileID: 931995778688058455, guid: 532661e5842164f47926db776fc84b06,
         type: 3}
       propertyPath: m_Name
-      value: pnlCardZone3
+      value: CardZone3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 532661e5842164f47926db776fc84b06, type: 3}
@@ -2458,7 +2458,7 @@ GameObject:
   - component: {fileID: 505022865}
   - component: {fileID: 505022864}
   m_Layer: 5
-  m_Name: txtLevel
+  m_Name: LevelText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2927,7 +2927,7 @@ GameObject:
   - component: {fileID: 655120446}
   - component: {fileID: 655120444}
   m_Layer: 5
-  m_Name: lblCardAlert
+  m_Name: CardAlertLabel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3227,7 +3227,7 @@ GameObject:
   - component: {fileID: 717894495}
   - component: {fileID: 717894494}
   m_Layer: 5
-  m_Name: pnlFadeMask
+  m_Name: FadeMaskPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3521,7 +3521,7 @@ PrefabInstance:
     - target: {fileID: 1388181716120031694, guid: 63197f6d125c77043905020d0d4decae,
         type: 3}
       propertyPath: m_Name
-      value: pnlPlayer2
+      value: Player2
       objectReference: {fileID: 0}
     - target: {fileID: 2986232162643907418, guid: 63197f6d125c77043905020d0d4decae,
         type: 3}
@@ -3773,7 +3773,7 @@ GameObject:
   - component: {fileID: 805660519}
   - component: {fileID: 805660520}
   m_Layer: 5
-  m_Name: pnlHUD
+  m_Name: HUD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3920,7 +3920,7 @@ PrefabInstance:
     - target: {fileID: 2499685685480308673, guid: c5f1c28085f57994da969ea94bb76edc,
         type: 3}
       propertyPath: m_Name
-      value: pnlPlayerSelectEarth
+      value: PlayerSelectEarth
       objectReference: {fileID: 0}
     - target: {fileID: 8115119536496603957, guid: c5f1c28085f57994da969ea94bb76edc,
         type: 3}
@@ -4045,7 +4045,7 @@ PrefabInstance:
     - target: {fileID: 2499685685480308673, guid: c5f1c28085f57994da969ea94bb76edc,
         type: 3}
       propertyPath: m_Name
-      value: pnlPlayerSelectFire
+      value: PlayerSelectFire
       objectReference: {fileID: 0}
     - target: {fileID: 8115119536496603957, guid: c5f1c28085f57994da969ea94bb76edc,
         type: 3}
@@ -4545,7 +4545,7 @@ GameObject:
   - component: {fileID: 1066969452}
   - component: {fileID: 1066969455}
   m_Layer: 5
-  m_Name: txtFPS
+  m_Name: FPSText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4720,7 +4720,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1136926390}
   m_Layer: 5
-  m_Name: pnlCardZones
+  m_Name: CardZones
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4791,7 +4791,7 @@ GameObject:
   - component: {fileID: 1166270185}
   - component: {fileID: 1166270183}
   m_Layer: 5
-  m_Name: lblVictory
+  m_Name: VictoryLabel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5078,7 +5078,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1306407813}
   m_Layer: 5
-  m_Name: pnlPlayers
+  m_Name: Players
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5287,7 +5287,7 @@ GameObject:
   - component: {fileID: 1362954737}
   - component: {fileID: 1362954736}
   m_Layer: 5
-  m_Name: btnStart
+  m_Name: StartButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5965,7 +5965,7 @@ PrefabInstance:
     - target: {fileID: 1388181716120031694, guid: 63197f6d125c77043905020d0d4decae,
         type: 3}
       propertyPath: m_Name
-      value: pnlPlayer3
+      value: Player3
       objectReference: {fileID: 0}
     - target: {fileID: 2986232162643907418, guid: 63197f6d125c77043905020d0d4decae,
         type: 3}
@@ -6187,7 +6187,7 @@ GameObject:
   - component: {fileID: 1597335375}
   - component: {fileID: 1597335373}
   m_Layer: 5
-  m_Name: lblStartClick
+  m_Name: StartClickLabel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6860,7 +6860,7 @@ PrefabInstance:
     - target: {fileID: 2499685685480308673, guid: c5f1c28085f57994da969ea94bb76edc,
         type: 3}
       propertyPath: m_Name
-      value: pnlPlayerSelectAir
+      value: PlayerSelectAir
       objectReference: {fileID: 0}
     - target: {fileID: 8115119536496603957, guid: c5f1c28085f57994da969ea94bb76edc,
         type: 3}
@@ -7298,7 +7298,7 @@ PrefabInstance:
     - target: {fileID: 931995778688058455, guid: 532661e5842164f47926db776fc84b06,
         type: 3}
       propertyPath: m_Name
-      value: pnlCardZone2
+      value: CardZone2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 532661e5842164f47926db776fc84b06, type: 3}
@@ -7699,7 +7699,7 @@ PrefabInstance:
     - target: {fileID: 2499685685480308673, guid: c5f1c28085f57994da969ea94bb76edc,
         type: 3}
       propertyPath: m_Name
-      value: pnlPlayerSelectWater
+      value: PlayerSelectWater
       objectReference: {fileID: 0}
     - target: {fileID: 8115119536496603957, guid: c5f1c28085f57994da969ea94bb76edc,
         type: 3}
@@ -7909,7 +7909,7 @@ PrefabInstance:
     - target: {fileID: 931995778688058455, guid: 532661e5842164f47926db776fc84b06,
         type: 3}
       propertyPath: m_Name
-      value: pnlCardZone1
+      value: CardZone1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 532661e5842164f47926db776fc84b06, type: 3}
@@ -8128,7 +8128,7 @@ PrefabInstance:
     - target: {fileID: 1388181716120031694, guid: 63197f6d125c77043905020d0d4decae,
         type: 3}
       propertyPath: m_Name
-      value: pnlPlayer1
+      value: Player1
       objectReference: {fileID: 0}
     - target: {fileID: 2986232162643907418, guid: 63197f6d125c77043905020d0d4decae,
         type: 3}
