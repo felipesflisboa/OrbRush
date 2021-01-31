@@ -88,34 +88,34 @@ public class Segment : MonoBehaviour {
         }
     }
 
-    public void ApplyEffectInPlayer(Orb player) {
+    public void ApplyEffectInPlayer(Orb orb) {
         switch (cardType) {
             case CardType.Fire:
-                if(player.element == Element.Fire)
-                    player.rigidBody.velocity = player.rigidBody.velocity * 1.2f;
-                if (player.element == Element.Air)
-                    player.rigidBody.velocity = player.rigidBody.velocity * 0.6f;
+                if(orb.element == Element.Fire)
+                    orb.rigidBody.velocity = orb.rigidBody.velocity * 1.2f;
+                if (orb.element == Element.Air)
+                    orb.rigidBody.velocity = orb.rigidBody.velocity * 0.6f;
                 break;
             case CardType.Water:
-                if(player.element == Element.Water)
-                    player.rigidBody.velocity = player.rigidBody.velocity * 1.2f;
-                if (player.element == Element.Fire)
-                    player.rigidBody.velocity = player.rigidBody.velocity * 0.6f;
+                if(orb.element == Element.Water)
+                    orb.rigidBody.velocity = orb.rigidBody.velocity * 1.2f;
+                if (orb.element == Element.Fire)
+                    orb.rigidBody.velocity = orb.rigidBody.velocity * 0.6f;
                 break;
             case CardType.Air:
-                if (player.element == Element.Air)
-                    player.rigidBody.velocity = player.rigidBody.velocity * 1.2f;
-                if (player.element == Element.Earth)
-                    player.rigidBody.velocity = player.rigidBody.velocity * 0.6f;
+                if (orb.element == Element.Air)
+                    orb.rigidBody.velocity = orb.rigidBody.velocity * 1.2f;
+                if (orb.element == Element.Earth)
+                    orb.rigidBody.velocity = orb.rigidBody.velocity * 0.6f;
                 break;
             case CardType.Earth:
-                if (player.element == Element.Earth)
-                    player.rigidBody.velocity = player.rigidBody.velocity * 1.2f;
-                if (player.element == Element.Water)
-                    player.rigidBody.velocity = player.rigidBody.velocity * 0.6f;
+                if (orb.element == Element.Earth)
+                    orb.rigidBody.velocity = orb.rigidBody.velocity * 1.2f;
+                if (orb.element == Element.Water)
+                    orb.rigidBody.velocity = orb.rigidBody.velocity * 0.6f;
                 break;
             case CardType.Lake:
-                player.rigidBody.velocity = player.rigidBody.velocity * 1.4f;
+                orb.rigidBody.velocity = orb.rigidBody.velocity * 1.4f * (orb.element == Element.Water ? 0.75f : 1);
                 break;
             case CardType.Earthquake:
                 //player.rigidBody.velocity = player.rigidBody.velocity * 1.6f;
