@@ -7,20 +7,22 @@ public class AI {
     internal List<CardType> cardTypeDeck = new List<CardType>(); //TODO rename class
     int level;
 
-    static bool debugPrint = false;
+    static bool showedDebug = false;
 
     public AI(int pLevel, Orb pPlayer) {
         level = pLevel;
         player = pPlayer;
-        if (!debugPrint) {
-            string s = "";
-            for (int l = 1; l < 10; l++) { 
-                s += $"Level {l} min {GetSecondBasePerRound(l)} max {GetSecondBasePerRound(l)+ GetSecondIncPerRound(l)}\n";
-            }
-            Debug.Log(s);
-            debugPrint = true;
-        }
+        if (!showedDebug)
+            DebugPrint();
         MainLoop();
+    }
+
+    public void DebugPrint() {
+        string s = "";
+        for (int l = 1; l < 10; l++)
+            s += $"AI level {l}: {GetSecondBasePerRound(l)}-{GetSecondBasePerRound(l) + GetSecondIncPerRound(l)} seconds per card use \n";
+        Debug.Log(s);
+        showedDebug = true;
     }
 
     public async void MainLoop() {
