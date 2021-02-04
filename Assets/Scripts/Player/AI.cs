@@ -7,22 +7,13 @@ public class AI {
     internal List<CardType> cardTypeDeck = new List<CardType>(); //TODO rename class
     int level;
 
-    static bool showedDebug = false;
+    float SecondBasePerRound => GetSecondBasePerRound(level);
+    float SecondIncPerRound => GetSecondIncPerRound(level);
 
     public AI(int pLevel, Orb pPlayer) {
         level = pLevel;
         player = pPlayer;
-        if (!showedDebug)
-            DebugPrint();
         MainLoop();
-    }
-
-    public void DebugPrint() {
-        string s = "";
-        for (int l = 1; l < 10; l++)
-            s += $"AI level {l}: {GetSecondBasePerRound(l)}-{GetSecondBasePerRound(l) + GetSecondIncPerRound(l)} seconds per card use \n";
-        Debug.Log(s);
-        showedDebug = true;
     }
 
     public async void MainLoop() {
@@ -32,10 +23,17 @@ public class AI {
             if(GameManager.Active)
                 GameManager.I.ExecuteCardEffect(null, cardTypeDeck[0]);
             cardTypeDeck.RemoveAt(0);
-            await new WaitForSeconds(GetSecondBasePerRound(level) + GetSecondIncPerRound(level) *Random.value);
+            await new WaitForSeconds(SecondBasePerRound + SecondIncPerRound * Random.value);
         }
     }
 
-    float GetSecondBasePerRound(int level) => 18f / (level);
-    float GetSecondIncPerRound(int level) => 24f / (level);
+    static float GetSecondBasePerRound(int level) => 18f / (level);
+    static float GetSecondIncPerRound(int level) => 24f / (level);
+
+    public static string GetDebugString() {
+        string ret = "AI interval between card uses:";
+        for (int l = 1; l < 10; l++)
+            ret += $"\nLv{l}:\t{GetSecondBasePerRound(l)}-{GetSecondBasePerRound(l) + GetSecondIncPerRound(l)}";
+        return ret;
+    }
 }
