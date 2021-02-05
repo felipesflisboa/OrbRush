@@ -51,6 +51,16 @@ public class Orb : MonoBehaviour {
         rigidBody.velocity = rigidBody.velocity + rigidBody.velocity.normalized * 1.2f;
     }
 
+    public void TeleportBackToLastSegment() {
+        InstantiateTeleportEffect();
+        transform.position = lastSegment.transform.position + Vector3.up * 0.6f;
+        InstantiateTeleportEffect();
+    }
+
+    void InstantiateTeleportEffect() {
+        Destroy(Instantiate(GameManager.I.teleportEffectPrefab, transform.position, Quaternion.identity), 4f);
+    }
+
     void FixedUpdate() {
         if (!Initialized)
             return;

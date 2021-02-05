@@ -4348,6 +4348,8 @@ MonoBehaviour:
   - {fileID: 4187372817680983988, guid: 3c09606bef56a5f4a8c93edabe48fa2e, type: 3}
   explosionPrefab: {fileID: 1158160664908234460, guid: 85ff8c6d7c7d3b345961b98a2262b20a,
     type: 3}
+  teleportEffectPrefab: {fileID: 1158160664908234460, guid: 8867f23912bc15148b1bc3edd45af9d5,
+    type: 3}
   marathonSkyboxMaterialPerLevel:
   - {fileID: 2100000, guid: a89c63ab8857bf4468661ac62df2b5ed, type: 2}
   - {fileID: 2100000, guid: 12232873d21fe614592b55e5d7e2ca5b, type: 2}

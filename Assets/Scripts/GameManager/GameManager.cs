@@ -12,8 +12,10 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     [SerializeField, PrefabReference] GameObject[] orbPrefabArray;
     [SerializeField, PrefabReference] GameObject[] cardPrefabArray;
     [SerializeField, PrefabReference] GameObject explosionPrefab;
+    [PrefabReference] public GameObject teleportEffectPrefab;
     [SerializeField] Material[] marathonSkyboxMaterialPerLevel; 
 
+    //TODO move into it effects
     [SerializeField] AudioSource cycloneSFX;
     [SerializeField] AudioSource squidSFX;
     [SerializeField] AudioSource earthquakeSFX;
