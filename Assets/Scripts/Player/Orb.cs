@@ -13,14 +13,17 @@ public class Orb : MonoBehaviour {
     internal Segment currentSegment;
     internal Segment lastSegment;
     internal bool reachGoal;
+    internal bool menuMode;
     public AI ai { get; private set; }
     int fixedUpdateCount;
+
+    const float MAX_MENU_VELOCITY = 12f;
 
     public int CardCount => IsCPU ? ai.cardTypeDeck.Count : cardZone.ValidCardCount;
     public float Velocity => VelocityV3.magnitude;
     public float HalfSecondAccelerationRatio => 1 - 0.01f * CardCount;
     public bool IsCPU => ai != null;
-    public bool Initialized => inputHandler != null;
+    public bool Initialized => inputHandler != null || menuMode;
 
     public Vector3 VelocityV3 {  
         get => rigidBody.velocity;
@@ -29,6 +32,7 @@ public class Orb : MonoBehaviour {
 
     void Awake() {
         rigidBody = GetComponentInChildren<Rigidbody>();
+        menuMode = FindObjectOfType<GameManager>() == null;
     }
 
     public void InitializeAsCPU(int pNumber, InputHandler pInputHandler, int aiLevel) {
@@ -48,13 +52,15 @@ public class Orb : MonoBehaviour {
     }
 
     public void Boost() {
-        rigidBody.velocity = rigidBody.velocity + rigidBody.velocity.normalized * 1.2f;
+        VelocityV3 += VelocityV3.normalized * 1.2f;
     }
 
     public void TeleportBackToLastSegment() {
-        InstantiateTeleportEffect();
+        if(!menuMode)
+            InstantiateTeleportEffect();
         transform.position = lastSegment.transform.position + Vector3.up * 0.6f;
-        InstantiateTeleportEffect();
+        if (!menuMode)
+            InstantiateTeleportEffect();
     }
 
     void InstantiateTeleportEffect() {
@@ -64,9 +70,21 @@ public class Orb : MonoBehaviour {
     void FixedUpdate() {
         if (!Initialized)
             return;
+        if (menuMode)
+            MenuFixedUpdate();
+        else
+            GameFixedUpdate();
+    }
+
+    void GameFixedUpdate() {
         if (fixedUpdateCount % 25 == 0) // half-second //TODO count other way
             VelocityV3 *= HalfSecondAccelerationRatio;
         fixedUpdateCount++;
+    }
+
+    void MenuFixedUpdate() {
+        if(Velocity > MAX_MENU_VELOCITY)
+            VelocityV3 = VelocityV3.normalized* MAX_MENU_VELOCITY;
     }
 
     void OnMouseDown() {
