@@ -3,19 +3,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
-using System.Linq;
 
 public class MenuCameraController : MonoBehaviour {
-    [SerializeField] float distanceToOrbs;
+    [Positive, SerializeField] float minDistanceToOrbs;
+    [Positive, SerializeField] float maxDistanceToOrbs;
+    float distanceToOrbs;
     [SerializeField] float lerpDeltatimeMultiplier = 1; //remove
     [SerializeField] Vector3 bonusPos;
+    [SerializeField] Vector3 eulerVariation;
+    [NonNegative, SerializeField] float rotateRoundDuration = 10f;
+    [NonNegative, SerializeField] float zoomRoundDuration = 10f;
     Orb targetOrb;
 
     Vector3 TargetPos => targetOrb.transform.position - transform.forward * distanceToOrbs + bonusPos;
 
     void Start() {
-        //transform.DORotate(initialRot.eulerAngles, 0.8f).SetEase(Ease.InOutSine);
         targetOrb = GetRandomOrb();
+        InitializeRotation();
+        InitializeZoom();
+    }
+
+    void InitializeRotation() {
+        transform.eulerAngles -= eulerVariation / 2f;
+        transform.DORotate(transform.eulerAngles + eulerVariation, rotateRoundDuration).SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo);
+    }
+
+    void InitializeZoom() {
+        distanceToOrbs = minDistanceToOrbs;
+        DOTween.To(
+            () => distanceToOrbs, value => distanceToOrbs = value, maxDistanceToOrbs, zoomRoundDuration
+        ).SetEase(Ease.InOutSine).SetLoops(-1, LoopType.Yoyo);
     }
 
     void Update(){
@@ -25,10 +42,5 @@ public class MenuCameraController : MonoBehaviour {
     Orb GetRandomOrb() {
         Orb[] orbArray = FindObjectsOfType<Orb>();
         return orbArray[Mathf.FloorToInt(Random.value* orbArray.Length)];
-    }
-
-    //remove
-    Vector3 GetPos() {
-        return Vector3.Lerp(transform.position, TargetPos, lerpDeltatimeMultiplier * Time.deltaTime);
     }
 }
