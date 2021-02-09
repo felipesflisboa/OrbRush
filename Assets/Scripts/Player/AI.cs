@@ -21,7 +21,7 @@ public class AI {
         while (!player.reachGoal) {
             await new WaitWhile(() => cardTypeDeck.Count == 0);
             if(GameManager.Active)
-                GameManager.I.ExecuteCardEffect(null, cardTypeDeck[0]);
+                GameManager.I.ExecuteCardEffect(null, cardTypeDeck[0], true);
             cardTypeDeck.RemoveAt(0);
             await new WaitForSeconds(SecondBasePerRound + SecondIncPerRound * Random.value);
         }

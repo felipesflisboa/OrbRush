@@ -13,6 +13,7 @@ public class CanvasController : SingletonMonoBehaviour<CanvasController> {
     public TextMeshProUGUI startText;
     public TextMeshProUGUI victoryText;
     public TextMeshProUGUI cardAlertText;
+    public TextMeshProUGUI offtackAlertText;
     bool canShowCardAlert;
 
     public CardZone NextAvailableCardZone => cardZoneArray.First(cz => cz!=null && !cz.Active);
@@ -37,6 +38,7 @@ public class CanvasController : SingletonMonoBehaviour<CanvasController> {
         hud.gameObject.SetActive(false);
         playerSelectScreen.gameObject.SetActive(false);
         cardAlertText.gameObject.SetActive(false);
+        offtackAlertText.gameObject.SetActive(false);
     }
 
     void InitializeCardZone() {
@@ -75,5 +77,12 @@ public class CanvasController : SingletonMonoBehaviour<CanvasController> {
                 continue;
             cardAlertText.gameObject.SetActive(cardZone.cardList.Count >= 6);
         }
+    }
+
+    public void DisplayOfftrackAlert() {
+        if (!canShowCardAlert)
+            return;
+        offtackAlertText.gameObject.SetActive(true);
+        this.Schedule(new WaitForSeconds(3f), () => offtackAlertText.gameObject.SetActive(false));
     }
 }

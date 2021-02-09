@@ -258,7 +258,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     public Orb GetOrb(Element element) => nonNullOrbArray.First(o => o.element == element);
 
     //TODO CardHandlers
-    public void ExecuteCardEffect(Card card, CardType cardType) {
+    public void ExecuteCardEffect(Card card, CardType cardType, bool isCPU) {
         Orb selectedOrb = null;
         switch (cardType) {
             case CardType.Neo:
@@ -283,7 +283,10 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
                 break;
             case CardType.Earth:
                 selectedOrb = orbArray.First((p) => p!=null && p.element == Element.Earth);
-                if(selectedOrb.currentSegment != null) {
+                if(selectedOrb.currentSegment == null) {
+                    if (!isCPU)
+                        CanvasController.I.DisplayOfftrackAlert();
+                } else {
                     selectedOrb.currentSegment.ApplyEffect(CardType.Earthquake);
                     if (card != null)
                         card.Remove();
@@ -292,7 +295,10 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
                 break;
             case CardType.Water:
                 selectedOrb = orbArray.First((p) => p != null && p.element == Element.Water);
-                if (selectedOrb.currentSegment != null) {
+                if (selectedOrb.currentSegment == null) {
+                    if (!isCPU)
+                        CanvasController.I.DisplayOfftrackAlert();
+                } else {
                     selectedOrb.currentSegment.ApplyEffect(CardType.Lake);
                     if (card != null)
                         card.Remove();
@@ -301,20 +307,16 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
                 break;
             case CardType.Air:
                 selectedOrb = orbArray.First((p) => p != null && p.element == Element.Air);
-                if (selectedOrb.currentSegment != null) {
+                if (selectedOrb.currentSegment == null) {
+                    if (!isCPU)
+                        CanvasController.I.DisplayOfftrackAlert();
+                } else {
                     selectedOrb.currentSegment.ApplyEffect(CardType.Tornado);
                     if (card != null)
                         card.Remove();
                     cycloneSFX.Play();
                 }
                 break;
-                /* //remove
-                if (card != null)
-                    card.Highlight();
-                else
-                    AIApplyOnNearSegment(player, cardType);
-                break;
-                */
             default:
                 Debug.Log("Activated=" + cardType);
                 break;
