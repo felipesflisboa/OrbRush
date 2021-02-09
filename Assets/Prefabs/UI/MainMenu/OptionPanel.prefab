@@ -290,6 +290,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   button: {fileID: 1628753850153972543}
   modelTransform: {fileID: 3911765411932590654}
+  rotateSpeed: 8
+  hoverRotateSpeed: 100
 --- !u!1 &8392441898693400063
 GameObject:
   m_ObjectHideFlags: 0
