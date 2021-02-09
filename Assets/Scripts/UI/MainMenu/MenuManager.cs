@@ -15,13 +15,12 @@ public class MenuManager : SingletonMonoBehaviour<MenuManager> {
     [SerializeField] MenuOption quickRaceOption;
     [SerializeField] MenuOption infoOption;
     [SerializeField] MenuOption localHighScoresOption;
-    MenuPanelType currentPanelOption;
+    MenuPanelType currentPanelType;
 	MenuPanel[] panelArray;
     Fader fader;
-	Timer clickCooldownTimer;
 
     bool FadeActive =>  fader != null && fader.ImageActive;
-    bool ShouldReturnToTitleAtClick => !new[] { MenuPanelType.Title, MenuPanelType.Loading }.Contains(currentPanelOption);
+    bool ShouldReturnToMenuAtClick => !new[] { MenuPanelType.Menu, MenuPanelType.Loading }.Contains(currentPanelType);
 
     void Awake() {
         fader = GetComponentInChildren<Fader>(true);
@@ -37,16 +36,16 @@ public class MenuManager : SingletonMonoBehaviour<MenuManager> {
     }
 
     void Start () {
-        clickCooldownTimer = new Timer(0.75f);
         EnablePanel(SimpleScoreListTimedDrawer.lastScore == null ? MenuPanelType.Title : MenuPanelType.LocalHighScores);
-	}
+        ClickLoop();
+    }
 
     //MenuPanel GetMenuPanel(MenuPanelType type) => menuPanelArray.First(mp => mp.type == type); //remove
 
     async Task EnablePanel(MenuPanelType type) {
         if (fader != null && Time.timeSinceLevelLoad > 0.1f) 
             await fader.FadeOut().WaitForCompletion();
-        currentPanelOption = type;
+        currentPanelType = type;
         foreach (MenuPanel panel in panelArray)
             panel.gameObject.SetActive(panel.type == type);
         if (fader != null && Time.timeSinceLevelLoad > 0.1f)
@@ -59,8 +58,8 @@ public class MenuManager : SingletonMonoBehaviour<MenuManager> {
         clickSFX.Play();
     }
 
-#region Buttons
-	public void OnMarathonClick(){
+    #region Buttons
+    public void OnMarathonClick(){
         OnPlay(new MarathonData());
     }
     public void OnQuickRaceClick() {
@@ -100,14 +99,24 @@ public class MenuManager : SingletonMonoBehaviour<MenuManager> {
         UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
     }
 
-	void Update(){
-		if(Input.GetButtonDown("Click") && !FadeActive && ShouldReturnToTitleAtClick && clickCooldownTimer.CheckAndUpdate()) {
-            PlayClickSFX();
-            BackToTitle();
+    async void ClickLoop(){
+        while (true) {
+            await new WaitForUpdate();
+            if (!FadeActive) {
+                if (Input.GetButtonDown("Click") && ShouldReturnToMenuAtClick) {
+                    EnablePanel(MenuPanelType.Menu);
+                    await OnPanelClick();
+                }
+                if (Input.GetKeyDown(KeyCode.Escape) && (ShouldReturnToMenuAtClick || currentPanelType == MenuPanelType.Menu)) {
+                    EnablePanel(currentPanelType == MenuPanelType.Menu ? MenuPanelType.Title : MenuPanelType.Menu);
+                    await OnPanelClick();
+                }
+            }
         }
-	}
+    }
 
-    public void BackToTitle() {
-        EnablePanel(MenuPanelType.Title);
+    async Task OnPanelClick() {
+        PlayClickSFX();
+        await new WaitForSeconds(0.75f);
     }
 }
