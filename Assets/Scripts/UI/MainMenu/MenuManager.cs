@@ -10,17 +10,30 @@ using UnityEngine.UI;
 /// Version 1.2
 /// </summary>
 public class MenuManager : SingletonMonoBehaviour<MenuManager> {
-	[SerializeField] AudioSource clickSFX;
+    [SerializeField] AudioSource clickSFX;
     [SerializeField] MenuOption marathonOption;
     [SerializeField] MenuOption quickRaceOption;
     [SerializeField] MenuOption infoOption;
     [SerializeField] MenuOption localHighScoresOption;
     MenuPanelType currentPanelType;
-	MenuPanel[] panelArray;
+    MenuPanel[] panelArray;
     Fader fader;
 
-    bool FadeActive =>  fader != null && fader.ImageActive;
+    bool FadeActive => fader != null && fader.ImageActive;
     bool ShouldReturnToMenuAtClick => !new[] { MenuPanelType.Menu, MenuPanelType.Loading }.Contains(currentPanelType);
+
+    bool CanPressBack {
+        get {
+            if (currentPanelType == MenuPanelType.Title) {
+#if UNITY_WEBGL
+                return false;
+#else
+                return true;
+#endif
+            }
+            return ShouldReturnToMenuAtClick || currentPanelType == MenuPanelType.Menu;
+        }
+    }
 
     void Awake() {
         fader = GetComponentInChildren<Fader>(true);
@@ -35,7 +48,7 @@ public class MenuManager : SingletonMonoBehaviour<MenuManager> {
         localHighScoresOption.button.onClick.AddListener(OnLocalHighScoresClick);
     }
 
-    void Start () {
+    void Start() {
         EnablePanel(SimpleScoreListTimedDrawer.lastScore == null ? MenuPanelType.Title : MenuPanelType.LocalHighScores);
         ClickLoop();
     }
@@ -43,7 +56,7 @@ public class MenuManager : SingletonMonoBehaviour<MenuManager> {
     //MenuPanel GetMenuPanel(MenuPanelType type) => menuPanelArray.First(mp => mp.type == type); //remove
 
     async Task EnablePanel(MenuPanelType type) {
-        if (fader != null && Time.timeSinceLevelLoad > 0.1f) 
+        if (fader != null && Time.timeSinceLevelLoad > 0.1f)
             await fader.FadeOut().WaitForCompletion();
         currentPanelType = type;
         foreach (MenuPanel panel in panelArray)
@@ -52,29 +65,29 @@ public class MenuManager : SingletonMonoBehaviour<MenuManager> {
             await fader.FadeIn().WaitForCompletion();
     }
 
-    public void PlayClickSFX(){
+    public void PlayClickSFX() {
         if (clickSFX == null)
             return;
         clickSFX.Play();
     }
 
     #region Buttons
-    public void OnMarathonClick(){
+    public void OnMarathonClick() {
         OnPlay(new MarathonData());
     }
     public void OnQuickRaceClick() {
         OnPlay(new QuickRaceData());
     }
-    public void OnInfoClick(){
-		PlayClickSFX();
-		EnablePanel(MenuPanelType.Info);
-	}
+    public void OnInfoClick() {
+        PlayClickSFX();
+        EnablePanel(MenuPanelType.Info);
+    }
     public void OnLocalHighScoresClick() {
         PlayClickSFX();
         EnablePanel(MenuPanelType.LocalHighScores);
     }
-    public void OnExitClick(){
-		PlayClickSFX();
+    public void OnExitClick() {
+        PlayClickSFX();
         System.Action action = () => {
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
@@ -87,8 +100,8 @@ public class MenuManager : SingletonMonoBehaviour<MenuManager> {
         } else {
             action();
         }
-	}
-#endregion
+    }
+    #endregion
 
     async void OnPlay(ModeData modeData) {
         PlayClickSFX();
@@ -99,7 +112,7 @@ public class MenuManager : SingletonMonoBehaviour<MenuManager> {
         UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
     }
 
-    async void ClickLoop(){
+    async void ClickLoop() {
         while (true) {
             await new WaitForUpdate();
             if (!FadeActive) {
@@ -107,16 +120,38 @@ public class MenuManager : SingletonMonoBehaviour<MenuManager> {
                     EnablePanel(MenuPanelType.Menu);
                     await OnPanelClick();
                 }
-                if (Input.GetKeyDown(KeyCode.Escape) && (ShouldReturnToMenuAtClick || currentPanelType == MenuPanelType.Menu)) {
-                    EnablePanel(currentPanelType == MenuPanelType.Menu ? MenuPanelType.Title : MenuPanelType.Menu);
+                if (Input.GetKeyDown(KeyCode.Escape) && CanPressBack) {
+                    Back();
                     await OnPanelClick();
                 }
             }
         }
     }
 
+    void Back() {
+        switch (currentPanelType) {
+            case MenuPanelType.Title:
+                Exit();
+                break;
+            case MenuPanelType.Menu:
+                EnablePanel(MenuPanelType.Title);
+                break;
+            default:
+                EnablePanel(MenuPanelType.Menu);
+                break;
+        }
+    }
+
     async Task OnPanelClick() {
         PlayClickSFX();
         await new WaitForSeconds(0.75f);
+    }
+
+    void Exit() {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#elif !UNITY_WEBGL && !UNITY_IOS
+		    Application.Quit();
+#endif
     }
 }
