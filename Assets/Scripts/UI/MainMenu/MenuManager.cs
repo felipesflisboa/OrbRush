@@ -11,10 +11,10 @@ using UnityEngine.UI;
 /// </summary>
 public class MenuManager : SingletonMonoBehaviour<MenuManager> {
 	[SerializeField] AudioSource clickSFX;
-    [SerializeField] Button marathonButton;
-    [SerializeField] Button quickRaceButton;
-    [SerializeField] Button infoButton;
-    [SerializeField] Button localHighScoresButton;
+    [SerializeField] MenuOption marathonOption;
+    [SerializeField] MenuOption quickRaceOption;
+    [SerializeField] MenuOption infoOption;
+    [SerializeField] MenuOption localHighScoresOption;
     MenuPanelType currentPanelOption;
 	MenuPanel[] panelArray;
     Fader fader;
@@ -26,20 +26,22 @@ public class MenuManager : SingletonMonoBehaviour<MenuManager> {
     void Awake() {
         fader = GetComponentInChildren<Fader>(true);
         panelArray = GetComponentsInChildren<MenuPanel>(true);
-        AssignButtonListeners();
+        AssignOptionListeners();
     }
 
-    void AssignButtonListeners() {
-        marathonButton.onClick.AddListener(OnMarathonClick);
-        quickRaceButton.onClick.AddListener(OnQuickRaceClick);
-        infoButton.onClick.AddListener(OnInfoClick);
-        localHighScoresButton.onClick.AddListener(OnLocalHighScoresClick);
+    void AssignOptionListeners() {
+        marathonOption.button.onClick.AddListener(OnMarathonClick);
+        quickRaceOption.button.onClick.AddListener(OnQuickRaceClick);
+        infoOption.button.onClick.AddListener(OnInfoClick);
+        localHighScoresOption.button.onClick.AddListener(OnLocalHighScoresClick);
     }
 
     void Start () {
         clickCooldownTimer = new Timer(0.75f);
         EnablePanel(SimpleScoreListTimedDrawer.lastScore == null ? MenuPanelType.Title : MenuPanelType.LocalHighScores);
 	}
+
+    //MenuPanel GetMenuPanel(MenuPanelType type) => menuPanelArray.First(mp => mp.type == type); //remove
 
     async Task EnablePanel(MenuPanelType type) {
         if (fader != null && Time.timeSinceLevelLoad > 0.1f) 
