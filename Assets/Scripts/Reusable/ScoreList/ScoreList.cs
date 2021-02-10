@@ -7,7 +7,7 @@ using System;
 ///
 /// <c>Important Methods:</c> <c>Add(value)</c> to add a new value into a list, <c>Save()</c> to save the list and <c>Load()</c> to load the list.
 /// The methods are saved using PlayerPref. So, if you want to write data avoiding changes, use PlayerPrefs.Save() after call.
-/// Version 4.0
+/// Version 4.1
 /// </summary>
 public abstract class ScoreList<T> where T : IComparable, new(){
 	public T[] values{protected set; get;}
@@ -39,7 +39,7 @@ public abstract class ScoreList<T> where T : IComparable, new(){
 		Clear();
 	}
 
-	public void Clear(){
+	public virtual void Clear(){
 		values = new T[Size];
 		for(int i = 0;i<Size;i++){
 			values[i] = DefaultValue;

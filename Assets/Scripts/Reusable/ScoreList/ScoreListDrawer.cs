@@ -12,7 +12,7 @@ public abstract class ScoreListDrawer<TScoreList, TScoreListGeneric> : MonoBehav
 	public Transform textScoreParent; // Parent to instantiate textScorePrefab. If null uses self
 	public string newRecordFormatMessage = "{0} !";
 	public bool clearLastScoreAfterShowing;
-	bool showedLastScore;
+	protected bool showedLastScore;
 
 	[Header("Current Score")]
     public Transform currentScoreLabelTransform; // Current Score label to be show
@@ -66,7 +66,7 @@ public abstract class ScoreListDrawer<TScoreList, TScoreListGeneric> : MonoBehav
 		}
 	}
 
-	protected Transform CreateTextScore(TScoreList scoreList, int index) {
+	protected virtual Transform CreateTextScore(TScoreList scoreList, int index) {
         Transform ret = Instantiate(textScorePrefab, textScoreParent).transform;
 		SetText(ret, FormatText(index + 1, scoreList.GetString(index)));
 		if (!showedLastScore && IsNewRecord(scoreList.values[index])) {

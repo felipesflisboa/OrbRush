@@ -49,11 +49,9 @@ public class MenuManager : SingletonMonoBehaviour<MenuManager> {
     }
 
     void Start() {
-        EnablePanel(SimpleScoreListTimedDrawer.lastScore == null ? MenuPanelType.Title : MenuPanelType.LocalHighScores);
+        EnablePanel(ScoreListMarathonDrawer.lastScore == null ? MenuPanelType.Title : MenuPanelType.LocalHighScores);
         ClickLoop();
     }
-
-    //MenuPanel GetMenuPanel(MenuPanelType type) => menuPanelArray.First(mp => mp.type == type); //remove
 
     async Task EnablePanel(MenuPanelType type) {
         if (fader != null && Time.timeSinceLevelLoad > 0.1f)
@@ -105,7 +103,7 @@ public class MenuManager : SingletonMonoBehaviour<MenuManager> {
 
     async void OnPlay(ModeData modeData) {
         PlayClickSFX();
-        SimpleScoreListTimedDrawer.lastScore = null;
+        ScoreListMarathonDrawer.ClearLast();
         await EnablePanel(MenuPanelType.Loading);
         await new WaitForUpdate();
         GameManager.modeData = modeData;

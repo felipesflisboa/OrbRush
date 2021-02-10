@@ -248,10 +248,11 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     }
 
     void SaveLastScore() {
-        SimpleScoreListTimedDrawer.lastScore = (modeData as MarathonData).level;
-        ScoreListTimed scoreList = new ScoreListTimed();
+        ScoreListMarathonDrawer.lastScore = (modeData as MarathonData).level;
+        ScoreListMarathonDrawer.lastElement = (modeData as MarathonData).element;
+        ScoreListMarathon scoreList = new ScoreListMarathon();
         scoreList.Load();
-        scoreList.AddScore((int)SimpleScoreListTimedDrawer.lastScore);
+        scoreList.AddScore((int)ScoreListMarathonDrawer.lastScore, ScoreListMarathonDrawer.lastElement);
         scoreList.Save();
     }
 
