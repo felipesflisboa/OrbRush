@@ -115,7 +115,7 @@ public class Segment : MonoBehaviour {
                     orb.rigidBody.velocity = orb.rigidBody.velocity * 0.6f;
                 break;
             case CardType.Lake:
-                orb.rigidBody.velocity = orb.rigidBody.velocity * 1.4f * (orb.element == Element.Water ? 0.75f : 1);
+                orb.rigidBody.velocity *=  1f + 0.4f * (orb.element == Element.Water ? 0.75f : 1);
                 break;
             case CardType.Earthquake:
                 //player.rigidBody.velocity = player.rigidBody.velocity * 1.6f;
