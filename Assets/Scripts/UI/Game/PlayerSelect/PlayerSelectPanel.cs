@@ -22,6 +22,16 @@ public class PlayerSelectPanel : MonoBehaviour {
     int TypeCount => Enum.GetNames(typeof(PlayerType)).Length;
     Color ImageColor => elementColorGroup.GetColor(element);
 
+    string ClickLabel {
+        get {
+#if UNITY_ANDROID
+            return "Human";
+#else
+            return "Mouse";
+#endif
+        }
+    }
+
     void Awake() {
         type = number == 1 ? PlayerType.Click : PlayerType.CPUEasy;
         backgroundImage.color = ImageColor;
@@ -53,7 +63,7 @@ public class PlayerSelectPanel : MonoBehaviour {
 
     string GetTypeName(PlayerType type) {
         switch (type) {
-            case PlayerType.Click:      return "Mouse";
+            case PlayerType.Click:      return ClickLabel;
             case PlayerType.Keyboard:   return "Keyboard";
             case PlayerType.Joystick1:  return "Joystick1";
             case PlayerType.Joystick2:  return "Joystick2";
@@ -83,7 +93,10 @@ public class PlayerSelectPanel : MonoBehaviour {
     public bool IsSelectableType(PlayerType type) {
         if (new[] { PlayerType.None }.Contains(type))
             return false;
-        //TODO add here Android types
+#if UNITY_ANDROID
+        if (new[] { PlayerType.Keyboard }.Contains(type) || IsJoystick(type))
+            return false;
+#endif
         return true;
     }
 
