@@ -7,7 +7,7 @@ using TMPro;
 
 //TODO remove singleton
 public class CanvasController : SingletonMonoBehaviour<CanvasController> {
-    [Tooltip("Per player")] public CardZone[] cardZoneArray;
+    internal CardZone[] cardZoneArray = new CardZone[5];
     internal PlayerSelectScreen playerSelectScreen;
     HUD hud;
     public TextMeshProUGUI startText;
@@ -40,9 +40,8 @@ public class CanvasController : SingletonMonoBehaviour<CanvasController> {
     }
 
     void InitializeCardZone() {
-        foreach (var cardZone in cardZoneArray) {
-            if (cardZone == null)
-                continue;
+        foreach (var cardZone in GetComponentsInChildren<CardZone>(true)) {
+            cardZoneArray[cardZone.player] = cardZone;
             cardZone.gameObject.SetActive(false);
         }
     }

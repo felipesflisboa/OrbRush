@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 
 public class CardZone : MonoBehaviour {
+    public int player;
     [SerializeField] RectTransform rangeRectTransform;
     //[SerializeField] RectTransform cursorRectTransform; //remove
     [SerializeField] float initialCardBonusY;
