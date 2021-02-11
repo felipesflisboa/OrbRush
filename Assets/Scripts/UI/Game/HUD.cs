@@ -10,9 +10,13 @@ using TMPro;
 public class HUD : MonoBehaviour {
     public TextMeshProUGUI levelText;
     public TextMeshProUGUI timeText;
+    [SerializeField] bool alwaysShowModeName;
 
     void Start() {
-        levelText.text = GameManager.modeData is MarathonData ? $"Level {(GameManager.modeData as MarathonData).level}" : string.Empty;
+        if (GameManager.modeData is MarathonData)
+            levelText.text = $"Level {(GameManager.modeData as MarathonData).level}";
+        else
+            levelText.text = alwaysShowModeName ? "Quick Race" : string.Empty;
     }
 
     void Update() {

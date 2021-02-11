@@ -25,22 +25,30 @@ public class CanvasController : SingletonMonoBehaviour<CanvasController> {
         }
     }
 
-    void Start() {
+    void Awake() {
         Initialize();
     }
 
     void Initialize() {
+        DestroyWrongPlatformComponents();
         InitializeCardZone();
         playerSelectScreen = GetComponentInChildren<PlayerSelectScreen>(true);
         playerSelectScreen.gameObject.SetActive(false);
-        hud = GetComponentInChildren<HUD>();
+        hud = GetComponentInChildren<HUD>(true);
         hud.gameObject.SetActive(false);
         alert = GetComponentInChildren<Alert>(true);
         alert.gameObject.SetActive(true);
     }
 
+    void DestroyWrongPlatformComponents() {
+        foreach (var platformDependent in GetComponentsInChildren<PlatformDependentComponent>(true))
+            platformDependent.Execute();
+    }
+
     void InitializeCardZone() {
         foreach (var cardZone in GetComponentsInChildren<CardZone>(true)) {
+            if (cardZone == null)
+                continue;
             cardZoneArray[cardZone.player] = cardZone;
             cardZone.gameObject.SetActive(false);
         }

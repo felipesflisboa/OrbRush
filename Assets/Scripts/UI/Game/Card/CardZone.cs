@@ -7,6 +7,7 @@ public class CardZone : MonoBehaviour {
     public int player;
     [SerializeField] RectTransform rangeRectTransform;
     //[SerializeField] RectTransform cursorRectTransform; //remove
+    [SerializeField] float scaleMultiplier = 1;
     [SerializeField] float initialCardBonusY;
     Card selectedCard;
     Orb orb;
@@ -27,7 +28,7 @@ public class CardZone : MonoBehaviour {
     public void Add(GameObject prefab) {
         cardList.Add(CreateCard(prefab));
         if (cardHeight == 0)
-            cardHeight = cardList[cardList.Count - 1].RectTransform.rect.height;
+            cardHeight = cardList.Last().RectTransform.rect.height* cardList.Last().transform.localScale.x;
         RefreshCardList();
         RefreshPosition();
     }
@@ -41,6 +42,7 @@ public class CardZone : MonoBehaviour {
 
     Card CreateCard(GameObject prefab) {
         Card ret = Instantiate(prefab, transform).GetComponent<Card>();
+        ret.transform.localScale = Vector3.one * scaleMultiplier;
         ret.zone = this;
         return ret;
     }
@@ -97,7 +99,7 @@ public class CardZone : MonoBehaviour {
             if (cardList[i] == null)
                 continue;
             float gain = Mathf.Min(rangeRectTransform.rect.height / cardList.Count, cardHeight + initialCardBonusY);
-            cardList[i].RefreshPosition(rangeRectTransform.rect.yMax - cardHeight*0.5f - i* gain);
+            cardList[i].RefreshPosition(rangeRectTransform.rect.yMax + rangeRectTransform.anchoredPosition.y - cardHeight*0.5f - i* gain);
         }
     }
 }
