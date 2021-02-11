@@ -12,12 +12,10 @@ public class CanvasController : SingletonMonoBehaviour<CanvasController> {
     HUD hud;
     public TextMeshProUGUI startText;
     public TextMeshProUGUI victoryText;
-    public TextMeshProUGUI cardAlertText;
-    public TextMeshProUGUI offtackAlertText;
-    bool canShowCardAlert;
+    internal Alert alert;
+    float lastCardZoneCount;
 
-    public CardZone NextAvailableCardZone => cardZoneArray.First(cz => cz!=null && !cz.Active);
-
+    public CardZone NextAvailableCardZone => cardZoneArray.First(cz => cz != null && !cz.Active);
     Canvas _canvas;
     public Canvas Canvas {
         get {
@@ -27,22 +25,22 @@ public class CanvasController : SingletonMonoBehaviour<CanvasController> {
         }
     }
 
-    void Awake() {
+    void Start() {
         Initialize();
     }
 
     void Initialize() {
         InitializeCardZone();
         playerSelectScreen = GetComponentInChildren<PlayerSelectScreen>(true);
+        playerSelectScreen.gameObject.SetActive(false);
         hud = GetComponentInChildren<HUD>();
         hud.gameObject.SetActive(false);
-        playerSelectScreen.gameObject.SetActive(false);
-        cardAlertText.gameObject.SetActive(false);
-        offtackAlertText.gameObject.SetActive(false);
+        alert = GetComponentInChildren<Alert>(true);
+        alert.gameObject.SetActive(true);
     }
 
     void InitializeCardZone() {
-        foreach(var cardZone in cardZoneArray) {
+        foreach (var cardZone in cardZoneArray) {
             if (cardZone == null)
                 continue;
             cardZone.gameObject.SetActive(false);
@@ -54,7 +52,7 @@ public class CanvasController : SingletonMonoBehaviour<CanvasController> {
         startText.gameObject.SetActive(false);
         hud.gameObject.SetActive(true);
         EnableActiveCardZones();
-        canShowCardAlert = cardZoneArray.Count(cz => cz != null && cz.Active) == 1;
+        alert.enabled = cardZoneArray.Count(cz => cz != null && cz.Active) == 1;
     }
 
     void EnableActiveCardZones() {
@@ -66,23 +64,19 @@ public class CanvasController : SingletonMonoBehaviour<CanvasController> {
     }
 
     void Update() {
-        RefreshCardAlert();
+        if(alert.enabled)
+            RefreshCardAlert();
     }
 
     void RefreshCardAlert() {
-        if (!canShowCardAlert)
-            return;
-        foreach (var cardZone in cardZoneArray) {
-            if (cardZone == null || !cardZone.Active)
-                continue;
-            cardAlertText.gameObject.SetActive(cardZone.cardList.Count >= 6);
+        if (cardZoneArray[1].ValidCardCount != lastCardZoneCount) {
+            lastCardZoneCount = cardZoneArray[1].ValidCardCount;
+            if (lastCardZoneCount >= 6 && !alert.DisplayingText)
+                alert.Display("Your hand is full.\nCards make your ball slower!", 4f);
         }
     }
 
     public void DisplayOfftrackAlert() {
-        if (!canShowCardAlert)
-            return;
-        offtackAlertText.gameObject.SetActive(true);
-        this.Schedule(new WaitForSeconds(3f), () => offtackAlertText.gameObject.SetActive(false));
+        alert.Display("Orb is off track!", 3);
     }
 }
