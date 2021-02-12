@@ -33,7 +33,7 @@ public class PlayerSelectPanel : MonoBehaviour {
     }
 
     void Awake() {
-        type = number == 1 ? PlayerType.Click : PlayerType.CPUEasy;
+        type = Load();
         backgroundImage.color = ImageColor;
         previousButton.onClick.AddListener(() => IncType(-1));
         nextButton.onClick.AddListener(() => IncType(1));
@@ -117,4 +117,7 @@ public class PlayerSelectPanel : MonoBehaviour {
                 return true;
         return false;
     }
+    
+    public void Save() => CanvasController.I.playerSelectScreen.Save(number, type);
+    public PlayerType Load() => CanvasController.I.playerSelectScreen.Load(number);
 }
