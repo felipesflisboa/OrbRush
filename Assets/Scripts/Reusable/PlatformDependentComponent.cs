@@ -14,7 +14,7 @@ public class PlatformDependentComponent : MonoBehaviour {
     }
 
 	public Call call = Call.LateUpdate;
-    public Action action = Action.Disable; 
+    public Action unavailableAction = Action.Disable; 
     public bool Windows;
     public bool MacOS;
     public bool Linux;
@@ -48,7 +48,7 @@ public class PlatformDependentComponent : MonoBehaviour {
     public void Execute() {
         if (IsAvailable())
             return;
-        switch (action) {
+        switch (unavailableAction) {
             case Action.Disable:
                 gameObject.SetActive(false);
                 break;

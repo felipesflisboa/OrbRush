@@ -36,6 +36,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
 
     int OrbReachGoalCount => nonNullOrbArray.Sum(orb => orb.reachGoal ? 1 : 0);
     int OrbCount => spawnPointTransformArray.Length;
+    public bool IsMultiplayer => nonNullOrbArray.Count(o => !o.IsCPU) > 1;
     public Orb ClickInputOrb => nonNullOrbArray.FirstOrDefault(p => p.inputHandler.CanClick);
     public float CurrentTime => GameState.Ocurring==state ? Time.timeSinceLevelLoad : endTime;
     public bool Paused => Time.timeScale == 0 && state == GameState.Ocurring;

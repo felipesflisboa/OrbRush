@@ -10,12 +10,14 @@ public class CanvasController : SingletonMonoBehaviour<CanvasController> {
     internal CardZone[] cardZoneArray = new CardZone[5];
     internal PlayerSelectScreen playerSelectScreen;
     HUD hud;
+    [SerializeField] Transform pauseButtonParent;
     public TextMeshProUGUI startText;
     public TextMeshProUGUI victoryText;
     internal Alert alert;
     float lastCardZoneCount;
 
     public CardZone NextAvailableCardZone => cardZoneArray.First(cz => cz != null && !cz.Active);
+
     Canvas _canvas;
     public Canvas Canvas {
         get {
@@ -32,6 +34,7 @@ public class CanvasController : SingletonMonoBehaviour<CanvasController> {
     void Initialize() {
         DestroyWrongPlatformComponents();
         InitializeCardZone();
+        InitializePauseButton();
         playerSelectScreen = GetComponentInChildren<PlayerSelectScreen>(true);
         playerSelectScreen.gameObject.SetActive(false);
         hud = GetComponentInChildren<HUD>(true);
@@ -54,12 +57,32 @@ public class CanvasController : SingletonMonoBehaviour<CanvasController> {
         }
     }
 
+    /* //remove
+    void InitializePauseButtons() {
+        foreach (var pauseButtonRectTransform in pauseButtonRectTransformArray) {
+            if (pauseButtonRectTransform == null)
+                continue;
+            pauseButtonRectTransform.GetComponentInChildren<Button>().onClick.AddListener(GameManager.I.TogglePause);
+            pauseButtonRectTransform.gameObject.SetActive(false);
+        }
+    }
+    */
+
+    void InitializePauseButton() {
+        pauseButtonParent.GetComponentInChildren<Button>().onClick.AddListener(GameManager.I.TogglePause);
+        pauseButtonParent.GetComponentInChildren<Button>().onClick.AddListener(() => Debug.Log("Test"));
+        pauseButtonParent.gameObject.SetActive(false);
+    }
+
     public void OnGameStart() {
         playerSelectScreen.gameObject.SetActive(false);
         startText.gameObject.SetActive(false);
         hud.gameObject.SetActive(true);
+        pauseButtonParent.gameObject.SetActive(true);
         EnableActiveCardZones();
-        alert.enabled = cardZoneArray.Count(cz => cz != null && cz.Active) == 1;
+        alert.enabled = !GameManager.I.IsMultiplayer;
+        if(GameManager.I.IsMultiplayer)
+            Destroy(pauseButtonParent);
     }
 
     void EnableActiveCardZones() {
@@ -69,6 +92,16 @@ public class CanvasController : SingletonMonoBehaviour<CanvasController> {
             cardZone.gameObject.SetActive(true);
         }
     }
+
+    /* //remove
+    void DestroyPauseButtons() {
+        foreach (var pauseButtonRectTransform in pauseButtonRectTransformArray) {
+            if (pauseButtonRectTransform == null)
+                continue;
+            Destroy(pauseButtonParent);
+        }
+    }
+    */
 
     void Update() {
         if(alert.enabled)
