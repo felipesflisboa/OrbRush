@@ -95,7 +95,7 @@ public class CanvasController : SingletonMonoBehaviour<CanvasController> {
         if (cardZoneArray[1].ValidCardCount != lastCardZoneCount) {
             lastCardZoneCount = cardZoneArray[1].ValidCardCount;
             if (lastCardZoneCount >= 6 && !alert.DisplayingText)
-                alert.Display("Your hand is full.\nCards make your ball slower!", 4f);
+                alert.Display("Your hand is full.\nCards make your orb slower!", 4f);
         }
     }
 
