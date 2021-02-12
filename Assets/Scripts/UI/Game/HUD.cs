@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Globalization;
 
 /// <summary>
 /// General game HUD
@@ -12,6 +13,8 @@ public class HUD : MonoBehaviour {
     public TextMeshProUGUI timeText;
     [SerializeField] bool alwaysShowModeName;
 
+    static readonly CultureInfo US_INFO = new CultureInfo("en-US");
+
     void Start() {
         if (GameManager.modeData is MarathonData)
             levelText.text = $"Level {(GameManager.modeData as MarathonData).level}";
@@ -20,6 +23,6 @@ public class HUD : MonoBehaviour {
     }
 
     void Update() {
-        timeText.text = $"{GameManager.I.CurrentTime.ToString("00.000")} s";
+        timeText.text = $"{GameManager.I.CurrentTime.ToString("00.000", US_INFO)} s";
     }
 }
