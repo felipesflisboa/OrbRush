@@ -3870,6 +3870,36 @@ MonoBehaviour:
   pauseButtonParent: {fileID: 566386094}
   startText: {fileID: 1597335373}
   victoryText: {fileID: 1166270183}
+  textColorPerElement:
+    reorderableList:
+      canAdd: 1
+      canRemove: 1
+      draggable: 1
+      expandable: 1
+      multipleSelection: 1
+      isExpanded: 1
+      label:
+        m_Text: Keys
+        m_Image: {fileID: 0}
+        m_Tooltip: 
+      headerHeight: 18
+      footerHeight: 13
+      slideEasing: 0.15
+      verticalSpacing: 2
+      showDefaultBackground: 1
+      elementDisplayType: 0
+      elementNameProperty: 
+      elementNameOverride: 
+      elementIcon: {fileID: 0}
+    reqReferences: {fileID: 0}
+    isExpanded: 1
+    _keyValues: 01000000020000000300000004000000
+    _keys: 01000000020000000300000004000000
+    _values:
+    - {r: 0.8666667, g: 0.21176471, b: 0.2901961, a: 1}
+    - {r: 0.2784314, g: 0.20392157, b: 0.827451, a: 1}
+    - {r: 0.15294118, g: 0.9254902, b: 0.30980393, a: 1}
+    - {r: 0.9529412, g: 0.83137256, b: 0.31764707, a: 1}
 --- !u!114 &616351372
 MonoBehaviour:
   m_ObjectHideFlags: 0

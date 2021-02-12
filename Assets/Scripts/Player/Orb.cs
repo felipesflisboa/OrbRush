@@ -6,6 +6,7 @@ using UnityEngine;
 public class Orb : MonoBehaviour {
     public Element element;
     public string m_name;
+    [Tooltip("For victory message")] public Color textColor; //remove
     internal int number;
     internal CardZone cardZone;
     internal InputHandler inputHandler;

@@ -4,15 +4,19 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using RotaryHeart.Lib.SerializableDictionary;
 
 //TODO remove singleton
 public class CanvasController : SingletonMonoBehaviour<CanvasController> {
+    [System.Serializable] class ElementColorDictionary : SerializableDictionaryBase<Element, Color> { }
+
     internal CardZone[] cardZoneArray = new CardZone[5];
     internal PlayerSelectScreen playerSelectScreen;
     HUD hud;
     [SerializeField] Transform pauseButtonParent;
     public TextMeshProUGUI startText;
-    public TextMeshProUGUI victoryText;
+    [SerializeField] TextMeshProUGUI victoryText;
+    [SerializeField] ElementColorDictionary textColorPerElement; 
     internal Alert alert;
     float lastCardZoneCount;
 
@@ -57,17 +61,6 @@ public class CanvasController : SingletonMonoBehaviour<CanvasController> {
         }
     }
 
-    /* //remove
-    void InitializePauseButtons() {
-        foreach (var pauseButtonRectTransform in pauseButtonRectTransformArray) {
-            if (pauseButtonRectTransform == null)
-                continue;
-            pauseButtonRectTransform.GetComponentInChildren<Button>().onClick.AddListener(GameManager.I.TogglePause);
-            pauseButtonRectTransform.gameObject.SetActive(false);
-        }
-    }
-    */
-
     void InitializePauseButton() {
         pauseButtonParent.GetComponentInChildren<Button>().onClick.AddListener(GameManager.I.TogglePause);
         pauseButtonParent.GetComponentInChildren<Button>().onClick.AddListener(() => Debug.Log("Test"));
@@ -92,17 +85,7 @@ public class CanvasController : SingletonMonoBehaviour<CanvasController> {
             cardZone.gameObject.SetActive(true);
         }
     }
-
-    /* //remove
-    void DestroyPauseButtons() {
-        foreach (var pauseButtonRectTransform in pauseButtonRectTransformArray) {
-            if (pauseButtonRectTransform == null)
-                continue;
-            Destroy(pauseButtonParent);
-        }
-    }
-    */
-
+    
     void Update() {
         if(alert.enabled)
             RefreshCardAlert();
@@ -118,5 +101,14 @@ public class CanvasController : SingletonMonoBehaviour<CanvasController> {
 
     public void DisplayOfftrackAlert() {
         alert.Display("Orb is off track!", 3);
+    }
+
+    public void DisplayVictoryText(Orb winnerOrb) {
+        victoryText.gameObject.SetActive(true);
+        victoryText.text = string.Format(
+            "Player <color=#{1}>{0}</color> won!",
+            winnerOrb.m_name,
+            ColorUtility.ToHtmlStringRGB(textColorPerElement[winnerOrb.element])
+        );
     }
 }

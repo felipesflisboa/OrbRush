@@ -211,8 +211,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         EndGameState(winnerOrb);
         endSFX.Play();
         await new WaitForSecondsRealtime(1.2f);
-        CanvasController.I.victoryText.gameObject.SetActive(true); //TODO
-        CanvasController.I.victoryText.text = $"Player {winnerOrb.m_name} won!";
+        CanvasController.I.DisplayVictoryText(winnerOrb);
         await new WaitForSecondsRealtime(2.5f);
         await new WaitMultiple(this, 1, new WaitForSecondsRealtime(4f), new WaitUntil(() => OrbReachGoalCount >= OrbCount - 1));
         await new WaitForSecondsRealtime(0.5f);
