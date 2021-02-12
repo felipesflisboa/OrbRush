@@ -12,8 +12,9 @@ public class IntroManager : SingletonMonoBehaviour<IntroManager>{
         fader.FadeIn();
         await new WaitWhile(() => fader.InProgress);
         var videoPlayer = FindObjectOfType<UnityEngine.Video.VideoPlayer>();
+        videoPlayer.Prepare();
+        await new WaitWhile(() => !videoPlayer.isPrepared);
         videoPlayer.Play();
-        await new WaitForSeconds(1); // For some reason. 1 frame isn't enough
         await new WaitWhile(() => videoPlayer.isPlaying);
         var loader = FindObjectOfType<SceneLoader>();
         loader.allowSceneActivation = false;
