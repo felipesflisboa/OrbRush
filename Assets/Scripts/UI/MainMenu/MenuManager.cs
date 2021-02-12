@@ -49,6 +49,7 @@ public class MenuManager : SingletonMonoBehaviour<MenuManager> {
     }
 
     void Start() {
+        Time.timeScale = 1;
         EnablePanel(ScoreListMarathonDrawer.lastScore == null ? MenuPanelType.Title : MenuPanelType.LocalHighScores);
         ClickLoop();
     }
