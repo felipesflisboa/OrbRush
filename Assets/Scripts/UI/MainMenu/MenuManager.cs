@@ -4,6 +4,7 @@ using System.Linq;
 using DG.Tweening;
 using System.Threading.Tasks;
 using UnityEngine.UI;
+using TMPro;
 
 /// <summary>
 /// Sample option class.
@@ -15,12 +16,14 @@ public class MenuManager : SingletonMonoBehaviour<MenuManager> {
     [SerializeField] MenuOption quickRaceOption;
     [SerializeField] MenuOption infoOption;
     [SerializeField] MenuOption localHighScoresOption;
+    [SerializeField] TextMeshProUGUI versionText;
     MenuPanelType currentPanelType;
     MenuPanel[] panelArray;
     Fader fader;
 
     bool FadeActive => fader != null && fader.ImageActive;
     bool ShouldReturnToMenuAtClick => !new[] { MenuPanelType.Menu, MenuPanelType.Loading }.Contains(currentPanelType);
+    string Version => string.Format("Version {0}", Application.version);
 
     bool CanPressBack {
         get {
@@ -38,6 +41,7 @@ public class MenuManager : SingletonMonoBehaviour<MenuManager> {
     void Awake() {
         fader = GetComponentInChildren<Fader>(true);
         panelArray = GetComponentsInChildren<MenuPanel>(true);
+        versionText.text = Version;
         AssignOptionListeners();
     }
 
