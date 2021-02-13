@@ -29,12 +29,10 @@ public class IntroManager : SingletonMonoBehaviour<IntroManager>{
     }
 
     async Task PlayVideo() {
+        videoPlayer.url = System.IO.Path.Combine(Application.streamingAssetsPath, "Videos" , "LudinoLogo.mp4");
         videoPlayer.Prepare();
-#if !UNITY_WEBGL
         await new WaitWhile(() => !videoPlayer.isPrepared);
-#endif
         videoPlayer.Play();
-        await new WaitForSeconds(1); // WebGL won't trigger play, so gives a little time to prepare
         await new WaitWhile(() => videoPlayer.isPlaying);
     }
 
