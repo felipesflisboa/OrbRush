@@ -69,11 +69,11 @@ public class Segment : MonoBehaviour {
             case CardType.Air:
                 ApplyColor(Color.yellow);
                 break;
-            case CardType.Lake:
+            case CardType.Squid:
                 DisableCardEffectTransforms();
                 squid.Activate();
                 break;
-            case CardType.Tornado:
+            case CardType.Cyclone:
                 DisableCardEffectTransforms();
                 cyclone.Activate();
                 break;
@@ -110,7 +110,7 @@ public class Segment : MonoBehaviour {
                 if (orb.element == Element.Water)
                     orb.rigidBody.velocity = orb.rigidBody.velocity * 0.6f;
                 break;
-            case CardType.Lake:
+            case CardType.Squid:
                 orb.rigidBody.velocity *=  1f + 0.4f * (orb.element == Element.Water ? 0.75f : 1);
                 break;
         }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine.UI;
 using TMPro;
 
-public class MenuManager : SingletonMonoBehaviour<MenuManager> {
+public class MainMenuManager : SingletonMonoBehaviour<MainMenuManager> {
     [SerializeField] AudioSource clickSFX;
     [SerializeField] MenuOption marathonOption;
     [SerializeField] MenuOption quickRaceOption;

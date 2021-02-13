@@ -15,9 +15,9 @@ public class CardHandler {
                 if (ApplyExplosionEffect(GameManager.I.GetOrb(Element.Fire)) && card != null)
                     card.Remove();
                 break;
-            case CardType.Tornado:
+            case CardType.Cyclone:
             case CardType.Earthquake:
-            case CardType.Lake:
+            case CardType.Squid:
                 if (ApplySegmentEffect(cardType, isCPU) && card != null)
                     card.Remove();
                 break;
@@ -56,9 +56,9 @@ public class CardHandler {
         switch (cardType) {
             case CardType.Fire:
                 return Element.Fire;
-            case CardType.Lake:
+            case CardType.Squid:
                 return Element.Water;
-            case CardType.Tornado:
+            case CardType.Cyclone:
                 return Element.Air;
             case CardType.Earthquake:
                 return Element.Earth;
