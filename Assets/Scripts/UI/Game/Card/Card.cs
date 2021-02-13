@@ -72,6 +72,6 @@ public class Card : MonoBehaviour {
     public void TryToUse() {
         if (GameManager.I.Paused || !valid)
             return;
-        GameManager.I.ExecuteCardEffect(this, type, false);
+        GameManager.I.cardHandler.ExecuteCardEffect(this, type, false);
     }
 }

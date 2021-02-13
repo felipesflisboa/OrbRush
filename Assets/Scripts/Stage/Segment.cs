@@ -5,15 +5,21 @@ using DG.Tweening;
 using Gamelogic.Extensions;
 
 public class Segment : MonoBehaviour {
-    [SerializeField] Transform[] earthquakePlatformArray = new Transform[0];
-    [SerializeField] Transform tornadoTransform;
-    [SerializeField] Transform earthquakeTransform; //TODO rename
-    [SerializeField] Transform squirtTransform; //TODO rename lake
+    public Transform[] earthquakePlatformArray = new Transform[0];
+    Earthquake earthquake;
+    Squid squid;
+    Cyclone cyclone;
     List<Orb> playerInsideList = new List<Orb>();
     float cardEffectEndTime;
     internal CardType cardType;
 
     const float CARD_EFFECT_DURATION = 10f;
+
+    void Awake() {
+        cyclone = GetComponentInChildren<Cyclone>(true);
+        earthquake = GetComponentInChildren<Earthquake>(true);
+        squid = GetComponentInChildren<Squid>(true);
+    }
 
     void OnTriggerEnter(Collider other) {
         var player = other.GetComponentInParent<Orb>();
@@ -26,7 +32,7 @@ public class Segment : MonoBehaviour {
         }
     }
 
-    void ApplyColor(Color color) {
+    public void ApplyColor(Color color) {
         var oldColorizer = GetComponentInChildren<AutoColorizer>();
         if(oldColorizer == null) {
             if (color == Color.white)
@@ -65,25 +71,15 @@ public class Segment : MonoBehaviour {
                 break;
             case CardType.Lake:
                 DisableCardEffectTransforms();
-                ApplyColor(new Color32(0xD0, 0xD0, 0xFF, 0xFF));
-                squirtTransform.gameObject.SetActive(true);
+                squid.Activate();
                 break;
             case CardType.Tornado:
                 DisableCardEffectTransforms();
-                tornadoTransform.gameObject.SetActive(true);
-                tornadoTransform.position = GameManager.I.GetOrb(Element.Air).transform.position.WithY(tornadoTransform.position.y);
+                cyclone.Activate();
                 break;
             case CardType.Earthquake:
                 DisableCardEffectTransforms();
-                earthquakeTransform.gameObject.SetActive(true);
-                foreach (var item in earthquakePlatformArray) {
-                    item.gameObject.SetActive(true);
-                    DOTween.Sequence().Append(
-                        item.transform.DOMoveY(0.2f, 0.4f).SetRelative()
-                    ).Append(
-                        item.transform.DOMoveY(-0.2f, 0.001f).SetRelative()
-                    ).SetLoops(-1);
-                }
+                earthquake.Activate();
                 break;
         }
     }
@@ -117,9 +113,6 @@ public class Segment : MonoBehaviour {
             case CardType.Lake:
                 orb.rigidBody.velocity *=  1f + 0.4f * (orb.element == Element.Water ? 0.75f : 1);
                 break;
-            case CardType.Earthquake:
-                //player.rigidBody.velocity = player.rigidBody.velocity * 1.6f;
-                break;
         }
     }
 
@@ -148,7 +141,7 @@ public class Segment : MonoBehaviour {
     }
 
     void DisableCardEffectTransforms() {
-        earthquakeTransform.gameObject.SetActive(false);
-        tornadoTransform.gameObject.SetActive(false);
+        earthquake.Deactivate();
+        cyclone.Deactivate();
     }
 }

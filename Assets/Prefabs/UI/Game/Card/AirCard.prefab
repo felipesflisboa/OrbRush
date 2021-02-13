@@ -179,7 +179,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cba6a3955848c5544a4edde60dc2711d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 4
+  type: 7
   highlightRectArray:
   - {fileID: 5555410753957162198}
   - {fileID: 1596443322527758111}

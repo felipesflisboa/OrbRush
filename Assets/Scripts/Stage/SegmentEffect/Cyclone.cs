@@ -3,9 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using Gamelogic.Extensions;
 
-public class Cyclone : MonoBehaviour{
+public class Cyclone : SegmentEffect {
     const float MAX_DISTANCE_FROM_ORB = 12;
     const float FORCE_INTENSITY = 350;
+
+    public override void Activate() {
+        base.Activate();
+        transform.position = GameManager.I.GetOrb(Element.Air).transform.position.WithY(transform.position.y);
+    }
 
     void FixedUpdate() {
         ApplyEffect();

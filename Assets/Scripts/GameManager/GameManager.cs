@@ -4,58 +4,35 @@ using UnityEngine;
 using System.Linq;
 using UnityEngine.SceneManagement;
 
-//TODO Block CPU only game
 public class GameManager : SingletonMonoBehaviour<GameManager> {
     public static ModeData modeData;
 
-    [SerializeField] Transform[] spawnPointTransformArray;
+    public CardHandler cardHandler;
     [SerializeField, PrefabReference] GameObject[] orbPrefabArray;
     [SerializeField, PrefabReference] GameObject[] cardPrefabArray;
-    [SerializeField, PrefabReference] GameObject explosionPrefab;
     [PrefabReference] public GameObject teleportEffectPrefab;
-    [SerializeField] Material[] marathonSkyboxMaterialPerLevel; 
-
-    //TODO move into it effects
-    [SerializeField] AudioSource cycloneSFX;
-    [SerializeField] AudioSource squidSFX;
-    [SerializeField] AudioSource earthquakeSFX;
-    [SerializeField] AudioSource explodeSFX;
     [SerializeField] AudioSource startSFX;
     [SerializeField] AudioSource endSFX;
+
+    internal Stage stage;
+    internal MusicController musicController;
+    internal Orb[] orbArray;
+    internal Orb[] nonNullOrbArray;
+    internal GameState state;
+    CameraController cameraController;
+    float endTime;
 
     [Header("Debug")]
     [SerializeField] bool standaloneSceneStartsAsMarathon = true;
 
-    internal MusicController musicController;
-    internal Orb[] orbArray; //TODO protect
-    internal Orb[] nonNullOrbArray;
-    internal GameState state;
-    internal List<Segment> segmentList;
-    CameraController cameraController;
-    float endTime;
-
     int OrbReachGoalCount => nonNullOrbArray.Sum(orb => orb.reachGoal ? 1 : 0);
-    int OrbCount => spawnPointTransformArray.Length;
     public bool IsMultiplayer => nonNullOrbArray.Count(o => !o.IsCPU) > 1;
     public Orb ClickInputOrb => nonNullOrbArray.FirstOrDefault(p => p.inputHandler.CanClick);
     public float CurrentTime => GameState.Ocurring==state ? Time.timeSinceLevelLoad : endTime;
     public bool Paused => Time.timeScale == 0 && state == GameState.Ocurring;
 
-    public Vector3 SpawnPointCenter{
-        get{
-            int validSize = 0;
-            Vector3 ret = Vector3.zero;
-            foreach (var spawnPoint in spawnPointTransformArray) {
-                if (spawnPoint == null)
-                    continue;
-                ret += spawnPoint.position;
-                validSize++;
-            }
-            return ret / validSize;
-        }
-    }
-
     void Awake() {
+        stage = FindObjectOfType<Stage>();
         cameraController = FindObjectOfType<CameraController>();
         FormatModeData();
     }
@@ -63,10 +40,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     void Start() {
         musicController = FindObjectOfType<MusicController>();
         Time.timeScale = 0;
-        segmentList = CreateSegmentList();
         state = GameState.OnInitialAnimation;
-        ConfigureSkybox();
-        InstantiateOrbs();
+        stage.InstantiateOrbs(orbPrefabArray);
     }
 
     void FormatModeData() {
@@ -77,70 +52,6 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
 #else
         Debug.LogError("No mode defined!");
 #endif
-    }
-
-    void ConfigureSkybox() {
-        if (modeData is MarathonData)
-            RenderSettings.skybox = marathonSkyboxMaterialPerLevel[(modeData as MarathonData).level % marathonSkyboxMaterialPerLevel.Length];
-    }
-
-    List<Segment> CreateSegmentList() {
-        List<Segment> ret = FindObjectsOfType<Segment>().ToList();
-        ret.Sort((a, b) => a.transform.position.z.CompareTo(b.transform.position.z));
-        return ret;
-    }
-
-    void InstantiateOrbs() {
-        for (int i = 1; i < spawnPointTransformArray.Length; i++)
-            Instantiate(orbPrefabArray[i], spawnPointTransformArray[i].position, spawnPointTransformArray[i].rotation);
-    }
-
-    void InitializeOrbArrayInQuickRace() {
-        Orb[] orbTempArray = FindObjectsOfType<Orb>();
-        orbArray = new Orb[spawnPointTransformArray.Length];
-        for(int i = 0; i < CanvasController.I.playerSelectScreen.panelArray.Length; i++) {
-            PlayerSelectPanel panel = CanvasController.I.playerSelectScreen.GetPanelWithCPULast()[i];
-            InitializeOrb(
-                i + 1,
-                orbTempArray.FirstOrDefault(orb => orb.element == panel.element),
-                InputHandler.Factory(panel.type),
-                panel.IsCPU() ? GetCPULevelPerType(panel.type) : 0
-            );
-        }
-        nonNullOrbArray = CreateNonNullOrbArray();
-    }
-
-    void InitializeOrbArrayInMarathon(Orb firstPlayerOrb) {
-        (modeData as MarathonData).element = firstPlayerOrb.element;
-        orbArray = new Orb[spawnPointTransformArray.Length];
-        InitializeOrb(1, firstPlayerOrb, new ClickInputHandler());
-        int orbIndex = 2;
-        foreach (var orb in FindObjectsOfType<Orb>()) {
-            if (orb.Initialized)
-                continue;
-            InitializeOrb(orbIndex++, orb, new CPUInputHandler(), (modeData as MarathonData).level);
-        }
-        nonNullOrbArray = CreateNonNullOrbArray();
-    }
-
-    Orb[] CreateNonNullOrbArray() => orbArray.Where(player => player != null).ToArray(); //remove
-
-    int GetCPULevelPerType(PlayerType playerType) {
-        switch (playerType) {
-            case PlayerType.CPUEasy:    return 1;
-            case PlayerType.CPUNormal:  return 3;
-            case PlayerType.CPUHard:    return 6;
-        }
-        Debug.LogError($"Invalid type {playerType}!");
-        return 0;
-    }
-
-    void InitializeOrb(int number, Orb orb, InputHandler inputHandler, int aiLevel = 0) {
-        orbArray[number] = orb;
-        if(aiLevel == 0)
-            orb.InitializeAsHuman(number, inputHandler, CanvasController.I.NextAvailableCardZone);
-        else
-            orb.InitializeAsCPU(number, inputHandler, aiLevel);
     }
 
     public void OnCameraInitialAnimationEnd() {
@@ -166,6 +77,54 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     public void StartQuickRace() {
         InitializeOrbArrayInQuickRace();
         StartGame();
+    }
+
+
+    void InitializeOrbArrayInQuickRace() {
+        orbArray = new Orb[FindObjectsOfType<Orb>().Length + 1];
+        for (int i = 0; i < CanvasController.I.playerSelectScreen.panelArray.Length; i++) {
+            PlayerSelectPanel panel = CanvasController.I.playerSelectScreen.GetPanelWithCPULast()[i];
+            InitializeOrb(
+                i + 1,
+                FindObjectsOfType<Orb>().FirstOrDefault(orb => orb.element == panel.element),
+                InputHandler.Factory(panel.type),
+                panel.IsCPU() ? GetCPULevelPerType(panel.type) : 0
+            );
+        }
+        nonNullOrbArray = orbArray.Where(player => player != null).ToArray();
+    }
+
+    void InitializeOrbArrayInMarathon(Orb firstPlayerOrb) {
+        (modeData as MarathonData).element = firstPlayerOrb.element;
+        orbArray = new Orb[FindObjectsOfType<Orb>().Length + 1];
+        InitializeOrb(1, firstPlayerOrb, new ClickInputHandler());
+        int orbIndex = 2;
+        foreach (var orb in FindObjectsOfType<Orb>()) {
+            if (orb.Initialized)
+                continue;
+            InitializeOrb(orbIndex++, orb, new CPUInputHandler(), (modeData as MarathonData).level);
+        }
+        nonNullOrbArray = orbArray.Where(player => player != null).ToArray();
+    }
+
+    Orb[] CreateNonNullOrbArray() => orbArray.Where(player => player != null).ToArray(); //remove
+
+    int GetCPULevelPerType(PlayerType playerType) {
+        switch (playerType) {
+            case PlayerType.CPUEasy: return 1;
+            case PlayerType.CPUNormal: return 3;
+            case PlayerType.CPUHard: return 6;
+        }
+        Debug.LogError($"Invalid type {playerType}!");
+        return 0;
+    }
+
+    void InitializeOrb(int number, Orb orb, InputHandler inputHandler, int aiLevel = 0) {
+        orbArray[number] = orb;
+        if (aiLevel == 0)
+            orb.InitializeAsHuman(number, inputHandler, CanvasController.I.NextAvailableCardZone);
+        else
+            orb.InitializeAsCPU(number, inputHandler, aiLevel);
     }
 
     void StartGame() {
@@ -213,7 +172,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         await new WaitForSecondsRealtime(1.2f);
         CanvasController.I.DisplayVictoryText(winnerOrb);
         await new WaitForSecondsRealtime(2.5f);
-        await new WaitMultiple(this, 1, new WaitForSecondsRealtime(4f), new WaitUntil(() => OrbReachGoalCount >= OrbCount - 1));
+        await new WaitMultiple(this, 1, new WaitForSecondsRealtime(4f), new WaitUntil(() => OrbReachGoalCount >= nonNullOrbArray.Length));
         await new WaitForSecondsRealtime(0.5f);
         FindObjectOfType<Fader>().FadeOut(() => GoToNextScene(winnerOrb));
     }
@@ -256,96 +215,6 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         scoreList.Save();
     }
 
-    public Orb GetOrb(Element element) => nonNullOrbArray.First(o => o.element == element);
-
-    //TODO CardHandlers
-    public void ExecuteCardEffect(Card card, CardType cardType, bool isCPU) {
-        Orb selectedOrb = null;
-        switch (cardType) {
-            case CardType.Neo:
-                Debug.Log("Activated=" + cardType);
-                orbArray[1].Boost();
-                if (card != null)
-                    card.Remove();
-                break;
-            case CardType.Fire:
-                selectedOrb = GetOrb(Element.Fire);
-                const float radius = 7f;
-                foreach(var item in Physics.OverlapSphere(selectedOrb.transform.position, radius)) {
-                    Orb p = item.GetComponentInParent<Orb>();
-                    if(p!= null && p != selectedOrb) {
-                        p.rigidBody.AddExplosionForce(700, selectedOrb.transform.position, radius);
-                    }
-                }
-                explodeSFX.Play();
-                Destroy(Instantiate(explosionPrefab, selectedOrb.transform.position, selectedOrb.transform.rotation), 8f);
-                if (card != null)
-                    card.Remove();
-                break;
-            case CardType.Earth:
-                selectedOrb = orbArray.First((p) => p!=null && p.element == Element.Earth);
-                if(selectedOrb.currentSegment == null) {
-                    if (!isCPU)
-                        CanvasController.I.DisplayOfftrackAlert();
-                } else {
-                    selectedOrb.currentSegment.ApplyEffect(CardType.Earthquake);
-                    if (card != null)
-                        card.Remove();
-                    earthquakeSFX.Play();
-                }
-                break;
-            case CardType.Water:
-                selectedOrb = orbArray.First((p) => p != null && p.element == Element.Water);
-                if (selectedOrb.currentSegment == null) {
-                    if (!isCPU)
-                        CanvasController.I.DisplayOfftrackAlert();
-                } else {
-                    selectedOrb.currentSegment.ApplyEffect(CardType.Lake);
-                    if (card != null)
-                        card.Remove();
-                    squidSFX.Play();
-                }
-                break;
-            case CardType.Air:
-                selectedOrb = orbArray.First((p) => p != null && p.element == Element.Air);
-                if (selectedOrb.currentSegment == null) {
-                    if (!isCPU)
-                        CanvasController.I.DisplayOfftrackAlert();
-                } else {
-                    selectedOrb.currentSegment.ApplyEffect(CardType.Tornado);
-                    if (card != null)
-                        card.Remove();
-                    cycloneSFX.Play();
-                }
-                break;
-            default:
-                Debug.Log("Activated=" + cardType);
-                break;
-        }
-    }
-
-    void AIApplyOnNearSegment(Orb orb, CardType cardType) {
-        for (int i = 0; i < 10; i++) { //TODO count
-            var segmentIndex = segmentList.IndexOf(orb.currentSegment);
-            var nearIndexArray = new[] { segmentIndex - 1, segmentIndex, segmentIndex + 1 };
-            int randomIndex = nearIndexArray[Mathf.FloorToInt(Random.value * nearIndexArray.Length)];
-            //TODO break method
-            if (0<=randomIndex && randomIndex<segmentList.Count && segmentList[randomIndex].cardType != cardType) {
-                segmentList[randomIndex].ApplyEffect(cardType);
-                return;
-            }
-        }
-        // Try any segment
-        for (int i = 0; i < 40; i++) {
-            int randomIndex = Mathf.FloorToInt(Random.value * segmentList.Count);
-            if (segmentList[randomIndex].cardType != cardType) {
-                segmentList[randomIndex].ApplyEffect(cardType);
-                return;
-            }
-        }
-        Debug.LogWarning("Can't apply effect on valid segment!");
-    }
-
     public void TogglePause() {
         if (state != GameState.Ocurring)
             return;
@@ -357,4 +226,6 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
                 musicController.Play();
         }
     }
+
+    public Orb GetOrb(Element element) => nonNullOrbArray.First(o => o.element == element);
 }

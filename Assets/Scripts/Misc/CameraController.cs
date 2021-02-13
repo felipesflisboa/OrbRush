@@ -63,7 +63,7 @@ public class CameraController : MonoBehaviour {
     }
 
     void SetupInitialAnimationPosRot() {
-        initialAnimationTargetPos = GameManager.I.SpawnPointCenter;
+        initialAnimationTargetPos = GameManager.I.stage.SpawnPointCenter;
         initialAnimationPos = initialAnimationTargetPos + characterSelectionBonusPos + initialAnimationYBonus * Vector3.up;
         transform.position = initialAnimationPos;
         Rotate(0);
