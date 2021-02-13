@@ -6,10 +6,6 @@ using System.Threading.Tasks;
 using UnityEngine.UI;
 using TMPro;
 
-/// <summary>
-/// Sample option class.
-/// Version 1.2
-/// </summary>
 public class MenuManager : SingletonMonoBehaviour<MenuManager> {
     [SerializeField] AudioSource clickSFX;
     [SerializeField] MenuOption marathonOption;
@@ -88,21 +84,6 @@ public class MenuManager : SingletonMonoBehaviour<MenuManager> {
     public void OnLocalHighScoresClick() {
         PlayClickSFX();
         EnablePanel(MenuPanelType.LocalHighScores);
-    }
-    public void OnExitClick() {
-        PlayClickSFX();
-        System.Action action = () => {
-#if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-#else
-            Application.Quit();
-#endif
-        };
-        if (fader == null) {
-            fader.FadeOut(action);
-        } else {
-            action();
-        }
     }
     #endregion
 

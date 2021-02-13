@@ -6,7 +6,6 @@ using UnityEngine;
 public class CardZone : MonoBehaviour {
     public int player;
     [SerializeField] RectTransform rangeRectTransform;
-    //[SerializeField] RectTransform cursorRectTransform; //remove
     [SerializeField] float scaleMultiplier = 1;
     [SerializeField] float initialCardBonusY;
     Card selectedCard;
@@ -17,7 +16,6 @@ public class CardZone : MonoBehaviour {
 
     public bool Active => orb != null;
     public InputHandler InputHandler => orb.inputHandler;
-    //public bool HasCursor => orb.inputHandler.HasCursor; //remove
     public int ValidCardCount => cardList.Count(c => c.valid);
     public bool ValidSelection => selectedCard!=null && selectedCard.valid;
 

@@ -6,13 +6,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
+using RotaryHeart.Lib.SerializableDictionary;
 
-//TODO save and restore last type combination
 public class PlayerSelectPanel : MonoBehaviour {
+    [Serializable] class ElementColorDictionary : SerializableDictionaryBase<Element, Color> { }
+
     public int number;
     public Element element;
     internal PlayerType type;
-    [SerializeField] ElementColorGroup elementColorGroup;
+    [SerializeField] ElementColorDictionary colorPerElement;
     [SerializeField] TextMeshProUGUI text;
     [SerializeField] Button previousButton;
     [SerializeField] Button nextButton;
@@ -20,7 +22,8 @@ public class PlayerSelectPanel : MonoBehaviour {
     Color imageOriginalColor;
 
     int TypeCount => Enum.GetNames(typeof(PlayerType)).Length;
-    Color ImageColor => elementColorGroup.GetColor(element);
+    Color ImageColor => colorPerElement[element];
+    PlayerSelectScreen PlayerSelectScreen => GameManager.I.canvasController.playerSelectScreen;
 
     string ClickLabel {
         get {
@@ -85,10 +88,7 @@ public class PlayerSelectPanel : MonoBehaviour {
     public bool InputIsConnected(PlayerType type) => GetJoystickNumber(type) <= Input.GetJoystickNames().Length;
     public bool IsCPU(PlayerType type) => new[] { PlayerType.CPUEasy, PlayerType.CPUNormal, PlayerType.CPUHard }.Contains(type);
     public bool IsCPU() => IsCPU(type);
-
-    bool CanSelectNow(PlayerType type) {
-        return IsSelectableType(type) && (!IsTypeExclusive(type) || !CanvasController.I.playerSelectScreen.TypeIsAlreadyUsed(type));
-    }
+    bool CanSelectNow(PlayerType type) => IsSelectableType(type) && (!IsTypeExclusive(type) || !PlayerSelectScreen.TypeIsAlreadyUsed(type));
 
     public bool IsSelectableType(PlayerType type) {
         if (new[] { PlayerType.None }.Contains(type))
@@ -118,6 +118,6 @@ public class PlayerSelectPanel : MonoBehaviour {
         return false;
     }
     
-    public void Save() => CanvasController.I.playerSelectScreen.Save(number, type);
-    public PlayerType Load() => CanvasController.I.playerSelectScreen.Load(number);
+    public void Save() => PlayerSelectScreen.Save(number, type);
+    public PlayerType Load() => PlayerSelectScreen.Load(number);
 }

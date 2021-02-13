@@ -28,7 +28,7 @@ public class PlayerSelectScreen : MonoBehaviour{
     }
 
     public PlayerSelectPanel[] GetPanelWithCPULast() => panelArray.OrderBy(psp => psp.IsCPU() ? 1 : 0).ToArray();
-    public bool TypeIsAlreadyUsed(PlayerType type) => CanvasController.I.playerSelectScreen.panelArray.Count((pp) => pp.type == type) >= 2;
+    public bool TypeIsAlreadyUsed(PlayerType type) => panelArray.Count((pp) => pp.type == type) >= 2;
 
     public void Save(int playerNumber, PlayerType type) => PlayerPrefs.SetInt(string.Format(INPUT_KEY, playerNumber), (int)type);
 

@@ -350,6 +350,36 @@ MonoBehaviour:
     waterColor: {r: 0.3442, g: 0.27719998, b: 0.84, a: 1}
     earthColor: {r: 0.21819608, g: 0.8392157, b: 0.34656325, a: 1}
     airColor: {r: 0.85882354, g: 0.7682941, b: 0.36929414, a: 1}
+  colorPerElement:
+    reorderableList:
+      canAdd: 1
+      canRemove: 1
+      draggable: 1
+      expandable: 1
+      multipleSelection: 1
+      isExpanded: 0
+      label:
+        m_Text: Keys
+        m_Image: {fileID: 0}
+        m_Tooltip: 
+      headerHeight: 18
+      footerHeight: 13
+      slideEasing: 0.15
+      verticalSpacing: 2
+      showDefaultBackground: 1
+      elementDisplayType: 0
+      elementNameProperty: 
+      elementNameOverride: 
+      elementIcon: {fileID: 0}
+    reqReferences: {fileID: 0}
+    isExpanded: 0
+    _keyValues: 01000000020000000300000004000000
+    _keys: 01000000020000000300000004000000
+    _values:
+    - {r: 0.81960785, g: 0.28627452, b: 0.34901962, a: 1}
+    - {r: 0.3442, g: 0.27719998, b: 0.84, a: 1}
+    - {r: 0.21819608, g: 0.8392157, b: 0.34656325, a: 1}
+    - {r: 0.85882354, g: 0.7682941, b: 0.36929414, a: 1}
   text: {fileID: 2969873068387194519}
   previousButton: {fileID: 2116175891613051666}
   nextButton: {fileID: 8014069853105656687}

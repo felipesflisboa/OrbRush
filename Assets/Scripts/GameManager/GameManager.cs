@@ -3,23 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
 
 public class GameManager : SingletonMonoBehaviour<GameManager> {
     public static ModeData modeData;
 
     public CardHandler cardHandler;
+    internal CanvasController canvasController;
+    internal Stage stage;
+    internal MusicController musicController;
+    CameraController cameraController;
+
     [SerializeField, PrefabReference] GameObject[] orbPrefabArray;
     [SerializeField, PrefabReference] GameObject[] cardPrefabArray;
     [PrefabReference] public GameObject teleportEffectPrefab;
     [SerializeField] AudioSource startSFX;
     [SerializeField] AudioSource endSFX;
 
-    internal Stage stage;
-    internal MusicController musicController;
     internal Orb[] orbArray;
     internal Orb[] nonNullOrbArray;
     internal GameState state;
-    CameraController cameraController;
     float endTime;
 
     [Header("Debug")]
@@ -32,13 +35,14 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     public bool Paused => Time.timeScale == 0 && state == GameState.Ocurring;
 
     void Awake() {
+        canvasController = FindObjectOfType<CanvasController>();
         stage = FindObjectOfType<Stage>();
         cameraController = FindObjectOfType<CameraController>();
+        musicController = FindObjectOfType<MusicController>();
         FormatModeData();
     }
 
     void Start() {
-        musicController = FindObjectOfType<MusicController>();
         Time.timeScale = 0;
         state = GameState.OnInitialAnimation;
         stage.InstantiateOrbs(orbPrefabArray);
@@ -59,12 +63,12 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         switch (modeData) {
             case MarathonData m:
                 if (m.element == Element.None)
-                    CanvasController.I.startText.gameObject.SetActive(true);
+                    canvasController.startText.gameObject.SetActive(true);
                 else
                     StartMarathon(FindObjectsOfType<Orb>().First(p => p.element == m.element));
                 break;
             case QuickRaceData qr:
-                CanvasController.I.playerSelectScreen.gameObject.SetActive(true);
+                canvasController.playerSelectScreen.gameObject.SetActive(true);
                 break;
         }
     }
@@ -82,8 +86,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
 
     void InitializeOrbArrayInQuickRace() {
         orbArray = new Orb[FindObjectsOfType<Orb>().Length + 1];
-        for (int i = 0; i < CanvasController.I.playerSelectScreen.panelArray.Length; i++) {
-            PlayerSelectPanel panel = CanvasController.I.playerSelectScreen.GetPanelWithCPULast()[i];
+        for (int i = 0; i < canvasController.playerSelectScreen.panelArray.Length; i++) {
+            PlayerSelectPanel panel = canvasController.playerSelectScreen.GetPanelWithCPULast()[i];
             InitializeOrb(
                 i + 1,
                 FindObjectsOfType<Orb>().FirstOrDefault(orb => orb.element == panel.element),
@@ -107,7 +111,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         nonNullOrbArray = orbArray.Where(player => player != null).ToArray();
     }
 
-    Orb[] CreateNonNullOrbArray() => orbArray.Where(player => player != null).ToArray(); //remove
+    Orb[] CreateNonNullOrbArray() => orbArray.Where(player => player != null).ToArray();
 
     int GetCPULevelPerType(PlayerType playerType) {
         switch (playerType) {
@@ -122,13 +126,13 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     void InitializeOrb(int number, Orb orb, InputHandler inputHandler, int aiLevel = 0) {
         orbArray[number] = orb;
         if (aiLevel == 0)
-            orb.InitializeAsHuman(number, inputHandler, CanvasController.I.NextAvailableCardZone);
+            orb.InitializeAsHuman(number, inputHandler, canvasController.NextAvailableCardZone);
         else
             orb.InitializeAsCPU(number, inputHandler, aiLevel);
     }
 
     void StartGame() {
-        CanvasController.I.OnGameStart();
+        canvasController.OnGameStart();
         cameraController.OnGameStart();
         Time.timeScale = 1;
         startSFX.Play();
@@ -141,13 +145,13 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
             foreach (var orb in nonNullOrbArray) {
                 if (orb.reachGoal)
                     continue;
-                DrawCardForOrb(orb);
+                DrawCard(orb);
             }
             await new WaitForSeconds(5);
         }
     }
 
-    void DrawCardForOrb(Orb orb) {
+    void DrawCard(Orb orb) {
         if (orb.IsCPU) {
             orb.ai.cardTypeDeck.Add(EnumUtil.GetRandomValueFromEnum<CardType>(1, -4));
         } else {
@@ -160,21 +164,16 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
             TogglePause();
     }
 
-    public void OnReachGoal(Orb orb) {
-        orb.reachGoal = true;
-        if (state == GameState.Ocurring)
-            EndGame(orb);
-    }
-
-    async void EndGame(Orb winnerOrb) {
+    public async void EndGame(Orb winnerOrb) {
         EndGameState(winnerOrb);
         endSFX.Play();
         await new WaitForSecondsRealtime(1.2f);
-        CanvasController.I.DisplayVictoryText(winnerOrb);
+        canvasController.DisplayVictoryText(winnerOrb);
         await new WaitForSecondsRealtime(2.5f);
         await new WaitMultiple(this, 1, new WaitForSecondsRealtime(4f), new WaitUntil(() => OrbReachGoalCount >= nonNullOrbArray.Length));
         await new WaitForSecondsRealtime(0.5f);
-        FindObjectOfType<Fader>().FadeOut(() => GoToNextScene(winnerOrb));
+        await canvasController.fader.FadeOut().WaitForCompletion();
+        GoToNextScene(winnerOrb);
     }
 
     void EndGameState(Orb winnerOrb) {
@@ -202,17 +201,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
 
     public void BackToMainMenu(bool gameLost = true) {
         if (gameLost && modeData is MarathonData)
-            SaveLastScore();
+            (modeData as MarathonData).SaveLastScore();
         SceneManager.LoadScene("MainMenu");
-    }
-
-    void SaveLastScore() {
-        ScoreListMarathonDrawer.lastScore = (modeData as MarathonData).level;
-        ScoreListMarathonDrawer.lastElement = (modeData as MarathonData).element;
-        ScoreListMarathon scoreList = new ScoreListMarathon();
-        scoreList.Load();
-        scoreList.AddScore((int)ScoreListMarathonDrawer.lastScore, ScoreListMarathonDrawer.lastElement);
-        scoreList.Save();
     }
 
     public void TogglePause() {

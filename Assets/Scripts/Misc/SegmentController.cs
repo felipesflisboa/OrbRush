@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using Gamelogic.Extensions;
 
 /// <summary>
 /// Control Segments on Title Screen

@@ -4,10 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using TMPro;
+using RotaryHeart.Lib.SerializableDictionary;
 
-//TODO color
-//TODO pulse start on 4 and raise until 6 or more cards
-public class PlayerHUD : MonoBehaviour{
+public class PlayerHUD : MonoBehaviour {
+    [System.Serializable] class ElementColorDictionary : SerializableDictionaryBase<Element, Color> { }
+
     [SerializeField] Image backgroundImage;
     [SerializeField] TextMeshProUGUI speedText;
     [SerializeField] TextMeshProUGUI accelerationText;
@@ -15,7 +16,7 @@ public class PlayerHUD : MonoBehaviour{
     [SerializeField] int playerNumber;
     Orb player;
 
-    [SerializeField] ElementColorGroup colorGroup;
+    [SerializeField] ElementColorDictionary colorPerElement;
     [SerializeField] Color tooManyCardColor;
     [SerializeField] Color cardSmallWarnColor;
     [SerializeField] Color cardBigWarnColor;
@@ -23,7 +24,6 @@ public class PlayerHUD : MonoBehaviour{
 
     const float BALL_SIZE_MULTIPLIER = 0.02f;
 
-    bool Initialized => player != null; //remove
     public float DisplayVelocity => player.Velocity * 3.6f* BALL_SIZE_MULTIPLIER;
 
     Color CardTextColor {
@@ -47,7 +47,7 @@ public class PlayerHUD : MonoBehaviour{
 
     void Initialize() {
         player = GameManager.I.orbArray[playerNumber];
-        backgroundImage.DOColor(colorGroup.GetColor(player.element), 1.2f);
+        backgroundImage.DOColor(colorPerElement[player.element], 1.2f);
     }
 
     async void UpdateLoop() {

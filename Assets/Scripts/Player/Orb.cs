@@ -6,11 +6,10 @@ using UnityEngine;
 public class Orb : MonoBehaviour {
     public Element element;
     public string m_name;
-    [Tooltip("For victory message")] public Color textColor; //remove
     internal int number;
     internal CardZone cardZone;
     internal InputHandler inputHandler;
-    internal Rigidbody rigidBody; //TODO protect
+    internal Rigidbody rigidBody;
     internal Segment currentSegment;
     internal Segment lastSegment;
     internal bool reachGoal;
@@ -89,7 +88,7 @@ public class Orb : MonoBehaviour {
     }
 
     void OnMouseDown() {
-        if (GameManager.I.state == GameState.SelectPlayer && GameManager.modeData is MarathonData)  //TODO check mode
+        if (GameManager.I.state == GameState.SelectPlayer && GameManager.modeData is MarathonData)
             GameManager.I.StartMarathon(this);
     }
 }

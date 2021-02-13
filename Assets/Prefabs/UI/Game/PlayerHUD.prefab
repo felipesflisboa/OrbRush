@@ -582,6 +582,36 @@ MonoBehaviour:
   accelerationText: {fileID: 3333696442515039071}
   cardText: {fileID: 5169428169482494745}
   playerNumber: 0
+  colorPerElement:
+    reorderableList:
+      canAdd: 1
+      canRemove: 1
+      draggable: 1
+      expandable: 1
+      multipleSelection: 1
+      isExpanded: 0
+      label:
+        m_Text: Keys
+        m_Image: {fileID: 0}
+        m_Tooltip: 
+      headerHeight: 18
+      footerHeight: 13
+      slideEasing: 0.15
+      verticalSpacing: 2
+      showDefaultBackground: 1
+      elementDisplayType: 0
+      elementNameProperty: 
+      elementNameOverride: 
+      elementIcon: {fileID: 0}
+    reqReferences: {fileID: 0}
+    isExpanded: 0
+    _keyValues: 01000000020000000300000004000000
+    _keys: 01000000020000000300000004000000
+    _values:
+    - {r: 0.81960785, g: 0.20392157, b: 0.27450982, a: 0.8784314}
+    - {r: 0.26666668, g: 0.19215687, b: 0.8392157, a: 0.8784314}
+    - {r: 0.13725491, g: 0.8392157, b: 0.28235295, a: 0.8784314}
+    - {r: 0.85882354, g: 0.7529412, b: 0.28627452, a: 0.8784314}
   colorGroup:
     fireColor: {r: 0.8207547, g: 0.20518868, b: 0.2756449, a: 0.8784314}
     waterColor: {r: 0.26840073, g: 0.19406372, b: 0.8396226, a: 0.8784314}

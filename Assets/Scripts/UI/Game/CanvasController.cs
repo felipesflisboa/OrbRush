@@ -7,7 +7,7 @@ using TMPro;
 using RotaryHeart.Lib.SerializableDictionary;
 
 //TODO remove singleton
-public class CanvasController : SingletonMonoBehaviour<CanvasController> {
+public class CanvasController : MonoBehaviour {
     [System.Serializable] class ElementColorDictionary : SerializableDictionaryBase<Element, Color> { }
 
     internal CardZone[] cardZoneArray = new CardZone[5];
@@ -18,6 +18,7 @@ public class CanvasController : SingletonMonoBehaviour<CanvasController> {
     [SerializeField] TextMeshProUGUI victoryText;
     [SerializeField] ElementColorDictionary textColorPerElement; 
     internal Alert alert;
+    internal Fader fader;
     float lastCardZoneCount;
 
     public CardZone NextAvailableCardZone => cardZoneArray.First(cz => cz != null && !cz.Active);
@@ -39,6 +40,7 @@ public class CanvasController : SingletonMonoBehaviour<CanvasController> {
         DestroyWrongPlatformComponents();
         InitializeCardZone();
         InitializePauseButton();
+        fader = GetComponentInChildren<Fader>(true);
         playerSelectScreen = GetComponentInChildren<PlayerSelectScreen>(true);
         playerSelectScreen.gameObject.SetActive(false);
         hud = GetComponentInChildren<HUD>(true);

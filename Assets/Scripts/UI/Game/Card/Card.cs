@@ -26,10 +26,10 @@ public class Card : MonoBehaviour {
     }
 
     void Start() {
-        InitialAnimation();
+        PlayInitialAnimation();
     }
 
-    void InitialAnimation() {
+    void PlayInitialAnimation() {
         DOTween.Kill(movementTween);
         transform.localPosition = transform.localPosition.WithY(-1500);
         movementTween = RectTransform.DOLocalMoveY(targetLocalY, ANIMATION_DURATION).SetEase(Ease.OutCubic);

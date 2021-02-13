@@ -45,4 +45,10 @@ public class Stage : MonoBehaviour {
         for (int i = 1; i < spawnPointTransformArray.Length; i++)
             Instantiate(orbPrefabArray[i], spawnPointTransformArray[i].position, spawnPointTransformArray[i].rotation);
     }
+
+    public void OnReachGoal(Orb orb) {
+        orb.reachGoal = true;
+        if (GameManager.I.state == GameState.Ocurring)
+            GameManager.I.EndGame(orb);
+    }
 }

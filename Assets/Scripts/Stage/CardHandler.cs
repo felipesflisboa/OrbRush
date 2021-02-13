@@ -12,7 +12,7 @@ public class CardHandler {
     public void ExecuteCardEffect(Card card, CardType cardType, bool isCPU) {
         switch (cardType) {
             case CardType.Fire:
-                if (ApplyExplosionEffect() && card != null)
+                if (ApplyExplosionEffect(GameManager.I.GetOrb(Element.Fire)) && card != null)
                     card.Remove();
                 break;
             case CardType.Tornado:
@@ -27,14 +27,12 @@ public class CardHandler {
         }
     }
 
-    bool ApplyExplosionEffect() {
-        Orb selectedOrb = GameManager.I.GetOrb(Element.Fire);
+    bool ApplyExplosionEffect(Orb selectedOrb) {
         const float radius = 7f;
         foreach (var item in Physics.OverlapSphere(selectedOrb.transform.position, radius)) {
             Orb orb = item.GetComponentInParent<Orb>();
-            if (orb != null && orb != selectedOrb) {
+            if (orb != null && orb != selectedOrb)
                 orb.rigidBody.AddExplosionForce(700, selectedOrb.transform.position, radius);
-            }
         }
         Object.Destroy(Object.Instantiate(explosionPrefab, selectedOrb.transform.position, selectedOrb.transform.rotation), 5f);
         return true;
@@ -47,7 +45,7 @@ public class CardHandler {
     bool ApplySegmentEffect(CardType cardType, bool isCPU, Orb orb) {
         if (orb.currentSegment == null) {
             if (!isCPU)
-                CanvasController.I.DisplayOfftrackAlert();
+                GameManager.I.canvasController.DisplayOfftrackAlert();
             return false;
         }
         orb.currentSegment.ApplyEffect(cardType);
