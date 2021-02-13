@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.14901961}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.09411765}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -88,7 +88,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b479f2cfaf27c7343a6ac46dc47febc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: 0
   rangeRectTransform: {fileID: 931995780656423841}
+  scaleMultiplier: 1
   initialCardBonusY: 16
 --- !u!1 &931995780656423842
 GameObject:
