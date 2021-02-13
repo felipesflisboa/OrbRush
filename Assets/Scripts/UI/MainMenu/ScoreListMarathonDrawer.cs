@@ -34,9 +34,21 @@ public class ScoreListMarathonDrawer : ScoreListDrawer<ScoreListMarathon, int> {
     }
 
     protected override Transform CreateTextScore(ScoreListMarathon scoreList, int index) {
-        Transform ret = base.CreateTextScore(scoreList, index);
+        Transform ret = Instantiate(textScorePrefab, textScoreParent).transform;
+        SetText(ret, FormatText(index + 1, scoreList.GetString(index)));
         SetScoreModel(ret, scoreList.orbElements[index]);
+        if (!showedLastScore && IsNewRecord(scoreList.values[index], scoreList.orbElements[index])) {
+            FormatTextNewRecord(ret);
+            showedLastScore = true;
+        }
         return ret;
+    }
+
+    bool IsNewRecord(int score, Element element) {
+        return LastScore != null && lastElement==element && Mathf.Approximately(
+            (float)System.Convert.ChangeType(score, typeof(float)),
+            (float)System.Convert.ChangeType(LastScore, typeof(float))
+        );
     }
 
     protected override void RefreshCurrentScore(ScoreListMarathon scoreList) {
