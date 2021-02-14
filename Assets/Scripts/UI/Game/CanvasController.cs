@@ -77,7 +77,7 @@ public class CanvasController : MonoBehaviour {
         EnableActiveCardZones();
         alert.enabled = !GameManager.I.IsMultiplayer;
         if(GameManager.I.IsMultiplayer)
-            Destroy(pauseButtonParent);
+            Destroy(pauseButtonParent.gameObject);
     }
 
     void EnableActiveCardZones() {
