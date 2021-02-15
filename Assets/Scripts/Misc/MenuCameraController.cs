@@ -8,7 +8,6 @@ public class MenuCameraController : MonoBehaviour {
     [Positive, SerializeField] float minDistanceToOrbs;
     [Positive, SerializeField] float maxDistanceToOrbs;
     float distanceToOrbs;
-    [SerializeField] float lerpDeltatimeMultiplier = 1; //remove
     [SerializeField] Vector3 bonusPos;
     [SerializeField] Vector3 eulerVariation;
     [NonNegative, SerializeField] float rotateRoundDuration = 10f;
