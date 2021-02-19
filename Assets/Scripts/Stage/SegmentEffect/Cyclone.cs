@@ -5,7 +5,8 @@ using Gamelogic.Extensions;
 
 public class Cyclone : SegmentEffect {
     const float MAX_DISTANCE_FROM_ORB = 12;
-    const float FORCE_INTENSITY = 350;
+    const float MIN_TIME_FROM_LAST_TELEPORT = 5;
+    const float FORCE_INTENSITY = 550;
 
     public override void Activate() {
         base.Activate();
@@ -18,12 +19,21 @@ public class Cyclone : SegmentEffect {
 
     void ApplyEffect() {
         foreach (var orb in GameManager.I.nonNullOrbArray) {
-            if (orb.element == Element.Air || Vector3.Distance(orb.transform.position.To2DXZ(), transform.position.To2DXZ()) > MAX_DISTANCE_FROM_ORB)
+            if (!CanAffectOrb(orb))
                 continue;
             orb.rigidBody.AddForce(
-                MathUtil.UnityAngleToNormal(GetAngleToPosition(orb.transform.position)) * FORCE_INTENSITY * Time.deltaTime, ForceMode.Acceleration
+                MathUtil.UnityAngleToNormal(GetAngleToPosition(orb.transform.position)) * FORCE_INTENSITY * Time.deltaTime,
+                ForceMode.Acceleration
             );
         }
+    }
+
+    bool CanAffectOrb(Orb orb) {
+        return (
+            orb.element != Element.Air &&
+            (orb.lastTeleportTime==0 || MIN_TIME_FROM_LAST_TELEPORT < (Time.timeSinceLevelLoad - orb.lastTeleportTime)) &&
+            Vector3.Distance(orb.transform.position.To2DXZ(), transform.position.To2DXZ()) < MAX_DISTANCE_FROM_ORB
+        );
     }
 
     float GetAngleToPosition(Vector3 posV3) => MathUtil.GetAngle(transform.position.To2DXZ() - posV3.To2DXZ()) - 90;

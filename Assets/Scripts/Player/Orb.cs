@@ -14,6 +14,7 @@ public class Orb : MonoBehaviour {
     internal Segment lastSegment;
     internal bool reachGoal;
     internal bool menuMode;
+    internal float lastTeleportTime;
     public AI ai { get; private set; }
     int fixedUpdateCount;
 
@@ -59,6 +60,7 @@ public class Orb : MonoBehaviour {
         if(!menuMode)
             InstantiateTeleportEffect();
         transform.position = lastSegment.transform.position + Vector3.up * 0.6f;
+        lastTeleportTime = Time.timeSinceLevelLoad;
         if (!menuMode)
             InstantiateTeleportEffect();
     }
