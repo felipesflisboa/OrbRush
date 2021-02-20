@@ -14,7 +14,7 @@ public class Earthquake : SegmentEffect{
     void ActivatePlatformMovement(Transform platform) {
         platform.gameObject.SetActive(true);
         DOTween.Sequence().Append(
-            platform.transform.DOMoveY(0.2f, 0.4f).SetRelative()
+            platform.transform.DOMoveY(0.2f, 0.3f).SetRelative()
         ).Append(
             platform.transform.DOMoveY(-0.2f, 0.001f).SetRelative()
         ).SetLoops(-1);
