@@ -22,7 +22,7 @@ public class Orb : MonoBehaviour {
 
     public int CardCount => IsCPU ? ai.cardTypeDeck.Count : cardZone.ValidCardCount;
     public float Velocity => VelocityV3.magnitude;
-    public float HalfSecondAccelerationRatio => 1 - 0.01f * CardCount;
+    public float HalfSecondAccelerationRatio => 1 - 0.012f * CardCount;
     public bool IsCPU => ai != null;
     public bool Initialized => inputHandler != null || menuMode;
 
