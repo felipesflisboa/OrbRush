@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using RotaryHeart.Lib.SerializableDictionary;
+using System.Globalization;
 
 //TODO remove singleton
 public class CanvasController : MonoBehaviour {
@@ -20,6 +21,8 @@ public class CanvasController : MonoBehaviour {
     internal Alert alert;
     internal Fader fader;
     float lastCardZoneCount;
+
+    public static readonly CultureInfo US_INFO = new CultureInfo("en-US");
 
     public CardZone NextAvailableCardZone => cardZoneArray.First(cz => cz != null && !cz.Active);
 
