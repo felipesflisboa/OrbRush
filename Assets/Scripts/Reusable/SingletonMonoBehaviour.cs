@@ -17,31 +17,16 @@ public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBe
 		}
 	}
 
-	protected virtual bool DestroyOnLoad{
-		get{
-			return true;
-		}
-	}
-
-	public static T Instance{
+    public static T Instance{
 		get{
             if (_instance == null){
                 _instance = (T) FindObjectOfType(typeof(T));
-
                 if ( FindObjectsOfType(typeof(T)).Length > 1 ) {
                     Debug.LogError("[SingletonMonoBehaviour] Something went really wrong " +
                         " - there should never be more than 1 singletonMonoBehaviour!" +
                         " Reopening the scene might fix it.");
                     return _instance;
                 }
-				if (_instance == null){
-					GameObject singleton = new GameObject();
-					_instance = singleton.AddComponent<T>();
-					singleton.name = "(singleton) "+ typeof(T);
-
-                    if (!(_instance as SingletonMonoBehaviour<T>).DestroyOnLoad)
-						DontDestroyOnLoad(singleton);
-				}
 			}
 
 			return _instance;
@@ -69,8 +54,7 @@ public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : MonoBe
 	/// </summary>
 	protected virtual void OnDestroy () 
     {
-		//applicationIsQuitting = true;        
-          if (_instance != null && !(_instance as SingletonMonoBehaviour<T>).DestroyOnLoad)
+          if (_instance != null && _instance.gameObject.scene.buildIndex != -1)
             _instance = null;
     }
 }

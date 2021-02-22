@@ -68,7 +68,6 @@ public class CanvasController : MonoBehaviour {
 
     void InitializePauseButton() {
         pauseButtonParent.GetComponentInChildren<Button>().onClick.AddListener(GameManager.I.TogglePause);
-        pauseButtonParent.GetComponentInChildren<Button>().onClick.AddListener(() => Debug.Log("Test"));
         pauseButtonParent.gameObject.SetActive(false);
     }
 

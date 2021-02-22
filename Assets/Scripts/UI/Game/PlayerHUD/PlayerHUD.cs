@@ -53,7 +53,7 @@ public class PlayerHUD : MonoBehaviour {
     async void UpdateLoop() {
         await new WaitWhile(() => GameManager.I.state != GameState.Ocurring);
         Initialize();
-        while (GameManager.I.state == GameState.Ocurring) {
+        while (GameManager.Active && GameManager.I.state == GameState.Ocurring) {
             Refresh();
             await new WaitForSeconds(0.15f);
         }
