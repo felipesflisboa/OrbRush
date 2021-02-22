@@ -51,11 +51,7 @@ public class CameraController : MonoBehaviour {
         distanceLimit = zPerDistanceBetweenOrbs.keys.Max(key => key.time);
     }
 
-    void Start() {
-        PlayInitialAnimation();
-    }
-
-    async void PlayInitialAnimation() {
+    public async void PlayInitialAnimation() {
         SetupInitialAnimationPosRot();
         transform.DOBlendableMoveBy(initialAnimationYBonus * Vector3.down, initialAnimationDuration).SetEase(Ease.InOutSine).SetUpdate(true);
         await DOTween.To(Rotate, 0, 1, initialAnimationDuration * 0.98f).SetEase(Ease.InOutSine).SetUpdate(true).WaitForCompletion();

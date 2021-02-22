@@ -16,6 +16,8 @@ public class IntroManager : SingletonMonoBehaviour<IntroManager>{
         fader = FindObjectOfType<Fader>(); ;
         videoPlayer = FindObjectOfType<VideoPlayer>();
         sceneLoader = FindObjectOfType<SceneLoader>();
+        if (ADSUtil.Supported)
+            ADSUtil.Initialize();
     }
 
     async void Start() {
