@@ -11,22 +11,12 @@ public class IntroManager : SingletonMonoBehaviour<IntroManager>{
     VideoPlayer videoPlayer;
     Fader fader;
 
-    string ADSID {
-        get {
-#if UNITY_ADS && UNITY_ANDROID
-            return "4022189";
-#endif
-            Debug.LogError("Ads not supported on this platform!");
-            return null;
-        }
-    }
-
     void Awake() {
         musicController = FindObjectOfType<MusicController>();
         fader = FindObjectOfType<Fader>(); ;
         videoPlayer = FindObjectOfType<VideoPlayer>();
         sceneLoader = FindObjectOfType<SceneLoader>();
-        GameManager.adsCaller = ADSCallerFactory.Create(ADSID);
+        AdvertisementHandler.I.Initialize();
     }
 
     async void Start() {

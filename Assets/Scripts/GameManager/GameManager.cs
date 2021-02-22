@@ -7,7 +7,6 @@ using DG.Tweening;
 
 public class GameManager : SingletonMonoBehaviour<GameManager> {
     public static ModeData modeData;
-    public static ADSCaller adsCaller;
 
     public CardHandler cardHandler;
     internal CanvasController canvasController;
@@ -29,15 +28,11 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     [Header("Debug")]
     [SerializeField] bool standaloneSceneStartsAsMarathon = true;
 
-    const string ADS_RUN_COUNT_KEY = "ADS Count";
-    const int MAX_RUN_COUNT_WITHOUT_ADS = 10;
-
     int OrbReachGoalCount => nonNullOrbArray.Sum(orb => orb.reachGoal ? 1 : 0);
     public bool IsMultiplayer => nonNullOrbArray.Count(o => !o.IsCPU) > 1;
     public Orb ClickInputOrb => nonNullOrbArray.FirstOrDefault(p => p.inputHandler.CanClick);
     public float CurrentTime => GameState.Ocurring==state ? Time.timeSinceLevelLoad : endTime;
     public bool Paused => Time.timeScale == 0 && state == GameState.Ocurring;
-    bool CanPlayADS => adsCaller != null && GetRunCountWithoutADS() >= MAX_RUN_COUNT_WITHOUT_ADS && adsCaller.IsReady;
 
     void Awake() {
         canvasController = FindObjectOfType<CanvasController>();
@@ -51,12 +46,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         Time.timeScale = 0;
         state = GameState.OnInitialAnimation;
         stage.InstantiateOrbs(orbPrefabArray);
-        if (CanPlayADS) {
-            SetRunCountWithoutADS(0);
-            adsCaller.Show(cameraController.PlayInitialAnimation);
-        } else {
-            cameraController.PlayInitialAnimation();
-        }
+        AdvertisementHandler.I.TryToPlay(cameraController.PlayInitialAnimation);
     }
 
     void FormatModeData() {
@@ -178,7 +168,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     public async void EndGame(Orb winnerOrb) {
         EndGameState(winnerOrb);
         endSFX.Play();
-        AddRunCountWithoutADS();
+        AdvertisementHandler.I.AddRunCountWithoutADS();
         await new WaitForSecondsRealtime(1.2f);
         canvasController.DisplayVictoryText(winnerOrb);
         await new WaitForSecondsRealtime(2.5f);
@@ -230,8 +220,4 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     }
 
     public Orb GetOrb(Element element) => nonNullOrbArray.First(o => o.element == element);
-
-    int GetRunCountWithoutADS() => PlayerPrefs.GetInt(ADS_RUN_COUNT_KEY, 0);
-    void SetRunCountWithoutADS(int value) => PlayerPrefs.SetInt(ADS_RUN_COUNT_KEY, value);
-    void AddRunCountWithoutADS(int value = 1) => SetRunCountWithoutADS(GetRunCountWithoutADS() + value);
 }
