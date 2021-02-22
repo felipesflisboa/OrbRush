@@ -178,6 +178,11 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         GoToNextScene(winnerOrb);
     }
 
+    public async void CancelGame() {
+        await canvasController.fader.FadeOut().WaitForCompletion();
+        BackToMainMenu();
+    }
+
     void EndGameState(Orb winnerOrb) {
         endTime = CurrentTime;
         state = GameState.End;

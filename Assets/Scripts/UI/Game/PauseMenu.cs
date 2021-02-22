@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,7 +22,7 @@ public class PauseMenu : MonoBehaviour{
         canvasGroup = GetComponent<CanvasGroup>();
         Active = false;
         closeButton.onClick.AddListener(GameManager.I.TogglePause);
-        exitButton.onClick.AddListener(() => GameManager.I.BackToMainMenu(false));
+        exitButton.onClick.AddListener(GameManager.I.CancelGame);
     }
 
     void LateUpdate() {
