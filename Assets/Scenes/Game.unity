@@ -5565,7 +5565,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Victory!
+  m_text: Player Lorem Won!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5729db79e56ab704e9e2f0624374d1a5, type: 2}
   m_sharedMaterial: {fileID: 883876985999035249, guid: 5729db79e56ab704e9e2f0624374d1a5,
@@ -5652,7 +5652,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 640, y: 180}
+  m_SizeDelta: {x: 800, y: 180}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1166270185
 CanvasRenderer:
