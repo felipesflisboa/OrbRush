@@ -42,6 +42,10 @@ public class PlayerSelectPanel : MonoBehaviour {
         nextButton.onClick.AddListener(() => IncType(1));
     }
 
+    void Start() {
+        Refresh();
+    }
+
     void Update() {
         Refresh();
         RefreshPressedInput();
