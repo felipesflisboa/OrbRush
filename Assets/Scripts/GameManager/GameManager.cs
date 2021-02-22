@@ -7,6 +7,7 @@ using DG.Tweening;
 
 public class GameManager : SingletonMonoBehaviour<GameManager> {
     public static ModeData modeData;
+    public static ADSCaller adsCaller;
 
     public CardHandler cardHandler;
     internal CanvasController canvasController;
@@ -36,7 +37,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     public Orb ClickInputOrb => nonNullOrbArray.FirstOrDefault(p => p.inputHandler.CanClick);
     public float CurrentTime => GameState.Ocurring==state ? Time.timeSinceLevelLoad : endTime;
     public bool Paused => Time.timeScale == 0 && state == GameState.Ocurring;
-    bool CanPlayADS => ADSUtil.Supported && GetRunCountWithoutADS() >= MAX_RUN_COUNT_WITHOUT_ADS && ADSUtil.IsReady;
+    bool CanPlayADS => adsCaller != null && GetRunCountWithoutADS() >= MAX_RUN_COUNT_WITHOUT_ADS && adsCaller.IsReady;
 
     void Awake() {
         canvasController = FindObjectOfType<CanvasController>();
@@ -52,7 +53,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         stage.InstantiateOrbs(orbPrefabArray);
         if (CanPlayADS) {
             SetRunCountWithoutADS(0);
-            ADSUtil.Show(cameraController.PlayInitialAnimation);
+            adsCaller.Show(cameraController.PlayInitialAnimation);
         } else {
             cameraController.PlayInitialAnimation();
         }
