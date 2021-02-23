@@ -4768,6 +4768,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef28b16530e023c43b805396813066d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cardType: 8
   activationSfx: {fileID: -7088483896599190338}
 --- !u!82 &-7088483896599190338
 AudioSource:

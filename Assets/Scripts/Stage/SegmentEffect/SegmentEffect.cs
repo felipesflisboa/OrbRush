@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class SegmentEffect : MonoBehaviour {
+    public CardType cardType;
     protected Segment segment;
     [SerializeField] protected AudioSource activationSfx;
 

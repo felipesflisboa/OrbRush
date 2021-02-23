@@ -3,18 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using Gamelogic.Extensions;
-using RotaryHeart.Lib.SerializableDictionary;
 
 public class Segment : MonoBehaviour {
-    [System.Serializable] class EffectCardDictionary : SerializableDictionaryBase<CardType, SegmentEffect> { }
-
     public Transform[] earthquakePlatformArray = new Transform[0];
-    [SerializeField] EffectCardDictionary effectPerCard; //TODO create it dynamically
+    Dictionary<CardType, SegmentEffect> effectPerCard;
     List<Orb> playerInsideList = new List<Orb>();
     float cardEffectEndTime;
     internal CardType cardType;
 
     const float CARD_EFFECT_DURATION = 10f;
+
+    void Awake() {
+        effectPerCard = CreateEffectCardDictionary();
+    }
+
+    Dictionary<CardType, SegmentEffect> CreateEffectCardDictionary() {
+        Dictionary<CardType, SegmentEffect> ret = new Dictionary<CardType, SegmentEffect>();
+        foreach (var effect in GetComponentsInChildren<SegmentEffect>(true))
+            ret.Add(effect.cardType, effect);
+        return ret;
+    }
 
     void OnTriggerEnter(Collider other) {
         var player = other.GetComponentInParent<Orb>();
