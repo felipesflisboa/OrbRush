@@ -53,9 +53,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
   m_Name: Segoe UI Emoji SDF
   m_EditorClassIdentifier: 
-  hashCode: 61222854
+  hashCode: 1848359826
   material: {fileID: 883876985999035249}
-  materialHashCode: 983308838
+  materialHashCode: -1294108430
   m_Version: 1.1.0
   m_SourceFontFileGUID: 01ccf59962be6bc43b5edee9c558e119
   m_SourceFontFile_EditorRef: {fileID: 12800000, guid: 01ccf59962be6bc43b5edee9c558e119,
