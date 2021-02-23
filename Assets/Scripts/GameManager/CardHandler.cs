@@ -11,7 +11,7 @@ public class CardHandler {
 
     public void ExecuteCardEffect(Card card, CardType cardType, bool isCPU) {
         switch (cardType) {
-            case CardType.Fire:
+            case CardType.Explode:
                 if (ApplyExplosionEffect(GameManager.I.GetOrb(Element.Fire)) && card != null)
                     card.Remove();
                 break;
@@ -54,7 +54,7 @@ public class CardHandler {
 
     Element GetElement(CardType cardType) {
         switch (cardType) {
-            case CardType.Fire:
+            case CardType.Explode:
                 return Element.Fire;
             case CardType.Squid:
                 return Element.Water;

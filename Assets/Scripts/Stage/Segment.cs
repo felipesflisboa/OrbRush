@@ -3,29 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using Gamelogic.Extensions;
+using RotaryHeart.Lib.SerializableDictionary;
 
 public class Segment : MonoBehaviour {
+    [System.Serializable] class EffectCardDictionary : SerializableDictionaryBase<CardType, SegmentEffect> { }
+
     public Transform[] earthquakePlatformArray = new Transform[0];
-    Earthquake earthquake;
-    Squid squid;
-    Cyclone cyclone;
+    [SerializeField] EffectCardDictionary effectPerCard; //TODO create it dynamically
     List<Orb> playerInsideList = new List<Orb>();
     float cardEffectEndTime;
     internal CardType cardType;
 
     const float CARD_EFFECT_DURATION = 10f;
 
-    void Awake() {
-        cyclone = GetComponentInChildren<Cyclone>(true);
-        earthquake = GetComponentInChildren<Earthquake>(true);
-        squid = GetComponentInChildren<Squid>(true);
-    }
-
     void OnTriggerEnter(Collider other) {
         var player = other.GetComponentInParent<Orb>();
         if (player != null) {
             playerInsideList.Add(player);
-            if(player.currentSegment != null) //TODO property
+            if(player.currentSegment != null)
                 player.lastSegment = player.currentSegment;
             player.currentSegment = this;
             ApplyEffectInPlayer(player);
@@ -56,60 +51,14 @@ public class Segment : MonoBehaviour {
             ApplyEffectInPlayer(player);
         cardType = newCardType;
         cardEffectEndTime = CARD_EFFECT_DURATION + Time.timeSinceLevelLoad;
-        switch (newCardType) {
-            case CardType.Fire:
-                ApplyColor(Color.red);
-                break;
-            case CardType.Water:
-                ApplyColor(Color.blue);
-                break;
-            case CardType.Earth:
-                ApplyColor(Color.green);
-                break;
-            case CardType.Air:
-                ApplyColor(Color.yellow);
-                break;
-            case CardType.Squid:
-                DisableCardEffectTransforms();
-                squid.Activate();
-                break;
-            case CardType.Cyclone:
-                DisableCardEffectTransforms();
-                cyclone.Activate();
-                break;
-            case CardType.Earthquake:
-                DisableCardEffectTransforms();
-                earthquake.Activate();
-                break;
+        if (effectPerCard.ContainsKey(newCardType)) {
+            DisableCardEffectTransforms();
+            effectPerCard[newCardType].Activate();
         }
     }
 
     public void ApplyEffectInPlayer(Orb orb) {
         switch (cardType) {
-            case CardType.Fire:
-                if(orb.element == Element.Fire)
-                    orb.rigidBody.velocity = orb.rigidBody.velocity * 1.2f;
-                if (orb.element == Element.Air)
-                    orb.rigidBody.velocity = orb.rigidBody.velocity * 0.6f;
-                break;
-            case CardType.Water:
-                if(orb.element == Element.Water)
-                    orb.rigidBody.velocity = orb.rigidBody.velocity * 1.2f;
-                if (orb.element == Element.Fire)
-                    orb.rigidBody.velocity = orb.rigidBody.velocity * 0.6f;
-                break;
-            case CardType.Air:
-                if (orb.element == Element.Air)
-                    orb.rigidBody.velocity = orb.rigidBody.velocity * 1.2f;
-                if (orb.element == Element.Earth)
-                    orb.rigidBody.velocity = orb.rigidBody.velocity * 0.6f;
-                break;
-            case CardType.Earth:
-                if (orb.element == Element.Earth)
-                    orb.rigidBody.velocity = orb.rigidBody.velocity * 1.2f;
-                if (orb.element == Element.Water)
-                    orb.rigidBody.velocity = orb.rigidBody.velocity * 0.6f;
-                break;
             case CardType.Squid:
                 orb.rigidBody.velocity *=  1f + 0.4f * (orb.element == Element.Water ? 0.75f : 1);
                 break;
@@ -141,7 +90,10 @@ public class Segment : MonoBehaviour {
     }
 
     void DisableCardEffectTransforms() {
-        earthquake.Deactivate();
-        cyclone.Deactivate();
+        foreach (var effectCard in effectPerCard) {
+            if (effectCard.Key == CardType.Squid)
+                continue;
+            effectCard.Value.Deactivate();
+        }
     }
 }
