@@ -60,8 +60,8 @@ public class PlayerHUD : MonoBehaviour {
     }
 
     void Refresh() {
-        speedText.text = DisplayVelocity.ToString("F2");
-        accelerationText.text = $"{(100 * Mathf.Pow(player.HalfSecondAccelerationRatio, 2)).ToString("0.00", CanvasController.US_INFO)}%";
+        speedText.text = DisplayVelocity.ToString("F2", CanvasController.US_INFO);
+        accelerationText.text = $"{(100 * Mathf.Pow(player.HalfSecondAccelerationRatio, 2)):F0}%";
         accelerationText.color = CardTextColor;
         cardText.text = player.CardCount.ToString();
         cardText.color = CardTextColor;
