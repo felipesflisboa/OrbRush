@@ -54,7 +54,7 @@ public class PlayerSelectPanel : MonoBehaviour {
     void Refresh() {
         text.text = GetTypeName(type);
         if (IsJoystick(type) && !InputIsConnected(type))
-            text.text += "\n(unconnected)";
+            text.text += "\n(off)";
     }
 
     void RefreshPressedInput() {
