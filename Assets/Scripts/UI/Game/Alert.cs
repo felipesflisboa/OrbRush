@@ -8,8 +8,8 @@ using UnityEngine;
 public class Alert : MonoBehaviour {
     TextMeshProUGUI label;
     float clearTime;
+    public bool displayingText { get; private set; } 
 
-    public bool DisplayingText => label.text != string.Empty; 
 
     void Awake() {
         label = GetComponent<TextMeshProUGUI> ();
@@ -20,7 +20,7 @@ public class Alert : MonoBehaviour {
         if (!enabled)
             return;
         if (clearTime != 0f && clearTime < Time.timeSinceLevelLoad) {
-            label.text = string.Empty;
+            GameManager.I.canvasController.HideTextWithDilateAnimation(label, () => displayingText = false);
             clearTime = 0f;
         }
     }
@@ -29,6 +29,7 @@ public class Alert : MonoBehaviour {
         if (!enabled)
             return;
         label.text = text;
+        GameManager.I.canvasController.ShowTextWithDilateAnimation(label);
         clearTime = Time.timeSinceLevelLoad + duration;
     }
 }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Gamelogic.Extensions;
 using DG.Tweening;
+using UnityEngine.UI;
+using TMPro;
 
 public class QuickTest : MonoBehaviour{
     public Transform main;
@@ -11,12 +13,24 @@ public class QuickTest : MonoBehaviour{
     //bool rotate;
 
     async void Start() {
+        var a = GetComponent<TextMeshProUGUI>();
+        //a.materialForRendering.SetFloat("_FaceDilate", 1);
+        a.fontMaterial.SetFloat("_FaceDilate", 1);
+
+        /*
         PlayAnim();
 
         while (true) {
             Debug.Log($"Loop! frameCount={Time.frameCount}");
             await new WaitForUpdate();
         }
+        */
+    }
+
+    Material CreateNewMaterial(Material mat) {
+        Material ret = new Material(mat);
+        ret.CopyPropertiesFromMaterial(mat);
+        return ret;
     }
 
     Vector3 originalCamPos;
@@ -35,7 +49,7 @@ public class QuickTest : MonoBehaviour{
     }
 
     void Update(){
-        Debug.Log($"Update! frameCount={Time.frameCount}");
+        //Debug.Log($"Update! frameCount={Time.frameCount}");
         //Debug.Log(MathUtil.UnityAngleToNormal(MathUtil.GetAngle(main.transform.position.To2DXZ() - target.transform.position.To2DXZ())-90));
         /*
         Vector3 posRelative = target.InverseTransformPoint(cam.transform.position);

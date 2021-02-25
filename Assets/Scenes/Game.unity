@@ -3638,6 +3638,91 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09ce19a5b4f283d45a2d8502a5ce9543, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  textAnimationHandler:
+    showCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: -0.004338064
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.099711135
+        value: 0.5064697
+        inSlope: 2.5289729
+        outSlope: 2.5289729
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.09728673
+      - serializedVersion: 3
+        time: 0.3343324
+        value: 1.0100809
+        inSlope: 4.0703506
+        outSlope: 4.0703506
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.05536723
+        outWeight: 0.042633094
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: -1.7566907
+        outSlope: -1.7566907
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.10169494
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    hideCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: -0.004338064
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 136
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 0.6666
+        value: 0
+        inSlope: 5.0473557
+        outSlope: 5.0473557
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.061576623
+        outWeight: 0.042633094
+      - serializedVersion: 3
+        time: 0.9
+        value: 0.5
+        inSlope: 4.1967063
+        outSlope: 4.1967063
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.14765736
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: -1.7566907
+        outSlope: -1.7566907
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.10169494
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
   pauseButtonParent: {fileID: 566386094}
   startText: {fileID: 1597335373}
   victoryText: {fileID: 1166270183}
@@ -5369,7 +5454,7 @@ MonoBehaviour:
     type: 3}
   startSFX: {fileID: 220875921}
   endSFX: {fileID: 122412476}
-  standaloneSceneStartsAsMarathon: 0
+  standaloneSceneStartsAsMarathon: 1
 --- !u!4 &953248772
 Transform:
   m_ObjectHideFlags: 0

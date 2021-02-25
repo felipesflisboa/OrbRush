@@ -64,7 +64,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         switch (modeData) {
             case MarathonData m:
                 if (m.element == Element.None)
-                    canvasController.startText.gameObject.SetActive(true);
+                    canvasController.ShowTextWithDilateAnimation(canvasController.startText);
                 else
                     StartMarathon(FindObjectsOfType<Orb>().First(p => p.element == m.element));
                 break;

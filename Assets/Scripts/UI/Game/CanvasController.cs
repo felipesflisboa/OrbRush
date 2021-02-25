@@ -6,11 +6,13 @@ using UnityEngine.UI;
 using TMPro;
 using RotaryHeart.Lib.SerializableDictionary;
 using System.Globalization;
+using DG.Tweening;
 
 //TODO remove singleton
 public class CanvasController : MonoBehaviour {
     [System.Serializable] class ElementColorDictionary : SerializableDictionaryBase<Element, Color> { }
 
+    [SerializeField] TextAnimationHandler textAnimationHandler;
     internal CardZone[] cardZoneArray = new CardZone[5];
     internal PlayerSelectScreen playerSelectScreen;
     HUD hud;
@@ -73,7 +75,8 @@ public class CanvasController : MonoBehaviour {
 
     public void OnGameStart() {
         playerSelectScreen.gameObject.SetActive(false);
-        startText.gameObject.SetActive(false);
+        if (startText.gameObject.activeSelf)
+            HideTextWithDilateAnimation(startText);
         hud.gameObject.SetActive(true);
         pauseButtonParent.gameObject.SetActive(true);
         EnableActiveCardZones();
@@ -98,7 +101,7 @@ public class CanvasController : MonoBehaviour {
     void RefreshCardAlert() {
         if (cardZoneArray[1].ValidCardCount != lastCardZoneCount) {
             lastCardZoneCount = cardZoneArray[1].ValidCardCount;
-            if (lastCardZoneCount >= 6 && !alert.DisplayingText)
+            if (lastCardZoneCount >= 6 && !alert.displayingText)
                 alert.Display("Your hand is full.\nCards make your orb slower!", 4f);
         }
     }
@@ -108,11 +111,19 @@ public class CanvasController : MonoBehaviour {
     }
 
     public void DisplayVictoryText(Orb winnerOrb) {
-        victoryText.gameObject.SetActive(true);
         victoryText.text = string.Format(
             "Player <color=#{1}>{0}</color> won!",
             winnerOrb.m_name,
             ColorUtility.ToHtmlStringRGB(textColorPerElement[winnerOrb.element])
         );
+        ShowTextWithDilateAnimation(victoryText);
+    }
+
+    public void ShowTextWithDilateAnimation(TextMeshProUGUI text){
+        textAnimationHandler.ShowTextWithDilateAnimation(text, 0.8f);
+    }
+
+    public void HideTextWithDilateAnimation(TextMeshProUGUI text, System.Action callback=null) {
+        textAnimationHandler.HideTextWithDilateAnimation(text, 0.4f, callback ?? (() => text.gameObject.SetActive(false)));
     }
 }
