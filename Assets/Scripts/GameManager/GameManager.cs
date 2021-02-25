@@ -64,12 +64,12 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
         switch (modeData) {
             case MarathonData m:
                 if (m.element == Element.None)
-                    canvasController.ShowTextWithDilateAnimation(canvasController.startText);
+                    canvasController.ShowWithDilateAnimation(canvasController.startText);
                 else
                     StartMarathon(FindObjectsOfType<Orb>().First(p => p.element == m.element));
                 break;
             case QuickRaceData qr:
-                canvasController.playerSelectScreen.gameObject.SetActive(true);
+                canvasController.ShowWithFadeAnimation(canvasController.playerSelectScreen.CanvasGroup);
                 break;
         }
     }

@@ -11,16 +11,12 @@ public class PauseMenu : MonoBehaviour{
 
     bool Active {
         get => canvasGroup.interactable;
-        set {
-            canvasGroup.interactable = value;
-            canvasGroup.blocksRaycasts = value;
-            canvasGroup.alpha = value ? 1 : 0;
-        }
+        set => SetActive(value);
     }
 
     void Awake() {
         canvasGroup = GetComponent<CanvasGroup>();
-        Active = false;
+        SetActive(false, false);
         closeButton.onClick.AddListener(GameManager.I.TogglePause);
         exitButton.onClick.AddListener(GameManager.I.CancelGame);
     }
@@ -28,5 +24,16 @@ public class PauseMenu : MonoBehaviour{
     void LateUpdate() {
         if (GameManager.I.Paused != Active)
             Active = !Active;
+    }
+
+    void SetActive(bool active, bool playAnimation = true) {
+        canvasGroup.interactable = active;
+        canvasGroup.blocksRaycasts = active;
+        if (playAnimation) {
+            if (active)
+                GameManager.I.canvasController.ShowWithFadeAnimation(canvasGroup);
+            else
+                GameManager.I.canvasController.HideWithFadeAnimation(canvasGroup, () => { });
+        }
     }
 }

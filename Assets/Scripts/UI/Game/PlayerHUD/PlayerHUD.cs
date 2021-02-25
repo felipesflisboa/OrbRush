@@ -47,7 +47,7 @@ public class PlayerHUD : MonoBehaviour {
 
     void Initialize() {
         player = GameManager.I.orbArray[playerNumber];
-        backgroundImage.DOColor(colorPerElement[player.element], 1.2f);
+        backgroundImage.DOColor(colorPerElement[player.element], 1.2f).SetDelay(0.8f);
     }
 
     async void UpdateLoop() {

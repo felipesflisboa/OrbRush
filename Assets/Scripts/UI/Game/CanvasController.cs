@@ -7,6 +7,7 @@ using TMPro;
 using RotaryHeart.Lib.SerializableDictionary;
 using System.Globalization;
 using DG.Tweening;
+using System;
 
 //TODO remove singleton
 public class CanvasController : MonoBehaviour {
@@ -74,10 +75,11 @@ public class CanvasController : MonoBehaviour {
     }
 
     public void OnGameStart() {
-        playerSelectScreen.gameObject.SetActive(false);
+        if (playerSelectScreen.gameObject.activeInHierarchy)
+            HideWithFadeAnimation(playerSelectScreen.CanvasGroup);
         if (startText.gameObject.activeSelf)
-            HideTextWithDilateAnimation(startText);
-        hud.gameObject.SetActive(true);
+            HideWithDilateAnimation(startText);
+        ShowWithFadeAnimation(hud.CanvasGroup);
         pauseButtonParent.gameObject.SetActive(true);
         EnableActiveCardZones();
         alert.enabled = !GameManager.I.IsMultiplayer;
@@ -116,14 +118,30 @@ public class CanvasController : MonoBehaviour {
             winnerOrb.m_name,
             ColorUtility.ToHtmlStringRGB(textColorPerElement[winnerOrb.element])
         );
-        ShowTextWithDilateAnimation(victoryText);
+        ShowWithDilateAnimation(victoryText);
     }
 
-    public void ShowTextWithDilateAnimation(TextMeshProUGUI text){
-        textAnimationHandler.ShowTextWithDilateAnimation(text, 0.8f);
+    public void ShowWithDilateAnimation(TextMeshProUGUI text){
+        textAnimationHandler.ShowWithDilateAnimation(text, 0.8f);
     }
 
-    public void HideTextWithDilateAnimation(TextMeshProUGUI text, System.Action callback=null) {
-        textAnimationHandler.HideTextWithDilateAnimation(text, 0.4f, callback ?? (() => text.gameObject.SetActive(false)));
+    public void HideWithDilateAnimation(TextMeshProUGUI text, Action callback=null) {
+        textAnimationHandler.HideWithDilateAnimation(text, 0.4f, callback ?? (() => text.gameObject.SetActive(false)));
+    }
+
+    public void ShowWithFadeAnimation(CanvasGroup group) {
+        DOTween.Kill(group);
+        group.alpha = 0;
+        if (!group.gameObject.activeSelf)
+            group.gameObject.SetActive(true);
+        group.DOFade(1, 0.25f).SetUpdate(true);
+    }
+
+    public void HideWithFadeAnimation(CanvasGroup group, Action callback = null) {
+        DOTween.Kill(group);
+        group.alpha = 1;
+        if (callback == null)
+            callback = () => group.gameObject.SetActive(false);
+        group.DOFade(0, 0.25f).SetUpdate(true).OnComplete(() => callback());
     }
 }

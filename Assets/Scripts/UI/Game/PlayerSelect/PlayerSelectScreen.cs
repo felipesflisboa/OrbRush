@@ -11,6 +11,15 @@ public class PlayerSelectScreen : MonoBehaviour{
 
     const string INPUT_KEY = "PlayerInput{0}";
 
+    CanvasGroup _canvasGroup;
+    public CanvasGroup CanvasGroup {
+        get {
+            if (_canvasGroup == null)
+                _canvasGroup = GetComponent<CanvasGroup>();
+            return _canvasGroup;
+        }
+    }
+
     void Awake() {
         panelArray = GetComponentsInChildren<PlayerSelectPanel>(true).OrderBy(psp => psp.number).ToArray();
         confirmButton.onClick.AddListener(OnConfirm);

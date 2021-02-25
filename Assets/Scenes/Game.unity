@@ -236,6 +236,7 @@ GameObject:
   m_Component:
   - component: {fileID: 64904877}
   - component: {fileID: 64904878}
+  - component: {fileID: 64904879}
   m_Layer: 5
   m_Name: PlayerSelectScreen
   m_TagString: Untagged
@@ -282,6 +283,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   confirmButton: {fileID: 1362954736}
   quitButton: {fileID: 350733738}
+--- !u!225 &64904879
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 64904876}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1001 &72238971
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4639,6 +4652,7 @@ GameObject:
   m_Component:
   - component: {fileID: 805660519}
   - component: {fileID: 805660520}
+  - component: {fileID: 805660522}
   - component: {fileID: 805660521}
   m_Layer: 5
   m_Name: General
@@ -4707,6 +4721,18 @@ MonoBehaviour:
   WindowsPhone8: 0
   WindowsStore: 1
   WebGL: 1
+--- !u!225 &805660522
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 805660518}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &822064904
 GameObject:
   m_ObjectHideFlags: 0
@@ -5660,6 +5686,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1036059825}
   - component: {fileID: 1036059827}
+  - component: {fileID: 1036059828}
   - component: {fileID: 1036059826}
   m_Layer: 5
   m_Name: Android
@@ -5728,6 +5755,18 @@ MonoBehaviour:
   levelText: {fileID: 1243641914}
   timeText: {fileID: 104605388}
   alwaysShowModeName: 1
+--- !u!225 &1036059828
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1036059824}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1066969450
 GameObject:
   m_ObjectHideFlags: 0

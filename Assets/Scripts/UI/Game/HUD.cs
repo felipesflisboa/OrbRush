@@ -13,6 +13,15 @@ public class HUD : MonoBehaviour {
     public TextMeshProUGUI timeText;
     [SerializeField] bool alwaysShowModeName;
 
+    CanvasGroup _canvasGroup;
+    public CanvasGroup CanvasGroup {
+        get {
+            if (_canvasGroup == null)
+                _canvasGroup = GetComponent<CanvasGroup>();
+            return _canvasGroup;
+        }
+    }
+
     void Start() {
         if (GameManager.modeData is MarathonData)
             levelText.text = $"Level {(GameManager.modeData as MarathonData).level}";

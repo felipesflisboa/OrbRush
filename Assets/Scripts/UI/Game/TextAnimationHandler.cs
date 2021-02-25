@@ -16,7 +16,7 @@ public class TextAnimationHandler {
     const float INITIAL_DILATE = -1f;
     const float FADE_DURATION_RATIO = 0.2f;
 
-    public void ShowTextWithDilateAnimation(TextMeshProUGUI text, float duration) {
+    public void ShowWithDilateAnimation(TextMeshProUGUI text, float duration) {
         DOTween.Kill(text);
         if (!text.gameObject.activeSelf)
             text.gameObject.SetActive(true);
@@ -26,10 +26,10 @@ public class TextAnimationHandler {
         text.fontMaterial.DOFloat(0, TEXT_DILATE_KEY, duration).SetUpdate(true).SetEase(showCurve);
     }
 
-    public void HideTextWithDilateAnimation(TextMeshProUGUI text, float duration, Action callback) {
+    public void HideWithDilateAnimation(TextMeshProUGUI text, float duration, Action callback) {
         DOTween.Kill(text);
         SetColorAlpha(text, 0, FADE_DURATION_RATIO * duration, (1-FADE_DURATION_RATIO)*duration);
-        text.fontMaterial.DOFloat(-1, TEXT_DILATE_KEY, duration).SetUpdate(true).SetEase(hideCurve).OnComplete(() => callback());
+        text.fontMaterial.DOFloat(INITIAL_DILATE, TEXT_DILATE_KEY, duration).SetUpdate(true).SetEase(hideCurve).OnComplete(() => callback());
     }
 
     void SetColorAlpha(TextMeshProUGUI text, float alpha, float duration = 0, float delay = 0) {

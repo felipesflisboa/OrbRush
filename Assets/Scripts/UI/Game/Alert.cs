@@ -20,7 +20,7 @@ public class Alert : MonoBehaviour {
         if (!enabled)
             return;
         if (clearTime != 0f && clearTime < Time.timeSinceLevelLoad) {
-            GameManager.I.canvasController.HideTextWithDilateAnimation(label, () => displayingText = false);
+            GameManager.I.canvasController.HideWithDilateAnimation(label, () => displayingText = false);
             clearTime = 0f;
         }
     }
@@ -29,7 +29,7 @@ public class Alert : MonoBehaviour {
         if (!enabled)
             return;
         label.text = text;
-        GameManager.I.canvasController.ShowTextWithDilateAnimation(label);
+        GameManager.I.canvasController.ShowWithDilateAnimation(label);
         clearTime = Time.timeSinceLevelLoad + duration;
         displayingText = true;
     }
