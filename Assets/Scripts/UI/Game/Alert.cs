@@ -31,5 +31,6 @@ public class Alert : MonoBehaviour {
         label.text = text;
         GameManager.I.canvasController.ShowTextWithDilateAnimation(label);
         clearTime = Time.timeSinceLevelLoad + duration;
+        displayingText = true;
     }
 }
