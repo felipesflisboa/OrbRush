@@ -42,4 +42,8 @@ public class MenuCameraController : MonoBehaviour {
         Orb[] orbArray = FindObjectsOfType<Orb>();
         return orbArray[Mathf.FloorToInt(Random.value* orbArray.Length)];
     }
+
+    void OnDestroy() {
+        DOTween.Kill(transform);
+    }
 }
