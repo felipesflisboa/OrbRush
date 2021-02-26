@@ -142,7 +142,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
     }
 
     async void DrawCardLoop() {
-        while (state == GameState.Ocurring) {
+        while (state == GameState.Ocurring && this != null) {
             foreach (var orb in nonNullOrbArray) {
                 if (orb.reachGoal)
                     continue;
