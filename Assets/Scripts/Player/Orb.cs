@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class Orb : MonoBehaviour {
+public class Orb : MonoBehaviour, IPointerDownHandler {
     public Element element;
     public string m_name;
     internal int number;
@@ -89,7 +90,7 @@ public class Orb : MonoBehaviour {
             VelocityV3 = VelocityV3.normalized* MAX_MENU_VELOCITY;
     }
 
-    void OnMouseDown() {
+    void IPointerDownHandler.OnPointerDown(PointerEventData eventData) {
         if (GameManager.I.state == GameState.SelectPlayer && GameManager.modeData is MarathonData)
             GameManager.I.StartMarathon(this);
     }
