@@ -28,7 +28,6 @@ public class AdvertisementHandler{
 #if UNITY_ADS && UNITY_ANDROID
             return "4022189";
 #else
-            Debug.LogError("Ads not supported on this platform!");
             return null;
 #endif
         }

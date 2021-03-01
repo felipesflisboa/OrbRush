@@ -52,7 +52,7 @@ namespace AdvertisementCaller {
         }
     }
 #else
-    public class UnityADSCaller : ADSCaller {
+    public class UnityADSCaller : BaseCaller {
         public UnityADSCaller(string id) : base(id) { }
     }
 #endif
