@@ -17,7 +17,6 @@ public class PlayerHUD : MonoBehaviour {
     Orb player;
 
     [SerializeField] ElementColorDictionary colorPerElement;
-    [SerializeField] Color tooManyCardColor;
     [SerializeField] Color cardSmallWarnColor;
     [SerializeField] Color cardBigWarnColor;
     Color initialTextColor;
