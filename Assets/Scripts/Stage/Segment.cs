@@ -67,7 +67,7 @@ public class Segment : MonoBehaviour {
 
     public void ApplyEffectInPlayer(Orb orb) {
         switch (cardType) {
-            case CardType.Squid:
+            case CardType.Squirt:
                 orb.rigidBody.velocity *=  1f + 0.4f * (orb.element == Element.Water ? 0.75f : 1);
                 break;
         }
@@ -99,7 +99,7 @@ public class Segment : MonoBehaviour {
 
     void DisableCardEffectTransforms() {
         foreach (var effectCard in effectPerCard) {
-            if (effectCard.Key == CardType.Squid)
+            if (effectCard.Key == CardType.Squirt)
                 continue;
             effectCard.Value.Deactivate();
         }

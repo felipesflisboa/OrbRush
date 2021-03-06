@@ -4,7 +4,7 @@ using UnityEngine;
 using Gamelogic.Extensions;
 using DG.Tweening;
 
-public class Squid : SegmentEffect {
+public class Squirt : SegmentEffect {
     public override void Activate() {
         base.Activate();
         segment.ApplyColor(new Color32(0xD0, 0xD0, 0xFF, 0xFF));

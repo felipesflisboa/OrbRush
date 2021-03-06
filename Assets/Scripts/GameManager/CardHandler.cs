@@ -17,7 +17,7 @@ public class CardHandler {
                 break;
             case CardType.Cyclone:
             case CardType.Earthquake:
-            case CardType.Squid:
+            case CardType.Squirt:
                 if (ApplySegmentEffect(cardType, isCPU) && card != null)
                     card.Remove();
                 break;
@@ -56,7 +56,7 @@ public class CardHandler {
         switch (cardType) {
             case CardType.Explode:
                 return Element.Fire;
-            case CardType.Squid:
+            case CardType.Squirt:
                 return Element.Water;
             case CardType.Cyclone:
                 return Element.Air;
