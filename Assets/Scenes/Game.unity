@@ -4086,7 +4086,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fadeInOnStart: 1
   inDuration: 0.4
-  inEase: 7
+  inEase: 6
   outDuration: 1.5
   outEase: 5
 --- !u!114 &717894495
