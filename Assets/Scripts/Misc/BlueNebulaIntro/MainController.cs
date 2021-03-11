@@ -27,7 +27,7 @@ namespace BlueNebula.Intro {
             yield return FadeScreenRoutine(1f, true);
             yield return ZoomOutRoutine(3f);
             yield return ShootingStarRoutine(0.5f);
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.1f);
             yield return FadeScreenRoutine(0.5f, false);
             if (!string.IsNullOrEmpty(nextSceneName))
                 SceneManager.LoadScene(nextSceneName);
