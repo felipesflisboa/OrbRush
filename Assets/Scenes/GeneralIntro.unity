@@ -321,7 +321,7 @@ VideoPlayer:
   m_TargetMaterialRenderer: {fileID: 0}
   m_TargetMaterialProperty: _MainTex
   m_RenderMode: 1
-  m_AspectRatio: 2
+  m_AspectRatio: 1
   m_DataSource: 1
   m_PlaybackSpeed: 1
   m_AudioOutputMode: 2
@@ -999,7 +999,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   logoTransform: {fileID: 339481405}
-  disableVideoOnDebug: 1
+  disableVideoOnDebug: 0
 --- !u!114 &2012571277
 MonoBehaviour:
   m_ObjectHideFlags: 0
