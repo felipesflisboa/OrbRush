@@ -11,6 +11,7 @@ namespace BlueNebula.Intro {
         Vector3 shootingStarStartLocalPos;
         [SerializeField] AudioSource shootingStarSFX;
         [SerializeField] SpriteRenderer fadeMaskRenderer;
+        [SerializeField] bool isShortVersion;
         [SerializeField] string nextSceneName;
 
         const float INITIAL_ZOOM = 8;
@@ -24,11 +25,12 @@ namespace BlueNebula.Intro {
             FadeScreen(1f);
             spaceController.RefreshItems(INITIAL_ZOOM);
             yield return null;
-            yield return FadeScreenRoutine(1f, true);
-            yield return ZoomOutRoutine(3f);
+            yield return FadeScreenRoutine(isShortVersion ? 0.25f : 1f, true);
+            yield return ZoomOutRoutine(isShortVersion ? 1.2f : 3f);
+            yield return new WaitForSeconds(isShortVersion ? 0.3f : 1f);
             yield return ShootingStarRoutine(0.5f);
             yield return new WaitForSeconds(0.1f);
-            yield return FadeScreenRoutine(0.5f, false);
+            yield return FadeScreenRoutine(isShortVersion ? 0.25f : 0.5f, false);
             if (!string.IsNullOrEmpty(nextSceneName))
                 SceneManager.LoadScene(nextSceneName);
         }
