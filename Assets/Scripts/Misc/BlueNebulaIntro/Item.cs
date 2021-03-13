@@ -17,29 +17,11 @@ namespace BlueNebula.Intro {
         }
 
         public void Refresh(float zoomMultiplier) {
-            distanceMultiplier = GetDistanceMultiplier(zoomMultiplier, distanceLevel);
+            distanceMultiplier = Mathf.Pow(1f/zoomMultiplier, 1f / distanceLevel);
             transform.position = (Vector3)pivotPos + new Vector3(
-                initialPosWithoutPivot.x / distanceMultiplier, initialPosWithoutPivot.y / distanceMultiplier, transform.position.z
+                initialPosWithoutPivot.x/distanceMultiplier, initialPosWithoutPivot.y/distanceMultiplier, transform.position.z
             );
-            transform.localScale = initialLocalScale / distanceMultiplier;
-        }
-
-
-        static Dictionary<float, float> distanceMultiplierPerLevel = new Dictionary<float, float>();
-        static float lastZoomMultiplier = -1;
-
-        float GetDistanceMultiplier(float zoomMultiplier, float distanceLevel) {
-            if (lastZoomMultiplier != zoomMultiplier) {
-                distanceMultiplierPerLevel.Clear();
-                lastZoomMultiplier = zoomMultiplier;
-            }
-            if (!distanceMultiplierPerLevel.ContainsKey(distanceLevel))
-                distanceMultiplierPerLevel.Add(distanceLevel, CalculateDistanceMultiplier(zoomMultiplier, distanceLevel));
-            return distanceMultiplierPerLevel[distanceLevel];
-        }
-
-        float CalculateDistanceMultiplier(float zoomMultiplier, float distanceLevel) {
-            return Mathf.Pow(1f / zoomMultiplier, 1f / distanceLevel);
+            transform.localScale = initialLocalScale/distanceMultiplier;
         }
     }
 }
