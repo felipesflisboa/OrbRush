@@ -154,7 +154,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager> {
 
     void DrawCard(Orb orb) {
         if (orb.IsCPU) {
-            orb.ai.cardTypeDeck.Add(EnumUtil.GetRandomValueFromEnum<CardType>(1, -4));
+            orb.ai.cardTypeDeck.Add(EnumUtil.GetRandomValueFromEnum<CardType>(1));
         } else {
             orb.cardZone.Add(cardPrefabArray[Mathf.FloorToInt(Random.value * cardPrefabArray.Length)]);
         }
