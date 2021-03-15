@@ -11,8 +11,13 @@ namespace BlueNebula.Intro {
         Vector3 shootingStarStartLocalPos;
         [SerializeField] AudioSource shootingStarSFX;
         [SerializeField] SpriteRenderer fadeMaskRenderer;
+        [SerializeField] string[] skipButtonNameArray = new string[0];
+        [SerializeField] KeyCode[] skipKeyArray = new KeyCode[0];
+        bool canSkipNow;
+        bool skipping;
         [SerializeField] bool isShortVersion;
         [SerializeField] string nextSceneName;
+        [Tooltip("To go into a different scene when skip. If empty, go into nextSceneName"), SerializeField] string skippableSceneName;
 
         const float INITIAL_ZOOM = 8;
 
@@ -26,13 +31,42 @@ namespace BlueNebula.Intro {
             spaceController.RefreshItems(INITIAL_ZOOM);
             yield return null;
             yield return FadeScreenRoutine(isShortVersion ? 0.25f : 1f, true);
+            canSkipNow = skipButtonNameArray.Length > 0 || skipKeyArray.Length > 0;
             yield return ZoomOutRoutine(isShortVersion ? 1.2f : 3f);
             yield return new WaitForSeconds(isShortVersion ? 0.3f : 1f);
             yield return ShootingStarRoutine(0.5f);
             yield return new WaitForSeconds(0.1f);
-            yield return FadeScreenRoutine(isShortVersion ? 0.25f : 0.5f, false);
-            if (!string.IsNullOrEmpty(nextSceneName))
-                SceneManager.LoadScene(nextSceneName);
+            if (!skipping) {
+                canSkipNow = false;
+                yield return FadeScreenRoutine(isShortVersion ? 0.25f : 0.5f, false);
+                if (!string.IsNullOrEmpty(nextSceneName))
+                    SceneManager.LoadScene(nextSceneName);
+            }
+        }
+
+        IEnumerator SkipRoutine() {
+            skipping = true;
+            canSkipNow = false;
+            yield return FadeScreenRoutine(0.25f, false);
+            if (string.IsNullOrEmpty(skippableSceneName))
+                skippableSceneName = nextSceneName;
+            if (!string.IsNullOrEmpty(skippableSceneName))
+                SceneManager.LoadScene(skippableSceneName);
+        }
+
+        void Update() {
+            if (canSkipNow && HasSkipRequested())
+                StartCoroutine(SkipRoutine());
+        }
+
+        bool HasSkipRequested() {
+            foreach (var buttonName in skipButtonNameArray)
+                if(Input.GetButtonDown(buttonName))
+                    return true;
+            foreach (var key in skipKeyArray)
+                if (Input.GetKeyDown(key))
+                    return true;
+            return false;
         }
 
         IEnumerator FadeScreenRoutine(float duration, bool isFadeIn) {
