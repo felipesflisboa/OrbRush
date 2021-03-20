@@ -16,6 +16,7 @@ public class MainMenuManager : SingletonMonoBehaviour<MainMenuManager> {
     MenuPanelType currentPanelType;
     MenuPanel[] panelArray;
     Fader fader;
+    MusicController musicController;
 
     bool FadeActive => fader != null && fader.ImageActive;
     bool ShouldReturnToMenuAtClick => !new[] { MenuPanelType.Menu, MenuPanelType.Loading }.Contains(currentPanelType);
@@ -37,6 +38,7 @@ public class MainMenuManager : SingletonMonoBehaviour<MainMenuManager> {
     void Awake() {
         fader = GetComponentInChildren<Fader>(true);
         panelArray = GetComponentsInChildren<MenuPanel>(true);
+        musicController = FindObjectOfType<MusicController>();
         versionText.text = Version;
         AssignOptionListeners();
     }
@@ -50,6 +52,8 @@ public class MainMenuManager : SingletonMonoBehaviour<MainMenuManager> {
 
     void Start() {
         Time.timeScale = 1;
+        if (musicController != null && !musicController.IsPlaying)
+            musicController.Play();
         EnablePanel(ScoreListMarathonDrawer.lastScore == null ? MenuPanelType.Title : MenuPanelType.LocalHighScores);
         ClickLoop();
     }

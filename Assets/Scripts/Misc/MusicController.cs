@@ -6,6 +6,8 @@ using UnityEngine;
 public class MusicController : MonoBehaviour{
     AudioSource bgm;
 
+    public bool IsPlaying => bgm.isPlaying;
+
     void Awake(){
         bgm = GetComponent<AudioSource>();
     }
