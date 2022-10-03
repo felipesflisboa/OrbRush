@@ -38,6 +38,7 @@ Assets/AssetStoreTools*
 # UnityVS
 UnityVS/*
 UnityVS.meta
+.vsconfig
 
 # Builds
 *.apk
