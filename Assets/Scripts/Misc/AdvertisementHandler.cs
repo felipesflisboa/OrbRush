@@ -25,7 +25,7 @@ public class AdvertisementHandler{
 
     string GameId {
         get {
-#if UNITY_ADS && UNITY_ANDROID
+#if UNITY_ANDROID
             return "4022189";
 #else
             return null;
@@ -47,10 +47,13 @@ public class AdvertisementHandler{
     }
 
     public void TryToPlay(Action callback) {
-        if (CanPlayADS)
+        if (CanPlayADS) {
             Show(callback);
-        else
+        } else {
+            if (caller!=null && !caller.IsLoaded)
+                caller.Load();
             callback?.Invoke();
+        }
     }
 
     public int GetRunCountWithoutADS() => PlayerPrefs.GetInt(ADS_RUN_COUNT_KEY, 0);

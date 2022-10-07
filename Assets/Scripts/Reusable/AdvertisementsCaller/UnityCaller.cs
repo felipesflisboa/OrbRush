@@ -2,21 +2,65 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-#if UNITY_ADS
 using UnityEngine.Advertisements;
-#endif
 
 namespace AdvertisementCaller {
-#if UNITY_ADS
     /// <summary>
     /// Handle ADS calls
+    /// 
+    /// Version 2.0.
     /// </summary>
-    public class UnityCaller : BaseCaller, IUnityAdsListener {
-        public override bool IsReady => Advertisement.isSupported && Advertisement.IsReady();
+    public class UnityCaller : BaseCaller, IUnityAdsInitializationListener, IUnityAdsLoadListener, IUnityAdsShowListener {
+        public override bool IsReady => Advertisement.isSupported && IsLoaded;
+        public override bool IsLoaded => loaded;
+        string gameId;
+        bool testMode;
+        bool loaded;
 
-        public UnityCaller(string id) : base(id) {
-            Advertisement.Initialize(id);
-            Advertisement.AddListener(this);
+        string AdId {
+            get {
+#if UNITY_ANDROID
+                return "video";
+#else
+                return null;
+#endif
+            }
+        }
+
+        public UnityCaller(string pId, bool pTestMode) : base(pId, pTestMode) {
+            gameId = pId;
+            testMode = pTestMode;
+            Initialize();
+        }
+
+        void Initialize() {
+            Advertisement.Initialize(gameId, testMode, this);
+        }
+
+        public void OnInitializationFailed(UnityAdsInitializationError error, string message) {
+            Debug.LogWarning(message);
+        }
+
+        public void OnInitializationComplete() {
+            Load();
+        }
+
+        public override void Load() {
+            if (!Advertisement.isInitialized) {
+                Initialize();
+                return;
+            }
+            base.Load();
+            Advertisement.Load(AdId, this);
+        }
+
+        public void OnUnityAdsAdLoaded(string placementId) {
+            loaded = true;
+        }
+
+        public void OnUnityAdsFailedToLoad(string placementId, UnityAdsLoadError error, string message) {
+            loaded = false;
+            Debug.LogWarning(message);
         }
 
         /// <summary>
@@ -25,35 +69,28 @@ namespace AdvertisementCaller {
         /// <param name="callback">Callback. True if was viewed until the end, false if was skipped, or null if wasn't showed.</param>
         public override void Show(Action<Result> callback) {
             base.Show(callback);
-            Advertisement.Show();
+            Advertisement.Show(AdId, this);
         }
 
-        void OnAdsDidFinish(Action<Result> callback, ShowResult result) {
-            switch (result) {
-                case ShowResult.Finished: callback(Result.Finished); break;
-                case ShowResult.Skipped: callback(Result.Skipped); break;
-                case ShowResult.Failed: callback(Result.Failed); break;
-            }
-        }
-
-        public void OnUnityAdsReady(string placementId) { }
-        public void OnUnityAdsDidStart(string placementId) { }
-
-        public void OnUnityAdsDidError(string message) {
+        public void OnUnityAdsShowFailure(string placementId, UnityAdsShowError error, string message) {
+            loaded = false;
             Debug.LogWarning(message);
+            showCallback?.Invoke(Result.Failed);
         }
 
-        public void OnUnityAdsDidFinish(string placementId, ShowResult showResult) {
-            switch (showResult) {
-                case ShowResult.Finished: showCallback?.Invoke(Result.Finished); break;
-                case ShowResult.Skipped: showCallback?.Invoke(Result.Skipped); break;
-                case ShowResult.Failed: showCallback?.Invoke(Result.Failed); break;
+        public void OnUnityAdsShowStart(string placementId) {
+            loaded = false;
+        }
+
+        public void OnUnityAdsShowClick(string placementId) {}
+
+        public void OnUnityAdsShowComplete(string placementId, UnityAdsShowCompletionState showCompletionState) {
+            switch (showCompletionState) {
+                case UnityAdsShowCompletionState.COMPLETED: showCallback?.Invoke(Result.Finished); break;
+                case UnityAdsShowCompletionState.SKIPPED:   showCallback?.Invoke(Result.Skipped); break;
+                case UnityAdsShowCompletionState.UNKNOWN:   showCallback?.Invoke(Result.Failed); break;
             }
+            Load();
         }
     }
-#else
-    public class UnityADSCaller : BaseCaller {
-        public UnityADSCaller(string id) : base(id) { }
-    }
-#endif
 }
